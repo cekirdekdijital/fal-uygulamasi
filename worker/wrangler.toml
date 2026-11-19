@@ -1,0 +1,17 @@
+# Cloudflare Worker ayarları. Kurulum adımları için README.md'ye bakın.
+name = "fal-sunucu"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+# Hak sayaçları için KV deposu. "npx wrangler kv namespace create HAK" komutunun verdiği id'yi buraya yazın.
+[[kv_namespaces]]
+binding = "HAK"
+id = "BURAYA_KV_ID"
+
+[vars]
+# Uygulamanın yayınlandığı adres(ler), virgülle ayrılmış. Test için "*" kullanılabilir.
+ALLOWED_ORIGINS = "https://KULLANICIADI.github.io"
+
+# Gizli değerler buraya YAZILMAZ; komutla eklenir:
+#   npx wrangler secret put ANTHROPIC_API_KEY
+#   npx wrangler secret put PREMIUM_KODLARI     (ör.  test-p:premium,test-pp:premiumPlus)
