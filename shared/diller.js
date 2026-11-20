@@ -10,7 +10,8 @@ export const DILLER = {
   es: { ad: "Español",                    yerel: "es-ES", yazi: "latin", hazir: false, istem: "Español" },
   fr: { ad: "Français",                   yerel: "fr-FR", yazi: "latin", hazir: false, istem: "Français" },
   ru: { ad: "Русский",                    yerel: "ru-RU", yazi: "kiril", hazir: false, istem: "Русский" },
-  ar: { ad: "العربية",                    yerel: "ar",    yazi: "arap",  hazir: false, istem: "العربية الفصحى", yon: "rtl" },
+  ar: { ad: "العربية",                    yerel: "ar",    yazi: "arap",  hazir: true,  istem: "العربية الفصحى", yon: "rtl",
+        istemNot: "Hitapta tekil eril genel kullanımı (أنت) kullan; arayüzle uyumlu kalsın. Rakamları 1, 2, 3 biçiminde yaz." },
   ja: { ad: "日本語",                      yerel: "ja-JP", yazi: "ja",    hazir: false, istem: "日本語" },
   ko: { ad: "한국어",                      yerel: "ko-KR", yazi: "ko",    hazir: false, istem: "한국어" },
   bs: { ad: "Bosanski · Hrvatski · Srpski", yerel: "bs",  yazi: "latin", hazir: false, istem: "bosanski/hrvatski/srpski (latinica)" },
@@ -39,6 +40,6 @@ export function yerelIstem(dil, metin, kartlar, cs) {
     pos: [0, 1, 2, 3, 4, 5].map(i => s(`pos.${i}.ad`)),
     dikey: s("konum.D"), yatay: s("konum.Y"),
     basliklar: { kopru: s("istem.kopru"), bag: s("istem.bag"), gok: s("istem.gok"), kapanis: s("istem.kapanis") },
-    uyari: s("istem.uyari"), uyariTam: s("istem.uyariTam"),
+    uyari: s("istem.uyari"), uyariTam: s("istem.uyariTam"), not: DILLER[dil].istemNot || "",
   };
 }

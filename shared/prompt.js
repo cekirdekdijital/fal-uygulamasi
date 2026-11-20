@@ -80,7 +80,7 @@ function dilEki(y, A, mod) {
 - Set adlarında yalnızca uluslararası adları kullan (Aetherion, Prometheion, Ragnarion, Alcherion, Duation, Samsarion).
 - Mitolojik figür ve metin adlarını o dilde yerleşik yazımlarıyla ver.
 - Bölüm başlıkları: ${mod === "kisa" ? "" : `"Mitolojik Köprüler" → "${y.basliklar.kopru}", "Kartların Bağı" → "${y.basliklar.bag}", "Göklerin Notu" → "${y.basliklar.gok}", `}"Kapanış" → "${y.basliklar.kapanis}".
-- Son satırdaki uyarıyı tam olarak şöyle yaz: _${mod === "kisa" ? y.uyari : y.uyariTam}_`;
+- Son satırdaki uyarıyı tam olarak şöyle yaz: _${mod === "kisa" ? y.uyari : y.uyariTam}_${y.not ? `\n- ${y.not}` : ""}`;
 }
 
 export function buildPrompt(D, A, P, mod = "tam", yerel = null) {

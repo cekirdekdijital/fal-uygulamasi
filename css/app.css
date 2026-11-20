@@ -295,3 +295,6 @@ html[data-yazi="arap"] *,html[data-yazi="ja"] *,html[data-yazi="ko"] *{letter-sp
 html[data-yazi="arap"] body{font-size:17px;line-height:1.7}
 html[dir="rtl"] .intro h1{padding-left:0}
 html[dir="rtl"] .rhead,html[dir="rtl"] .bar{direction:rtl}
+/* Arapçada eğik yazı yapay görünür; vurgu için kalınlık ve renk yeterli */
+html[data-yazi="arap"] i,html[data-yazi="arap"] em,html[data-yazi="arap"] [style*="italic"],html[data-yazi="arap"] .soz,html[data-yazi="arap"] .hint,html[data-yazi="arap"] .read{font-style:normal!important}
+html[data-yazi="arap"] .aiout i{color:var(--muted)}
