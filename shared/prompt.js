@@ -66,7 +66,24 @@ DERİN OKUMA EKİ
 - Mitolojik köprülerde kültürlerin aynı motifi nasıl farklı anlattığını somut figürlerle karşılaştır.
 - Yatay kartların hangi olgunlaşmayı beklediğini, dikey kartların hangi eylemi çağırdığını açıkça ayır.`;
 
-export function buildPrompt(D, A, P, mod = "tam") {
+// yerel: Türkçe dışı çıktı için (shared/diller.js yerelIstem). Talimat ve veri Türkçe kalır; yalnızca çıktı dili değişir.
+function dilEki(y, A, mod) {
+  const pos = POS.map((p, i) => `${p.ad} → ${y.pos[i]}`).join(", ");
+  const kart = A.cs.map(c => `${c.ad} → ${y.kartAd[c.kod]}`).join("; ");
+  return `
+
+ÇIKTI DİLİ (bu bölüm yukarıdaki dil ve biçim kurallarının önüne geçer)
+- Okumanın tamamını ${y.dilAd} dilinde yaz. Türkçe kelime kullanma. Talimatlar ve veriler Türkçedir; yalnızca çıktı ${y.dilAd} olacak.
+- Ton kuralındaki "sade Türkçe" yerine sade ve doğal ${y.dilAd} geçerlidir. Kullanıcıya o dilde samimi, tekil hitap et.
+- Kart adlarını yalnızca şu karşılıklarla yaz: ${kart}.
+- Pozisyon adları: ${pos}. Dikey → ${y.dikey}, Yatay → ${y.yatay}.
+- Set adlarında yalnızca uluslararası adları kullan (Aetherion, Prometheion, Ragnarion, Alcherion, Duation, Samsarion).
+- Mitolojik figür ve metin adlarını o dilde yerleşik yazımlarıyla ver.
+- Bölüm başlıkları: ${mod === "kisa" ? "" : `"Mitolojik Köprüler" → "${y.basliklar.kopru}", "Kartların Bağı" → "${y.basliklar.bag}", "Göklerin Notu" → "${y.basliklar.gok}", `}"Kapanış" → "${y.basliklar.kapanis}".
+- Son satırdaki uyarıyı tam olarak şöyle yaz: _${mod === "kisa" ? y.uyari : y.uyariTam}_`;
+}
+
+export function buildPrompt(D, A, P, mod = "tam", yerel = null) {
   const SET = Object.fromEntries(D.sets.map(s => [s.id, s]));
   const kisa = mod === "kisa";
   const s = SIGN[P.burc] || { el: "?", yon: "?" };
@@ -109,5 +126,5 @@ Kart bağları:\n${A.pairs.map(p => `- ${POS[p.a.i].ad}→${POS[p.b.i].ad}: ${p.
     satir.push(`Yorumlayıcı notu: ${kisa ? clip(c.notKisa, 220) : c.notKisa}`);
     L.push(satir.join("\n"));
   });
-  return { system: TEMEL + "\n\n" + BICIM[mod], user: L.join("\n"), model: OKUMALAR[mod].model, maxTokens: OKUMALAR[mod].maxTokens };
+  return { system: TEMEL + "\n\n" + BICIM[mod] + (yerel ? dilEki(yerel, A, mod) : ""), user: L.join("\n"), model: OKUMALAR[mod].model, maxTokens: OKUMALAR[mod].maxTokens };
 }

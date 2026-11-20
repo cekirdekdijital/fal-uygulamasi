@@ -1,9 +1,12 @@
 // Set temaları ve koruyucu figürler.
 // Koruyucu karga görselleri: assets/ui/koruyucular/G-S1.webp … G-S6.webp (yol app.config.js içinde).
-// Koruyucu adlarını ve sözlerini aşağıdaki TEMA bölümünden değiştirebilirsiniz;
+// Koruyucu adları ve sözleri dil dosyalarındadır (i18n/tr.json: kor.S1.ad, kor.S1.soz …). TEMA'daki adlar yalnızca başvuru içindir;
 // dosya yoksa aşağıdaki çizim (yer tutucu) gösterilir.
 import { CONFIG } from "../app.config.js";
+import { t } from "./i18n.js";
 
+export const korAd = set => t(`kor.${set}.ad`);
+export const korSoz = set => t(`kor.${set}.soz`);
 export const TEMA = {
   S1: { renk: "#e2b04f", rgba: "rgba(226,176,79,A)", koruyucu: "Güneş Kargası", soz: "Göğün düzeni, adanmayla dönen güneşte saklıdır." },
   S2: { renk: "#e07b4a", rgba: "rgba(224,123,74,A)", koruyucu: "Defne Kargası", soz: "Tanrılardan alınan ateş, insanın kendi yolunu aydınlatır." },
@@ -33,7 +36,7 @@ const CIZIM = {
 
 export function koruyucuSVG(set) {
   const t = TEMA[set];
-  return `<svg viewBox="0 0 200 250" role="img" aria-label="${t.koruyucu}"><defs><radialGradient id="h${set}"><stop offset="0" stop-color="${t.renk}" stop-opacity=".35"/><stop offset="1" stop-color="${t.renk}" stop-opacity="0"/></radialGradient></defs>
+  return `<svg viewBox="0 0 200 250" role="img" aria-label="${korAd(set)}"><defs><radialGradient id="h${set}"><stop offset="0" stop-color="${t.renk}" stop-opacity=".35"/><stop offset="1" stop-color="${t.renk}" stop-opacity="0"/></radialGradient></defs>
     <circle cx="100" cy="125" r="100" fill="url(#h${set})"/><circle cx="100" cy="125" r="92" fill="none" stroke="${t.renk}" stroke-opacity=".35" stroke-dasharray="2 7"/>${CIZIM[set](t.renk)}</svg>`;
 }
 
@@ -45,7 +48,7 @@ export function koruyucuOnYukle(set) { if (!YOK[set]) { const i = new Image(); i
 const YOK = window.__KYOK = window.__KYOK || {};
 export function koruyucuHTML(set, cls = "") {
   const ic = YOK[set] ? `<div class="gsvg">${koruyucuSVG(set)}</div>`
-    : `<img src="${yol(set)}" decoding="async" alt="${TEMA[set].koruyucu}" onerror="window.__KYOK['${set}']=1;this.replaceWith(Object.assign(document.createElement('div'),{className:'gsvg',innerHTML:window.__KSVG('${set}')}))">`;
+    : `<img src="${yol(set)}" decoding="async" alt="${korAd(set)}" onerror="window.__KYOK['${set}']=1;this.replaceWith(Object.assign(document.createElement('div'),{className:'gsvg',innerHTML:window.__KSVG('${set}')}))">`;
   return `<div class="guard ${cls}" style="--g:${TEMA[set].renk}">${ic}</div>`;
 }
 window.__KSVG = koruyucuSVG;

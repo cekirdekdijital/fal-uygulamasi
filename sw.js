@@ -1,6 +1,6 @@
 // Çevrimdışı önbellek. Dosyaları güncellediğinizde SURUM değerini değiştirin.
-const SURUM = "fal-0.3.0";
-const CEKIRDEK = ["./", "index.html", "app.config.js", "css/app.css", "js/app.js", "js/ai.js", "js/store.js", "js/fx.js", "js/koruyucu.js",
+const SURUM = "fal-0.4.0";
+const CEKIRDEK = ["./", "index.html", "app.config.js", "css/app.css", "js/app.js", "js/ai.js", "js/store.js", "js/fx.js", "js/koruyucu.js", "js/i18n.js", "shared/diller.js", "i18n/tr.json",
   "shared/motor.js", "shared/prompt.js", "shared/katmanlar.js", "data/deste.json", "manifest.webmanifest", "assets/icons/icon-192.png", "assets/ui/logo.webp",
   ...["S1", "S2", "S3", "S4", "S5", "S6"].map(s => `assets/ui/koruyucular/G-${s}.webp`)];
 self.addEventListener("install", e => { e.waitUntil(caches.open(SURUM).then(c => c.addAll(CEKIRDEK)).then(() => self.skipWaiting())); });

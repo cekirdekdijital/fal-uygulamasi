@@ -1,0 +1,404 @@
+{
+ "dil": "en",
+ "not": "English card translations. Long texts (meaning, positions, story, mythology) will be added in the next step.",
+ "cards": {
+  "S1-K1": {
+   "ad": "Golden Thunder",
+   "dAnahtar": "Awakening, news, breakthrough",
+   "yAnahtar": "Accumulation, intuition, ripening",
+   "mitFigur": [
+    "Tlaloc",
+    "Tonatiuh"
+   ]
+  },
+  "S1-K2": {
+   "ad": "Gate of the Celestial Scales",
+   "dAnahtar": "Balance, passage, harmony",
+   "yAnahtar": "Adjustment, waiting, alignment",
+   "mitFigur": [
+    "Quetzalcoatl",
+    "Tonatiuh",
+    "The four directions"
+   ]
+  },
+  "S1-K3": {
+   "ad": "The Broken Comet",
+   "dAnahtar": "Severance, liberation, new direction",
+   "yAnahtar": "Unravelling, hesitation, acceptance",
+   "mitFigur": [
+    "Citlalin popoca (the smoking star)",
+    "Florentine Codex"
+   ]
+  },
+  "S1-K4": {
+   "ad": "The Silent Sun Throne",
+   "dAnahtar": "Sovereignty, dignity, self-respect",
+   "yAnahtar": "Insight, stillness, self-discovery",
+   "mitFigur": [
+    "Tonatiuh",
+    "Nanahuatzin",
+    "Nahui Ollin (the Fifth Sun)"
+   ]
+  },
+  "S1-K5": {
+   "ad": "The Endless Ring of Light",
+   "dAnahtar": "Renewal, continuity, hope",
+   "yAnahtar": "Remembering, internalising, preparation",
+   "mitFigur": [
+    "Nanahuatzin",
+    "Tecuciztecatl",
+    "Teotihuacan"
+   ]
+  },
+  "S1-K6": {
+   "ad": "The Inverted Crown Star",
+   "dAnahtar": "Questioning, reassessment, independence",
+   "yAnahtar": "Doubt, self-reckoning, realisation",
+   "mitFigur": [
+    "Tezcatlipoca (the smoking mirror)",
+    "The four directions and the centre"
+   ]
+  },
+  "S2-K1": {
+   "ad": "The Child Who Knows Hunger",
+   "dAnahtar": "Need, compassion, sharing",
+   "yAnahtar": "Longing, awareness, acceptance",
+   "mitFigur": [
+    "Demeter",
+    "Persephone",
+    "Demophon",
+    "Erysichthon"
+   ]
+  },
+  "S2-K2": {
+   "ad": "Heart of the Nomad Warrior",
+   "dAnahtar": "Courage, loyalty, companionship",
+   "yAnahtar": "Preparation, trust, inner bond",
+   "mitFigur": [
+    "Castor and Polydeuces (the Dioscuri)",
+    "Orestes and Pylades"
+   ]
+  },
+  "S2-K3": {
+   "ad": "The Unmasked King",
+   "dAnahtar": "Confrontation, honesty, openness",
+   "yAnahtar": "Introspection, reticence, self-awareness",
+   "mitFigur": [
+    "Oedipus",
+    "Tiresias",
+    "Sophocles, Oedipus Rex"
+   ]
+  },
+  "S2-K4": {
+   "ad": "The Silent Sage's Gaze",
+   "dAnahtar": "Wisdom, observation, guidance",
+   "yAnahtar": "Contemplation, listening, ripening",
+   "mitFigur": [
+    "Athena",
+    "Mentor",
+    "Telemachus",
+    "The Odyssey"
+   ]
+  },
+  "S2-K5": {
+   "ad": "The False Priestess's Word",
+   "dAnahtar": "Deception, revelation, discernment",
+   "yAnahtar": "Intuition, questioning, clarity",
+   "mitFigur": [
+    "Pythia",
+    "Delphi",
+    "Croesus (Herodotus)"
+   ]
+  },
+  "S2-K6": {
+   "ad": "The Weary Homeless Emperor",
+   "dAnahtar": "Belonging, simplicity, return",
+   "yAnahtar": "Weariness, longing, seeking",
+   "mitFigur": [
+    "Odysseus",
+    "Calypso",
+    "Penelope",
+    "Ithaca"
+   ]
+  },
+  "S3-K1": {
+   "ad": "Flameless Bursting Lightning",
+   "dAnahtar": "Explosion, rupture, release",
+   "yAnahtar": "Pressure, restlessness, build-up",
+   "mitFigur": [
+    "Thor",
+    "Mjölnir",
+    "Ginnungagap",
+    "Niflheim and Muspelheim"
+   ]
+  },
+  "S3-K2": {
+   "ad": "The Scream in the Void",
+   "dAnahtar": "Echo, release, confrontation",
+   "yAnahtar": "Deepening, listening, formation",
+   "mitFigur": [
+    "Ginnungagap",
+    "Ymir",
+    "Gjallarhorn"
+   ]
+  },
+  "S3-K3": {
+   "ad": "The Silent Centre of Chaos",
+   "dAnahtar": "Stillness, centring, clarity",
+   "yAnahtar": "Pause, descent within, alignment",
+   "mitFigur": [
+    "Ginnungagap",
+    "Yggdrasil",
+    "Ragnarök"
+   ]
+  },
+  "S3-K4": {
+   "ad": "The Shattered Seal of Fate",
+   "dAnahtar": "Liberation, choice, rewriting",
+   "yAnahtar": "Questioning, unravelling, possibility",
+   "mitFigur": [
+    "The Norns: Urðr, Verðandi, Skuld",
+    "Urðarbrunnr",
+    "Fenrir",
+    "Gleipnir"
+   ]
+  },
+  "S3-K5": {
+   "ad": "The Upturned World Cage",
+   "dAnahtar": "Upheaval, perspective, restructuring",
+   "yAnahtar": "Estrangement, observation, adaptation",
+   "mitFigur": [
+    "Yggdrasil",
+    "Midgard",
+    "Jörmungandr",
+    "Völuspá"
+   ]
+  },
+  "S3-K6": {
+   "ad": "The Reborn Shadow Bird",
+   "dAnahtar": "Rebirth, ascent, resurrection",
+   "yAnahtar": "Recovery, sprouting, preparation",
+   "mitFigur": [
+    "Völuspá",
+    "Líf and Lífþrasir",
+    "The eagle of the renewed world"
+   ]
+  },
+  "S4-K1": {
+   "ad": "The Moonlight Stag",
+   "dAnahtar": "Guidance, intuition, protection",
+   "yAnahtar": "Listening, sensitivity, inner direction",
+   "mitFigur": [
+    "The Dreaming",
+    "Ancestral journeys"
+   ]
+  },
+  "S4-K2": {
+   "ad": "The Winged River's Memory",
+   "dAnahtar": "Remembering, transmission, continuity",
+   "yAnahtar": "Recollection, internalising, tracking",
+   "mitFigur": [
+    "The Dreaming (Jukurrpa, Tjukurpa)",
+    "Songlines"
+   ]
+  },
+  "S4-K3": {
+   "ad": "Whisper of the Roots",
+   "dAnahtar": "Rootedness, devotion, wholeness",
+   "yAnahtar": "Origin, belonging, discovery",
+   "mitFigur": [
+    "The Dreaming",
+    "Country"
+   ]
+  },
+  "S4-K4": {
+   "ad": "The Tree the Wind Forgot",
+   "dAnahtar": "Self-worth, resilience, being seen again",
+   "yAnahtar": "Solitude, acceptance, inner strength",
+   "mitFigur": [
+    "The Dreaming",
+    "Country",
+    "Knowledge carried by the wind (in some communities)"
+   ]
+  },
+  "S4-K5": {
+   "ad": "The Petrified Flower Garden",
+   "dAnahtar": "Preservation, permanence, acceptance",
+   "yAnahtar": "Holding on, longing, softening",
+   "mitFigur": [
+    "The Dreaming",
+    "Ancestral traces in the rocks"
+   ]
+  },
+  "S4-K6": {
+   "ad": "The Rock That Speaks with Rain",
+   "dAnahtar": "Patience, softening, ripening",
+   "yAnahtar": "Listening, calm, absorption",
+   "mitFigur": [
+    "The Dreaming",
+    "The Rainbow Serpent (Kakadu and some communities)"
+   ]
+  },
+  "S5-K1": {
+   "ad": "Prophecy of the Iron Chain",
+   "dAnahtar": "Commitment, responsibility, confrontation",
+   "yAnahtar": "Questioning, awareness, resolution",
+   "mitFigur": [
+    "Ra",
+    "Duat",
+    "Apep",
+    "Book of Gates (11th hour)",
+    "Book of the Dead"
+   ]
+  },
+  "S5-K2": {
+   "ad": "Heart of the Black Labyrinth",
+   "dAnahtar": "Inner reckoning, untangling, discovery",
+   "yAnahtar": "Seeking, introspection, deepening",
+   "mitFigur": [
+    "Book of Two Ways (Coffin Texts)",
+    "Osiris"
+   ]
+  },
+  "S5-K3": {
+   "ad": "The Well of Lost Souls",
+   "dAnahtar": "Remembering, recovery, integration",
+   "yAnahtar": "Silence, seeking, recollection",
+   "mitFigur": [
+    "Book of Caverns",
+    "Amduat",
+    "Ra",
+    "Osiris"
+   ]
+  },
+  "S5-K4": {
+   "ad": "Mask of the Silent Scream",
+   "dAnahtar": "Expression, opening up, authenticity",
+   "yAnahtar": "Suppression, noticing, preparation",
+   "mitFigur": [
+    "Funerary masks",
+    "Book of the Dead, spell 125",
+    "The feather of Ma'at",
+    "Osiris"
+   ]
+  },
+  "S5-K5": {
+   "ad": "The Sleeping Shadow Serpent",
+   "dAnahtar": "Awakening, will, setting out",
+   "yAnahtar": "Potential, intuition, ripening",
+   "mitFigur": [
+    "Mehen",
+    "Apep",
+    "Amduat"
+   ]
+  },
+  "S5-K6": {
+   "ad": "Moon Mirror of the Underworld",
+   "dAnahtar": "Reflection, integration, acceptance",
+   "yAnahtar": "Self-regard, deepening, discernment",
+   "mitFigur": [
+    "Thoth",
+    "Khonsu",
+    "Ra's passage through the Duat"
+   ]
+  },
+  "S6-K1": {
+   "ad": "Gate of the Turning Hourglass",
+   "dAnahtar": "Passage, timing, beginning",
+   "yAnahtar": "Preparation, waiting, threshold",
+   "mitFigur": [
+    "Xihe",
+    "Di Jun",
+    "The ten suns",
+    "The Fusang tree"
+   ]
+  },
+  "S6-K2": {
+   "ad": "Ring of Eternal Return",
+   "dAnahtar": "Repetition, awareness, renewal",
+   "yAnahtar": "Observation, pattern, understanding",
+   "mitFigur": [
+    "Changxi",
+    "The twelve moons",
+    "Di Jun",
+    "Shan Hai Jing"
+   ]
+  },
+  "S6-K3": {
+   "ad": "Memory Seeping from the Future",
+   "dAnahtar": "Foresight, inspiration, orientation",
+   "yAnahtar": "Intuition, imagining, uncertainty",
+   "mitFigur": [
+    "Urashima Tarō",
+    "Ryūgū Palace",
+    "Otohime",
+    "Tamatebako"
+   ]
+  },
+  "S6-K4": {
+   "ad": "The Broken Mirror of Time",
+   "dAnahtar": "Reinterpretation, perspective, liberation",
+   "yAnahtar": "Fragmentation, questioning, making sense",
+   "mitFigur": [
+    "Amaterasu",
+    "Ame-no-Iwato",
+    "Yata no Kagami",
+    "Kojiki and Nihon Shoki"
+   ]
+  },
+  "S6-K5": {
+   "ad": "Shadow of a Forgotten Moment",
+   "dAnahtar": "Remembering, awareness, cherishing",
+   "yAnahtar": "Silence, tracing, sensing",
+   "mitFigur": [
+    "Meng Po",
+    "Naihe Bridge"
+   ]
+  },
+  "S6-K6": {
+   "ad": "The Knotted Thread of Time",
+   "dAnahtar": "Connection, untangling, reconciliation",
+   "yAnahtar": "Entanglement, discernment, preparation",
+   "mitFigur": [
+    "Yue Lao",
+    "The red thread",
+    "Wei Gu",
+    "Dinghun Dian"
+   ]
+  }
+ },
+ "sets": {
+  "S1": {
+   "ad": "The Heavens"
+  },
+  "S2": {
+   "ad": "Humanity"
+  },
+  "S3": {
+   "ad": "Chaos"
+  },
+  "S4": {
+   "ad": "Spirits"
+  },
+  "S5": {
+   "ad": "The Underworld"
+  },
+  "S6": {
+   "ad": "Time"
+  }
+ },
+ "motifler": {
+  "dongu": "Cycle and rebirth",
+  "yeralti": "Otherworld / underworld journey",
+  "kader_ipi": "Bond of fate (thread, chain, seal)",
+  "yilan": "Cosmic serpent",
+  "eksen": "World axis / sacred tree",
+  "isik": "The loss and return of light",
+  "ayna": "Mirror and truth",
+  "yargi": "Scales, balance and judgement",
+  "kehanet": "Sign and prophecy",
+  "fedakarlik": "Transformation through sacrifice",
+  "yolculuk": "Journey and return",
+  "bosluk": "Primordial void"
+ }
+}

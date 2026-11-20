@@ -7,7 +7,7 @@
 export const CONFIG = {
   // Uygulamanın adı. Değiştirirseniz manifest.webmanifest içindeki "name" ve index.html içindeki <title> da değişmeli.
   APP_NAME: "Logos",
-  APP_SLOGAN: "Altı kart, altı mitoloji, tek yolculuk",
+  APP_SLOGAN: "Altı kart, altı mitoloji, tek yolculuk", // Ekranda görünen slogan dil dosyasındadır (i18n/xx.json: intro.slogan)
 
   // Sunucu (Cloudflare Worker) adresi. Boş bırakılırsa uygulama "demo modu"nda çalışır:
   // yorumlar yapay zekâ olmadan, kart verisinden örnek olarak üretilir.
@@ -17,6 +17,8 @@ export const CONFIG = {
   // Kart görsellerinin yolu. {kod} yerine kart kodu (S1-K1 gibi) gelir.
   // Görselleri PNG olarak koyacaksanız ".webp" yerine ".png" yazın.
   CARD_IMAGE: "assets/cards/{kod}.webp",
+  // Türkçe dışındaki dillerde kullanılan uluslararası (-ion adlı) kart görselleri.
+  CARD_IMAGE_INT: "assets/cards/int/{kod}.webp",
 
   // Koruyucu karga görselleri. {set} yerine S1 … S6 gelir. Dosya yoksa uygulamanın kendi çizimi görünür.
   GUARDIAN_IMAGE: "assets/ui/koruyucular/G-{set}.webp",
@@ -44,5 +46,5 @@ export const CONFIG = {
   STORE_READY: false,
 
   // Sürüm. Dosyaları güncellediğinizde bu sayıyı artırın; telefonlar yeni sürümü indirir.
-  VERSION: "0.3.0",
+  VERSION: "0.4.0",
 };

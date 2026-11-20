@@ -5,15 +5,18 @@ import { POS, SIGNS, SIGN, TAGS, NIYET, sunSign, analyze } from "../shared/motor
 import { store, zamanAnahtarlari } from "./store.js";
 import { okumaIste, hakDurumu, calismaModu, OkumaHatasi } from "./ai.js";
 import { ses, titres, gokyuzu, kivilcim, kivilcimEl, efektAyar, setEfekt, azHareket, sis, ortam } from "./fx.js";
-import { TEMA, baskinSet, koruyucuHTML, koruyucuOnYukle } from "./koruyucu.js";
+import { TEMA, baskinSet, koruyucuHTML, koruyucuOnYukle, korAd, korSoz } from "./koruyucu.js";
+import { t, tv, aktifDil, yerelKod, dilYukle, dilKaydet, desteBirlestir, kartCevirisi, metinler } from "./i18n.js";
+import { DILLER, yerelIstem } from "../shared/diller.js";
 
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const sleep = ms => new Promise(r => setTimeout(r, azHareket() ? Math.min(ms, 60) : ms));
-let D = null, CARD = {}, SET = {}, MODE = "demo";
+let D = null, DT = null, CARD = {}, SET = {}, MODE = "demo";
+// DT: Türkçe ana deste (analiz ve yorum istemi için) · D: seçili dile çevrilmiş görüntüleme destesi
 
 /* ---------- Ortak parçalar ---------- */
-const img = kod => CONFIG.CARD_IMAGE.replace("{kod}", kod);
+const img = kod => (aktifDil() === "tr" ? CONFIG.CARD_IMAGE : CONFIG.CARD_IMAGE_INT || CONFIG.CARD_IMAGE).replace("{kod}", kod);
 const face = c => `<div class="face"><img src="${img(c.kod)}" alt="${esc(c.ad)}" loading="lazy" decoding="async"></div>`;
 function toast(t) { const e = $("#toast"); e.textContent = t; e.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove("show"), 2600); }
 function md(t) {
@@ -28,6 +31,15 @@ function md(t) {
 }
 const mdAkan = t => md(t).replace(/<\/(p|h1|h2)>$/, '<span class="caret" aria-hidden="true"></span></$1>');
 const setRenkleri = () => D.sets.map(s => TEMA[s.id].renk);
+// Yerelleştirilmiş veri değerleri
+const posAd = i => t(`pos.${i}.ad`), posSoru = i => t(`pos.${i}.soru`);
+const konum = o => t(`konum.${o}`);
+const burcAd = b => tv("burc", b), elAd = e => tv("el", e), gezAd = g => tv("gez", g);
+const katmanAd = k => t(`katman.${k}`), okumaAd = m => m ? t(`okuma.${m}`) : "";
+const mitAd = id => t(`mit.${id}`);
+// Set başlığı: Türkçede "Gökler / Aetherion", diğer dillerde yalnızca uluslararası ad
+const setAd = s => aktifDil() === "tr" ? `${s.ad} / ${s.diger}` : s.diger;
+const ceviriNot = () => `<p class="small muted">${t("ceviri.yakinda")}</p>`;
 // Altı mitolojiyi temsil eden dönen işaret (ana sayfa, giriş, bekleme)
 function SIGIL(cls = "") {
   if (CONFIG.MEDIA.logo) return `<div class="sigil logoimg ${cls}" aria-hidden="true"><img src="${CONFIG.MEDIA.logo}" alt=""></div>`;
@@ -50,7 +62,7 @@ function chrome(show, route) {
   $$("#tabbar a").forEach(a => a.dataset.r === route ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   $("#app").classList.toggle("withbg", !!(route === "ana" && CONFIG.MEDIA.homeBackground));
   $("#barGuard").innerHTML = ""; document.documentElement.style.removeProperty("--set");
-  const k = KATMANLAR[store.katman()]; $("#katmanChip").textContent = k.ad; $("#katmanChip").className = "chip" + (store.katman() !== "ucretsiz" ? " on" : "");
+  $("#katmanChip").textContent = katmanAd(store.katman()); $("#katmanChip").className = "chip" + (store.katman() !== "ucretsiz" ? " on" : "");
 }
 function openDialog(h, b) { $("#dlgH").innerHTML = h; $("#dlgB").innerHTML = b; $("#dlg").showModal(); $("#dlgB").scrollTop = 0; }
 $("#dlgX").onclick = () => $("#dlg").close();
@@ -83,11 +95,13 @@ function viewHosgeldin(adim) {
     const M = CONFIG.MEDIA;
     $("#view").innerHTML = `<section class="intro">
       ${M.introVideo ? `<video src="${M.introVideo}" ${M.introPoster ? `poster="${M.introPoster}"` : ""} autoplay muted playsinline loop></video>` : SIGIL("big")}
-      <h1 class="glow">${esc(CONFIG.APP_NAME)}</h1><p class="muted">${esc(CONFIG.APP_SLOGAN)}</p>
+      <h1 class="glow">${esc(CONFIG.APP_NAME)}</h1><p class="muted">${t("intro.slogan")}</p>
       <div class="setline">${D.sets.map(s => `<span style="--c:${TEMA[s.id].renk}">${s.diger}</span>`).join("")}</div>
-      <p class="small muted" style="max-width:34ch">Altı mitolojiden otuz altı kart. Seçtiğin altı kart, burcunla birlikte sana özel bir yolculuk anlatır.</p>
-      <a class="btn primary" id="hBasla" href="#hosgeldin-profil" style="min-width:200px">Başla</a></section>`;
+      <p class="small muted" style="max-width:34ch">${t("intro.aciklama")}</p>
+      <a class="btn primary" id="hBasla" href="#hosgeldin-profil" style="min-width:200px">${t("intro.basla")}</a>
+      <button class="chip dilchip" id="hDil">🌐 ${DILLER[aktifDil()].ad}</button></section>`;
     $("#hBasla").addEventListener("click", () => ses.acilis());
+    $("#hDil").onclick = dilSecici;
     return;
   }
   viewProfilForm(true);
@@ -95,40 +109,51 @@ function viewHosgeldin(adim) {
 function viewProfilForm(ilk) {
   const p = store.profil() || { ad: "", dt: "", yk: "", niyet: "genel" };
   $("#view").innerHTML = `<section class="stack" style="gap:16px;padding-top:${ilk ? 24 : 0}px">
-    <h2>${ilk ? "Seni tanıyalım" : "Profilini düzenle"}</h2>
-    <p class="small muted">Yorumlar burcuna göre kişiselleşir. Adın ve doğum tarihin yalnızca bu cihazda saklanır; yapay zekâya yalnızca burç bilgin gönderilir.</p>
-    <label class="f">Adın (isteğe bağlı)<input id="pAd" value="${esc(p.ad)}" autocomplete="given-name" maxlength="30"></label>
-    <label class="f">Doğum tarihin<input id="pDt" type="date" value="${esc(p.dt)}" max="${new Date().toISOString().slice(0, 10)}"></label>
-    <label class="f">Yükselen burcun (biliyorsan)<select id="pYk"><option value="">Bilmiyorum</option>${SIGNS.map(s => `<option ${p.yk === s[0] ? "selected" : ""}>${s[0]}</option>`).join("")}</select></label>
+    <h2>${ilk ? t("pf.baslikIlk") : t("pf.baslik")}</h2>
+    <p class="small muted">${t("pf.aciklama")}</p>
+    <label class="f">${t("pf.ad")}<input id="pAd" value="${esc(p.ad)}" autocomplete="given-name" maxlength="30"></label>
+    <label class="f">${t("pf.dt")}<input id="pDt" type="date" value="${esc(p.dt)}" max="${new Date().toISOString().slice(0, 10)}"></label>
+    <label class="f">${t("pf.yk")}<select id="pYk"><option value="">${t("pf.ykYok")}</option>${SIGNS.map(s => `<option value="${s[0]}" ${p.yk === s[0] ? "selected" : ""}>${burcAd(s[0])}</option>`).join("")}</select></label>
     <div id="pBurc" class="row"></div>
     ${ilk ? `<div class="stack" style="gap:12px;margin-top:6px">
-      <label class="check"><input type="checkbox" id="c18"> 18 yaşından büyüğüm.</label>
-      <label class="check"><input type="checkbox" id="cEg"> Yorumların eğlence ve kişisel farkındalık amaçlı olduğunu, sağlık, hukuk ya da para konularında tavsiye yerine geçmediğini biliyorum.</label>
-      <label class="check"><input type="checkbox" id="cKv"> <span><button type="button" class="chip" id="kvkk" style="display:inline;padding:0 6px">Aydınlatma metnini</button> okudum; burç bilgimin yorum için yurt dışındaki yapay zekâ hizmetine (Anthropic) aktarılmasına onay veriyorum.</span></label>
+      <label class="check"><input type="checkbox" id="c18"> ${t("pf.onay18")}</label>
+      <label class="check"><input type="checkbox" id="cEg"> ${t("pf.onayEglence")}</label>
+      <label class="check"><input type="checkbox" id="cKv"> <span>${t("pf.onayAktarim", { btn: `<button type="button" class="chip" id="kvkk" style="display:inline;padding:0 6px">${t("pf.onayMetinBtn")}</button>` })}</span></label>
     </div>` : ""}
-    <button class="btn primary block" id="pKaydet" disabled>${ilk ? "Devam" : "Kaydet"}</button>
-    ${ilk ? "" : `<a class="btn ghost block" href="#profil">Vazgeç</a>`}</section>`;
+    <button class="btn primary block" id="pKaydet" disabled>${ilk ? t("genel.devam") : t("genel.kaydet")}</button>
+    ${ilk ? "" : `<a class="btn ghost block" href="#profil">${t("genel.vazgec")}</a>`}</section>`;
   const check = () => {
     const b = sunSign($("#pDt").value);
-    $("#pBurc").innerHTML = b ? `<span class="small muted">Güneş burcun</span><span class="chip on">${b}</span><span class="chip el-${SIGN[b].el}">${SIGN[b].el}</span><span class="chip">Yönetici: ${SIGN[b].yon}</span>` : "";
+    $("#pBurc").innerHTML = b ? `<span class="small muted">${t("pf.gunesBurcun")}</span><span class="chip on">${burcAd(b)}</span><span class="chip el-${SIGN[b].el}">${elAd(SIGN[b].el)}</span><span class="chip">${t("pf.yonetici", { g: gezAd(SIGN[b].yon) })}</span>` : "";
     $("#pKaydet").disabled = !b || (ilk && !($("#c18").checked && $("#cEg").checked && $("#cKv").checked));
   };
   $$("#view input,#view select").forEach(e => e.addEventListener("input", check)); check();
   $("#kvkk")?.addEventListener("click", aydinlatma);
   $("#pKaydet").onclick = () => {
     const n = { ...p, ad: $("#pAd").value.trim(), dt: $("#pDt").value, yk: $("#pYk").value, burc: sunSign($("#pDt").value) };
-    if (ilk) n.onay = { tarih: new Date().toISOString(), surum: "1" };
-    store.setProfil(n); ses.tamam(); toast(ilk ? `Hoş geldin${n.ad ? ", " + n.ad : ""}` : "Profil kaydedildi"); go(ilk ? "ana" : "profil");
+    if (ilk) n.onay = { tarih: new Date().toISOString(), surum: "1", dil: aktifDil() };
+    store.setProfil(n); ses.tamam(); toast(ilk ? (n.ad ? t("pf.hosgeldinAd", { ad: n.ad }) : t("pf.hosgeldin")) : t("pf.kaydedildi")); go(ilk ? "ana" : "profil");
   };
 }
 function aydinlatma() {
-  openDialog(`<div class="lab">KVKK</div><h2>Aydınlatma metni (taslak)</h2>`, `<div class="read small stack" style="gap:10px">
-    <p><b>Bu metin taslaktır;</b> yayından önce bir hukukçuya kontrol ettirilmelidir.</p>
-    <p><b>Veri sorumlusu:</b> [Şirket unvanı, adresi, iletişim bilgisi].</p>
-    <p><b>İşlenen veriler:</b> Adın (isteğe bağlı), doğum tarihin, yükselen burcun, niyet ve soru metnin, seçtiğin kartlar. Ad ve doğum tarihi yalnızca cihazında saklanır.</p>
-    <p><b>Amaç:</b> Sana kişiselleştirilmiş kart yorumu üretmek ve kullanım haklarını yönetmek.</p>
-    <p><b>Aktarım:</b> Yorum üretmek için burcun, niyetin, sorun ve kart seçimin yurt dışında hizmet veren yapay zekâ sağlayıcısına (Anthropic, ABD) iletilir. Bu aktarım açık rızana dayanır (6698 sayılı KVKK md. 9).</p>
-    <p><b>Hakların:</b> KVKK md. 11 kapsamında verilerine erişme, düzeltme ve silinmesini isteme hakkın vardır. Profil sayfasındaki "Verilerimi sil" ile cihazdaki verilerini silebilirsin.</p></div>`);
+  const b = ["taslak", "sorumlu", "veriler", "amac", "aktarim", "haklar"].map(k => `<p>${t("gz." + k)}</p>`).join("");
+  openDialog(`<div class="lab">${t("gz.etiket")}</div><h2>${t("gz.baslik")}</h2>`, `<div class="read small stack" style="gap:10px">${b}</div>`);
+}
+
+/* ---------- Dil seçimi ---------- */
+function dilSecici() {
+  openDialog(`<div class="lab">🌐</div><h2>${t("dil.baslik")}</h2>`, `<div class="dilliste">${Object.entries(DILLER).map(([k, v]) =>
+    `<button class="dilbtn ${k === aktifDil() ? "on" : ""}" data-d="${k}" ${v.hazir ? "" : "disabled"} lang="${k}" dir="${v.yon || "ltr"}"><b>${v.ad}</b>${v.hazir ? "" : `<span class="small muted">${t("dil.yakinda")}</span>`}</button>`).join("")}</div>`);
+  $$(".dilbtn[data-d]").forEach(b => b.onclick = async () => {
+    if (b.disabled) return; dilKaydet(b.dataset.d); $("#dlg").close();
+    await dilUygula(b.dataset.d); toast(t("dil.secildi")); route();
+  });
+}
+async function dilUygula(d) {
+  await dilYukle(d);
+  D = desteBirlestir(DT); CARD = {}; SET = {}; D.cards.forEach(c => CARD[c.kod] = c); D.sets.forEach(s => SET[s.id] = s);
+  document.title = CONFIG.APP_NAME;
+  D.cards.forEach(c => { const i = new Image(); i.src = img(c.kod); });
 }
 
 /* ---------- Ana sayfa ---------- */
@@ -143,23 +168,23 @@ const halka = (kalan, top, et) => { const r = 22, C = 2 * Math.PI * r, f = top ?
 async function viewAna() {
   chrome(true, "ana"); const p = store.profil();
   if (CONFIG.MEDIA.homeBackground) $("#app").style.setProperty("--homebg", `url("${CONFIG.MEDIA.homeBackground}")`);
-  const saat = new Date().getHours(); const selam = saat < 6 ? "İyi geceler" : saat < 12 ? "Günaydın" : saat < 18 ? "İyi günler" : "İyi akşamlar";
+  const saat = new Date().getHours(); const selam = t(saat < 6 ? "ana.selamGece" : saat < 12 ? "ana.selamSabah" : saat < 18 ? "ana.selamGun" : "ana.selamAksam");
   const g = store.gecmis().slice(0, 3); const gk = gununKarti(p.burc);
   $("#view").innerHTML = `
    <section class="welcome">${SIGIL()}<div class="stack" style="gap:6px"><p class="muted">${selam}${p.ad ? ", " + esc(p.ad) : ""}</p>
-     <div class="row"><span class="chip on">${p.burc}</span><span class="chip el-${SIGN[p.burc].el}">${SIGN[p.burc].el}</span>${p.yk ? `<span class="chip">Yükselen ${p.yk}</span>` : ""}${MODE !== "sunucu" ? `<span class="chip warn">${MODE === "demo" ? "Demo modu" : "Önizleme modu"}</span>` : ""}</div></div></section>
+     <div class="row"><span class="chip on">${burcAd(p.burc)}</span><span class="chip el-${SIGN[p.burc].el}">${elAd(SIGN[p.burc].el)}</span>${p.yk ? `<span class="chip">${t("ana.yukselen", { b: burcAd(p.yk) })}</span>` : ""}${MODE !== "sunucu" ? `<span class="chip warn">${t("mod." + MODE)}</span>` : ""}</div></div></section>
    <section class="panel hero">
-     <div class="lab">Bugünün okuması</div><h2>Altı kart seç, yolculuğunu gör</h2>
-     <div class="stack"><span class="small muted">Niyetin</span><div class="row" id="niyet">${Object.entries(NIYET).map(([k, v]) => `<button class="chip ${SECIM.niyet === k ? "on" : ""}" data-k="${k}">${v}</button>`).join("")}</div></div>
-     <label class="f">Sorun (isteğe bağlı)<input id="soru" maxlength="160" value="${esc(SECIM.soru)}" placeholder="ör. Bu değişime hazır mıyım?"></label>
+     <div class="lab">${t("ana.etiket")}</div><h2>${t("ana.baslik")}</h2>
+     <div class="stack"><span class="small muted">${t("ana.niyet")}</span><div class="row" id="niyet">${Object.keys(NIYET).map(k => `<button class="chip ${SECIM.niyet === k ? "on" : ""}" data-k="${k}">${t("niyet." + k)}</button>`).join("")}</div></div>
+     <label class="f">${t("ana.soru")}<input id="soru" maxlength="160" value="${esc(SECIM.soru)}" placeholder="${t("ana.soruOrnek")}"></label>
      <div id="derinBox"></div>
      <div class="quota" id="quota">${halka(0, 1, "–")}${halka(0, 1, "–")}${halka(0, 1, "–")}</div>
-     <div class="quota-l"><span>Bugün</span><span>Bu hafta</span><span>Derin</span></div>
-     <button class="btn primary block cta" id="basla" disabled><span>Kartları diz</span></button>
+     <div class="quota-l"><span>${t("ana.bugun")}</span><span>${t("ana.buHafta")}</span><span>${t("ana.derin")}</span></div>
+     <button class="btn primary block cta" id="basla" disabled><span>${t("ana.cta")}</span></button>
      <p class="small muted" id="hakNot"></p>
    </section>
-   <button class="daily" id="gun" style="--c:${TEMA[gk.set].renk}">${face(gk)}<div class="stack" style="gap:4px"><span class="lab">Günün işareti · ${SET[gk.set].diger}</span><b>${esc(gk.ad)}</b><span class="small muted">${esc(gk.dAnahtar)}</span><span class="small" style="color:var(--c)">${esc(gk.mitDers.split(/(?<=[.;])\s/)[0])}</span></div></button>
-   ${g.length ? `<section class="stack"><div class="row" style="justify-content:space-between"><h3>Son okumaların</h3><a class="small" href="#gecmis" style="color:var(--blue)">Tümü</a></div><div class="hist">${g.map(histItem).join("")}</div></section>` : ""}`;
+   <button class="daily" id="gun" style="--c:${TEMA[gk.set].renk}">${face(gk)}<div class="stack" style="gap:4px"><span class="lab">${t("ana.gununIsareti")} · ${SET[gk.set].diger}</span><b>${esc(gk.ad)}</b><span class="small muted">${esc(gk.dAnahtar)}</span>${gk.mitDers ? `<span class="small" style="color:var(--c)">${esc(gk.mitDers.split(/(?<=[.;。])\s*/)[0])}</span>` : ""}</div></button>
+   ${g.length ? `<section class="stack"><div class="row" style="justify-content:space-between"><h3>${t("ana.sonOkumalar")}</h3><a class="small" href="#gecmis" style="color:var(--blue)">${t("ana.tumu")}</a></div><div class="hist">${g.map(histItem).join("")}</div></section>` : ""}`;
   $$("#niyet button").forEach(b => b.onclick = () => { SECIM.niyet = b.dataset.k; $$("#niyet button").forEach(x => x.classList.toggle("on", x === b)); });
   $("#soru").oninput = e => SECIM.soru = e.target.value;
   $("#gun").onclick = () => kartDetay(gk.kod);
@@ -167,16 +192,16 @@ async function viewAna() {
   $("#quota").innerHTML = halka(h.gunKalan, h.gunluk, `${h.gunKalan}/${h.gunluk}`) + halka(h.haftaKalan, h.haftalik, `${h.haftaKalan}/${h.haftalik}`) + (k.okuma === "derin" ? halka(1, 1, "∞") : halka(h.derinKalan, h.derinAylik || 1, `${h.derinKalan}/${h.derinAylik}`));
   const var_ = h.gunKalan > 0 && h.haftaKalan > 0; $("#basla").disabled = !var_;
   if (k.okuma === "tam" && h.derinKalan > 0) {
-    $("#derinBox").innerHTML = `<label class="check"><input type="checkbox" id="derin" ${SECIM.derin ? "checked" : ""}> Derin okuma kullan (bu ay ${h.derinKalan} hakkın var)</label>`;
+    $("#derinBox").innerHTML = `<label class="check"><input type="checkbox" id="derin" ${SECIM.derin ? "checked" : ""}> ${t("ana.derinKullan", { n: h.derinKalan })}</label>`;
     $("#derin").onchange = e => SECIM.derin = e.target.checked;
   } else SECIM.derin = false;
-  $("#hakNot").innerHTML = var_ ? `${OKUMALAR[k.okuma].ad} · ${k.ad} katman` : `${h.gunKalan <= 0 ? "Bugünkü" : "Bu haftaki"} okuma hakkın doldu. <a href="#premium" style="color:var(--blue)">Premium ile günde 2 okuma</a>`;
+  $("#hakNot").innerHTML = var_ ? t("ana.hakNot", { okuma: okumaAd(k.okuma), katman: katmanAd(h.katman) }) : `${t(h.gunKalan <= 0 ? "ana.hakBittiGun" : "ana.hakBittiHafta")} <a href="#premium" style="color:var(--blue)">${t("ana.premiumIle")}</a>`;
   $("#basla").onclick = () => okumaBaslat();
 }
 function histItem(r) {
   const d = new Date(r.tarih); const ks = r.koruyucu || baskinSet(r.picks.map(p => CARD[p.kod])).set;
   return `<a class="hitem" href="#sonuc-${r.id}" style="--c:${TEMA[ks].renk}">${koruyucuHTML(ks, "mini")}
-   <div class="stack" style="gap:2px;flex:1"><span class="t">${esc(r.baslik || "Okuma")}</span><span class="small muted">${d.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })} · ${OKUMALAR[r.mod]?.ad || ""}</span></div>
+   <div class="stack" style="gap:2px;flex:1"><span class="t">${esc(r.baslik || t("genel.okuma"))}</span><span class="small muted">${d.toLocaleDateString(yerelKod(), { day: "numeric", month: "long" })} · ${okumaAd(r.mod)}</span></div>
    <div class="thumbs">${r.picks.slice(0, 3).map(p => `<img src="${img(p.kod)}" alt="">`).join("")}</div></a>`;
 }
 
@@ -185,29 +210,29 @@ let CTL = null;
 function okumaBaslat() {
   const order = [...D.cards.map(c => c.kod)].sort(() => Math.random() - .5);
   const picks = []; let pending = null;
-  const ov = document.createElement("div"); ov.className = "reading dealing"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", "Kart seçimi");
+  const ov = document.createElement("div"); ov.className = "reading dealing"; ov.setAttribute("role", "dialog"); ov.setAttribute("aria-label", t("ok.aria"));
   const sesAcik = () => efektAyar().ses;
-  ov.innerHTML = `<div class="rhead"><button class="btn ghost icon" id="rx" aria-label="Kapat">✕</button><h2 id="rt">Kartlar karıştırılıyor</h2>
-     <div class="row" style="gap:10px"><div class="dots" id="rd">${POS.map(() => "<i></i>").join("")}</div><button class="btn ghost icon" id="rm" aria-label="Sesi aç/kapat">${sesAcik() ? "♪" : "–"}</button></div></div>
-   <p class="hint small muted" id="rhint">Kartlara odaklan ve içinden gelen ilk karta dokun.</p>
-   <div class="grid" id="rg">${order.map((k, i) => `<button class="gcard" data-k="${k}" aria-label="Kapalı kart ${i + 1}" disabled><span class="badge"></span><span class="in"><span class="back"></span></span></button>`).join("")}</div>
-   <div class="tray" id="rtr">${POS.map((p, i) => `<div class="slot" data-i="${i}"><span class="sl">${p.ad}</span></div>`).join("")}</div>
-   <div class="sheet" id="sh"><div class="lab" id="shp"></div><div style="font-family:var(--f-display);font-size:18px;margin-top:4px">Kartı nasıl koyuyorsun?</div>
-     <div class="choice"><button id="chD"><span class="shape"></span>Dikey</button><button id="chY"><span class="shape h"></span>Yatay</button><button id="chX"><span class="shape" style="border-style:dashed;border-color:var(--dim)"></span>Vazgeç</button></div>
-     <p class="small muted" style="margin-top:10px">Dikey: enerji açık ve harekette. Yatay: enerji içe dönük, olgunlaşıyor.</p></div>`;
+  ov.innerHTML = `<div class="rhead"><button class="btn ghost icon" id="rx" aria-label="${t("genel.kapat")}">✕</button><h2 id="rt">${t("ok.karistiriliyor")}</h2>
+     <div class="row" style="gap:10px"><div class="dots" id="rd">${POS.map(() => "<i></i>").join("")}</div><button class="btn ghost icon" id="rm" aria-label="${t("ok.sesAria")}">${sesAcik() ? "♪" : "–"}</button></div></div>
+   <p class="hint small muted" id="rhint">${t("ok.ipucu")}</p>
+   <div class="grid" id="rg">${order.map((k, i) => `<button class="gcard" data-k="${k}" aria-label="${t("ok.kapaliKart", { n: i + 1 })}" disabled><span class="badge"></span><span class="in"><span class="back"></span></span></button>`).join("")}</div>
+   <div class="tray" id="rtr">${POS.map((p, i) => `<div class="slot" data-i="${i}"><span class="sl">${posAd(i)}</span></div>`).join("")}</div>
+   <div class="sheet" id="sh"><div class="lab" id="shp"></div><div style="font-family:var(--f-display);font-size:18px;margin-top:4px">${t("ok.nasilKoy")}</div>
+     <div class="choice"><button id="chD"><span class="shape"></span>${konum("D")}</button><button id="chY"><span class="shape h"></span>${konum("Y")}</button><button id="chX"><span class="shape" style="border-style:dashed;border-color:var(--dim)"></span>${t("genel.vazgec")}</button></div>
+     <p class="small muted" style="margin-top:10px">${t("ok.konumAciklama")}</p></div>`;
   document.body.appendChild(ov); document.body.style.overflow = "hidden";
   const kartlar = [...ov.querySelectorAll(".gcard")];
   const baslik = () => {
     $$("#rd i").forEach((d, i) => d.classList.toggle("on", i < picks.length));
     $$("#rtr .slot").forEach((s, i) => s.classList.toggle("next", i === picks.length));
-    $("#rt").textContent = picks.length < 6 ? `${picks.length + 1}. kart · ${POS[picks.length].ad}` : "Kartlar hazır";
-    $("#rhint").textContent = picks.length < 6 ? POS[picks.length].soru : "Kartlar açılıyor…";
+    $("#rt").textContent = picks.length < 6 ? t("ok.kartNo", { n: picks.length + 1, pos: posAd(picks.length) }) : t("ok.hazir");
+    $("#rhint").textContent = picks.length < 6 ? posSoru(picks.length) : t("ok.aciliyor");
   };
   const close = () => { ov.remove(); document.body.style.overflow = ""; };
   ortam.baslat(); sis.surekli(0.7); sis.gecis();
   const sheet = on => { $("#sh").classList.toggle("show", on); if (!on) { pending?.classList.remove("sel"); pending = null; } };
   $("#rx").onclick = () => { close(); ortam.durdur(); sis.surekli(0); };
-  $("#rm").onclick = () => { setEfekt("ses", !sesAcik()); $("#rm").textContent = sesAcik() ? "♪" : "–"; toast(sesAcik() ? "Ses açık" : "Ses kapalı"); };
+  $("#rm").onclick = () => { setEfekt("ses", !sesAcik()); $("#rm").textContent = sesAcik() ? "♪" : "–"; toast(t(sesAcik() ? "ok.sesAcik" : "ok.sesKapali")); };
 
   // Karıştırma ve dağıtma
   (async () => {
@@ -232,7 +257,7 @@ function okumaBaslat() {
     if (picks.length >= 6 || b.classList.contains("taken")) return;
     pending?.classList.remove("sel"); pending = b; b.classList.add("sel");
     ses.kaldir(); titres(10); kivilcimEl(b, { n: 6, renk: "mavi", hiz: 40, omur: 1.2 });
-    $("#shp").textContent = `${picks.length + 1}. pozisyon · ${POS[picks.length].ad} — ${POS[picks.length].soru}`; sheet(true); $("#chD").focus();
+    $("#shp").textContent = t("ok.pozisyon", { n: picks.length + 1, pos: posAd(picks.length), soru: posSoru(picks.length) }); sheet(true); $("#chD").focus();
   });
   const place = async o => {
     if (!pending) return; const b = pending, i = picks.length; sheet(false);
@@ -245,7 +270,7 @@ function okumaBaslat() {
     const dx = to.left + to.width / 2 - (from.left + from.width / 2), dy = to.top + to.height / 2 - (from.top + from.height / 2), sc = h / from.height;
     if (fly.animate && !azHareket()) await fly.animate([{ transform: "none" }, { transform: `translate(${dx * 0.5}px,${dy * 0.5 - 60}px) scale(${(1 + sc) / 2 + 0.25}) rotate(${o === "Y" ? 45 : 0}deg)` }, { transform: `translate(${dx}px,${dy}px) scale(${sc}) rotate(${o === "Y" ? 90 : 0}deg)` }], { duration: 560, easing: "cubic-bezier(.3,.6,.2,1)", fill: "forwards" }).finished.catch(() => {});
     fly.remove();
-    slot.innerHTML = `<div class="m ${o === "Y" ? "y" : ""}" style="height:${h}px;width:${w}px"><span class="back"></span></div><span class="sl">${POS[i].ad}</span>`; slot.classList.add("full");
+    slot.innerHTML = `<div class="m ${o === "Y" ? "y" : ""}" style="height:${h}px;width:${w}px"><span class="back"></span></div><span class="sl">${posAd(i)}</span>`; slot.classList.add("full");
     ses.yerlestir(i); titres([8, 40, 12]); sis.duman(slot, { n: 4, tepe: 0.45 }); kivilcimEl(slot, { n: 5, renk: "kirmizi", hiz: 30, omur: 1.4 });
     baslik();
     if (picks.length === 6) { ses.tamam(); $("#rtr").classList.add("done"); await sleep(900); close(); acilis(picks); }
@@ -257,26 +282,27 @@ async function acilis(picks) {
   const p = store.profil(); const P = { ...p, niyet: SECIM.niyet, soru: SECIM.soru.trim() };
   const k = KATMANLAR[store.katman()]; const mod = k.okuma === "tam" && SECIM.derin ? "derin" : k.okuma;
   const A = analyze(D, picks, P); const B = baskinSet(A.cs); koruyucuOnYukle(B.set);
+  const At = analyze(DT, picks, P); const yerel = yerelIstem(aktifDil(), metinler(), kartCevirisi(), At.cs);
   const id = Date.now().toString(36);
-  store.addGecmis({ id, tarih: new Date().toISOString(), picks, profil: { burc: P.burc, yk: P.yk, niyet: P.niyet, soru: P.soru }, mod, metin: "", baslik: "", durum: "bekliyor", koruyucu: B.set });
+  store.addGecmis({ id, tarih: new Date().toISOString(), picks, profil: { burc: P.burc, yk: P.yk, niyet: P.niyet, soru: P.soru }, mod, metin: "", baslik: "", durum: "bekliyor", koruyucu: B.set, dil: aktifDil() });
   // Yorum isteği açılış animasyonu başlamadan gönderilir; bekleme animasyonun arkasında kalır.
   CTL?.abort(); CTL = new AbortController(); const t0 = performance.now(); let tIlk = null;
   const LIVE = window.__LIVE = { id, text: "", bitti: false };
-  okumaIste({ D, A, profil: P, picks, mod, signal: CTL.signal, onText: text => {
+  okumaIste({ D: DT, A: At, Dy: D, Ay: A, dil: aktifDil(), yerel, profil: P, picks, mod, signal: CTL.signal, onText: text => {
     if (tIlk === null) tIlk = performance.now();
     LIVE.text = text; const out = $("#aiout"); if (out && LIVE.id === id) { out.innerHTML = mdAkan(text); oracleKapat(); }
   } }).then(r => {
-    LIVE.bitti = true; const baslik = (r.text.match(/^#\s+(.+)$/m) || [])[1] || "Okuma";
+    LIVE.bitti = true; const baslik = (r.text.match(/^#\s+(.+)$/m) || [])[1] || t("genel.okuma");
     store.updateGecmis(id, { metin: r.text, baslik, mod: r.mod, durum: "tamam", sure: { ilk: tIlk ? Math.round(tIlk - t0) : null, toplam: Math.round(performance.now() - t0) }, demo: !!r.demo });
     if (location.hash === "#sonuc-" + id) { ortam.durdur(3); sis.surekli(0); viewSonuc(id, true); ses.tamam(); }
   }).catch(e => {
-    LIVE.bitti = true; ortam.durdur(); sis.surekli(0); store.updateGecmis(id, { durum: "hata", hata: e instanceof OkumaHatasi ? e.message : "Yorum alınamadı.", hataKod: e.kod });
+    LIVE.bitti = true; ortam.durdur(); sis.surekli(0); store.updateGecmis(id, { durum: "hata", hata: e instanceof OkumaHatasi ? e.message : t("hata.genel"), hataKod: e.kod });
     if (location.hash === "#sonuc-" + id) viewSonuc(id, true);
   });
 
   const ov = document.createElement("div"); ov.className = "reveal";
-  ov.innerHTML = `<button class="btn ghost skip" id="atla">Atla</button><div class="lab" id="rvl">Kartlar açılıyor</div>
-   <div class="rgrid">${picks.map((pk, i) => { const c = CARD[pk.kod]; return `<div class="rslot" style="--c:${TEMA[c.set].renk};--d:${i * 90}ms"><div class="box"><div class="c ${pk.o === "Y" ? "y" : ""}"><span class="back"></span>${face(c)}<span class="shine"></span></div></div><span class="p">${POS[i].ad}</span></div>`; }).join("")}</div>
+  ov.innerHTML = `<button class="btn ghost skip" id="atla">${t("acl.atla")}</button><div class="lab" id="rvl">${t("acl.etiket")}</div>
+   <div class="rgrid">${picks.map((pk, i) => { const c = CARD[pk.kod]; return `<div class="rslot" style="--c:${TEMA[c.set].renk};--d:${i * 90}ms"><div class="box"><div class="c ${pk.o === "Y" ? "y" : ""}"><span class="back"></span>${face(c)}<span class="shine"></span></div></div><span class="p">${posAd(i)}</span></div>`; }).join("")}</div>
    <p class="cap" id="rvn" aria-live="polite"></p>
    <div class="gstage" id="gs"></div>`;
   document.body.appendChild(ov);
@@ -287,14 +313,14 @@ async function acilis(picks) {
   for (let i = 0; i < cs.length && !atla; i++) {
     const c = CARD[picks[i].kod]; cs[i].classList.add("open"); ses.cevir(i); titres(12);
     setTimeout(() => { sis.duman(cs[i], { n: 5, tepe: 0.4 }); kivilcimEl(cs[i], { n: 10, renk: TEMA[c.set].rgba, hiz: 50 }); }, 380);
-    $("#rvn").innerHTML = `<span style="color:${TEMA[c.set].renk}">${POS[i].ad}</span> · ${esc(c.ad)} <span class="muted">(${picks[i].o === "D" ? "dikey" : "yatay"})</span>`;
+    $("#rvn").innerHTML = `<span style="color:${TEMA[c.set].renk}">${posAd(i)}</span> · ${esc(c.ad)} <span class="muted">(${konum(picks[i].o).toLocaleLowerCase(yerelKod())})</span>`;
     await sleep(820);
   }
   if (atla) return bitir();
   // Koruyucu sahnesi
   await sleep(400); ov.classList.add("guardian");
   const T = TEMA[B.set], S = SET[B.set];
-  $("#gs").innerHTML = `${koruyucuHTML(B.set, "big")}<div class="lab">Bu okumanın koruyucusu</div><h2 style="color:${T.renk}">${T.koruyucu}</h2><p class="muted small">${S.diger} · ${S.mitoloji}</p><p class="soz">${T.soz}</p>`;
+  $("#gs").innerHTML = `${koruyucuHTML(B.set, "big")}<div class="lab">${t("acl.koruyucu")}</div><h2 style="color:${T.renk}">${korAd(B.set)}</h2><p class="muted small">${S.diger} · ${mitAd(B.set)}</p><p class="soz">${korSoz(B.set)}</p>`;
   ses.koruyucu(); titres([20, 60, 30]);
   sis.acilis(2.4, 0.4); sis.surekli(0.8);
   setTimeout(() => { const g = $("#gs .guard"); if (g) { sis.duman(g, { n: 7, tepe: 0.35 }); kivilcimEl(g, { n: 24, renk: T.rgba, hiz: 70, omur: 2.2 }); } }, 500);
@@ -303,12 +329,12 @@ async function acilis(picks) {
 }
 
 /* ---------- Sonuç ---------- */
-const BEKLEME = (A, S) => ["Kartların dili çözülüyor", `${[...new Set(A.cs.map(c => S[c.set].mitoloji))].join(", ")} anlatıları dinleniyor`, "Göklerin haritası okunuyor", "Kök'ten Kader'e yol çiziliyor", "Koruyucu sözünü fısıldıyor"];
+const BEKLEME = A => [t("bek.1"), t("bek.2", { m: [...new Set(A.cs.map(c => mitAd(c.set)))].join(", ") }), t("bek.3"), t("bek.4", { a: posAd(0), b: posAd(5) }), t("bek.5")];
 function oracleKapat() { const o = $("#oracle"); if (o && !o.classList.contains("hidden")) { o.classList.add("hidden"); clearInterval(BEKLE); } }
 function viewSonuc(id, yenile) {
   chrome(true, "gecmis");
   const r = store.gecmis().find(x => x.id === id);
-  if (!r) { $("#view").innerHTML = `<p class="muted">Okuma bulunamadı.</p>`; return; }
+  if (!r) { $("#view").innerHTML = `<p class="muted">${t("sn.bulunamadi")}</p>`; return; }
   const A = analyze(D, r.picks, r.profil); const B = { ...baskinSet(A.cs), ...(r.koruyucu ? { set: r.koruyucu } : {}) };
   const T = TEMA[B.set], S = SET[B.set]; const adet = A.cs.filter(c => c.set === B.set).length;
   const live = window.__LIVE?.id === id ? window.__LIVE.text : ""; const metin = r.metin || live; const akiyor = !r.metin && r.durum === "bekliyor";
@@ -317,26 +343,26 @@ function viewSonuc(id, yenile) {
   const W = CONFIG.MEDIA.waitingVideo;
   $("#view").innerHTML = `
    <section class="ghero" style="--c:${T.renk}">${koruyucuHTML(B.set, "hero")}
-    <div class="stack" style="gap:4px"><div class="lab">Koruyucun</div><h2 style="color:${T.renk}">${T.koruyucu}</h2>
-     <span class="small muted">${S.diger} · ${S.mitoloji}</span>
-     <span class="small">${adet >= 2 && B.neden !== "kader" ? `Bu okumada ${adet} ${S.diger} kartı çıktı.` : (new Set(A.cs.map(c => c.set)).size === 6 ? "Kartlar altı farklı setten geldi" : "Setler eşit dağıldı") + "; Kader kartının koruyucusu yol gösteriyor."}</span>
-     <p class="soz">${T.soz}</p></div></section>
-   <section class="stack"><div class="lab">${new Date(r.tarih).toLocaleString("tr-TR", { dateStyle: "long", timeStyle: "short" })} · ${OKUMALAR[r.mod]?.ad || ""}</div>
-    <div class="strip">${A.cs.map((c, i) => `<button data-k="${c.kod}" data-i="${i}" style="--c:${TEMA[c.set].renk}"><span class="p">${POS[i].ad}</span><span class="bx"><span class="t ${c.o === "Y" ? "y" : ""}">${face(c)}</span></span><span class="n">${esc(c.ad)}</span></button>`).join("")}</div></section>
+    <div class="stack" style="gap:4px"><div class="lab">${t("sn.koruyucun")}</div><h2 style="color:${T.renk}">${korAd(B.set)}</h2>
+     <span class="small muted">${S.diger} · ${mitAd(B.set)}</span>
+     <span class="small">${adet >= 2 && B.neden !== "kader" ? t("sn.cogunluk", { n: adet, set: S.diger }) : t(new Set(A.cs.map(c => c.set)).size === 6 ? "sn.altiFarkli" : "sn.esit", { kader: posAd(5) })}</span>
+     <p class="soz">${korSoz(B.set)}</p></div></section>
+   <section class="stack"><div class="lab">${new Date(r.tarih).toLocaleString(yerelKod(), { dateStyle: "long", timeStyle: "short" })} · ${okumaAd(r.mod)}</div>
+    <div class="strip">${A.cs.map((c, i) => `<button data-k="${c.kod}" data-i="${i}" style="--c:${TEMA[c.set].renk}"><span class="p">${posAd(i)}</span><span class="bx"><span class="t ${c.o === "Y" ? "y" : ""}">${face(c)}</span></span><span class="n">${esc(c.ad)}</span></button>`).join("")}</div></section>
    <section class="panel reading-text">
-    <div class="oracle ${metin || r.durum !== "bekliyor" ? "hidden" : ""}" id="oracle">${W ? `<video src="${W}" autoplay muted loop playsinline></video>` : SIGIL("small spin")}<span id="obek">Kartların dili çözülüyor</span></div>
+    <div class="oracle ${metin || r.durum !== "bekliyor" ? "hidden" : ""}" id="oracle">${W ? `<video src="${W}" autoplay muted loop playsinline></video>` : SIGIL("small spin")}<span id="obek">${t("bek.1")}</span></div>
     <div class="aiout" id="aiout">${metin ? (akiyor ? mdAkan(metin) : md(metin)) : ""}</div>
     ${r.durum === "hata" ? `<p class="note" style="border-color:var(--warn)">${esc(r.hata)}</p>` : ""}
-    ${r.sure ? `<p class="small muted" style="margin-top:12px">İlk metin ${(r.sure.ilk / 1000 || 0).toFixed(1)} sn · toplam ${(r.sure.toplam / 1000).toFixed(1)} sn${r.demo ? " · demo" : ""}</p>` : ""}
+    ${r.sure ? `<p class="small muted" style="margin-top:12px">${t("sn.sure", { ilk: (r.sure.ilk / 1000 || 0).toFixed(1), top: (r.sure.toplam / 1000).toFixed(1) })}${r.demo ? " · demo" : ""}</p>` : ""}
    </section>
-   <section class="panel stack"><div class="lab">Okumanın haritası</div>
-    <div class="row small">${Object.entries(A.elc).map(([e, n]) => `<span class="chip el-${e}">${e} ${n}</span>`).join("")}<span class="chip">${A.dik} dikey · ${6 - A.dik} yatay</span></div>
-    ${A.anaTema.length ? `<div class="row small">${A.anaTema.map(x => `<span class="chip">${TAGS[x.t]} ×${x.n}</span>`).join("")}</div>` : ""}
-    ${A.kopru.length ? `<div class="small"><span class="muted">Mitolojik köprüler:</span> ${A.kopru.map(k => `${D.motifler[k.m]} (${k.l.map(c => SET[c.set].mitoloji).filter((v, i, a) => a.indexOf(v) === i).join(" + ")})`).join(" · ")}</div>` : ""}
-    <p class="small muted">Kartlara dokunarak anlamlarını ve mitolojik bağlarını inceleyebilirsin.</p></section>
-   <a class="btn block" href="#ana">Ana sayfaya dön</a>`;
+   <section class="panel stack"><div class="lab">${t("sn.harita")}</div>
+    <div class="row small">${Object.entries(A.elc).map(([e, n]) => `<span class="chip el-${e}">${elAd(e)} ${n}</span>`).join("")}<span class="chip">${t("sn.dikYat", { d: A.dik, y: 6 - A.dik })}</span></div>
+    ${A.anaTema.length ? `<div class="row small">${A.anaTema.map(x => `<span class="chip">${tv("tag", x.t)} ×${x.n}</span>`).join("")}</div>` : ""}
+    ${A.kopru.length ? `<div class="small"><span class="muted">${t("sn.kopruler")}</span> ${A.kopru.map(k => `${tv("motif", k.m)} (${k.l.map(c => mitAd(c.set)).filter((v, i, a) => a.indexOf(v) === i).join(" + ")})`).join(" · ")}</div>` : ""}
+    <p class="small muted">${t("sn.dokun")}</p></section>
+   <a class="btn block" href="#ana">${t("sn.anaDon")}</a>`;
   $$(".strip button").forEach(b => b.onclick = () => kartDetay(b.dataset.k, A.cs[+b.dataset.i], +b.dataset.i));
-  if (!metin && r.durum === "bekliyor") { const L = BEKLEME(A, SET); let n = 0; clearInterval(BEKLE); BEKLE = setInterval(() => { const e = $("#obek"); if (!e) return clearInterval(BEKLE); e.classList.remove("swap"); void e.offsetWidth; e.textContent = L[++n % L.length]; e.classList.add("swap"); }, 2200); }
+  if (!metin && r.durum === "bekliyor") { const L = BEKLEME(A); let n = 0; clearInterval(BEKLE); BEKLE = setInterval(() => { const e = $("#obek"); if (!e) return clearInterval(BEKLE); e.classList.remove("swap"); void e.offsetWidth; e.textContent = L[++n % L.length]; e.classList.add("swap"); }, 2200); }
   if (!yenile) { const g = $(".ghero .guard"); g && setTimeout(() => kivilcimEl(g, { n: 10, renk: T.rgba, hiz: 40, omur: 2 }), 350); }
   if (!metin && r.durum === "bekliyor") sis.surekli(0.35);
 }
@@ -344,25 +370,27 @@ function viewSonuc(id, yenile) {
 /* ---------- Kart detayı ---------- */
 function kartDetay(kod, okumadaki, i) {
   const c = CARD[kod], s = SET[c.set];
-  const o = okumadaki?.o; const pz = okumadaki ? c.poz[POS[i].ad] : null;
-  openDialog(`<div class="lab" style="color:${TEMA[c.set].renk}">${s.ad} / ${s.diger} · ${s.mitoloji}</div><h2>${esc(c.ad)}</h2>`, `
-   <div class="dcard">${face(c)}<div class="stack"><div class="row small"><span class="chip">${c.gezegen}</span><span class="chip">${c.burc}</span><span class="chip el-${c.element}">${c.element}</span></div>
-    ${o ? `<div class="lab">${POS[i].ad} · ${o === "D" ? "Dikey" : "Yatay"}</div><p class="read" style="font-style:italic">${esc(o === "D" ? pz.D : pz.Y)}</p>` : `<p class="small muted">${esc(c.dAnahtar)} · ${esc(c.yAnahtar)}</p>`}</div></div>
-   ${o ? `<div><div class="lab">${o === "D" ? "Dikey" : "Yatay"} anlam</div><p class="read">${esc(o === "D" ? c.dAnlam : c.yAnlam)}</p></div>` :
-     `<div><div class="lab">Dikey · ${esc(c.dAnahtar)}</div><p class="read">${esc(c.dAnlam)}</p></div><div><div class="lab">Yatay · ${esc(c.yAnahtar)}</div><p class="read">${esc(c.yAnlam)}</p></div>`}
-   <div class="mit" style="border-color:${TEMA[c.set].renk}"><div class="lab">Mitolojik bağ</div><div class="row small">${c.mitFigur.map(f => `<span class="chip">${esc(f)}</span>`).join("")}</div>
-    <p class="read">${esc(c.mitDers)}</p><p class="small"><span class="muted">Dikkat:</span> ${esc(c.mitDikkat)}</p></div>
-   <div><div class="lab">Mitolojik kaynak</div><p class="read small">${esc(c.mitGercek)}</p></div>
-   <div><div class="lab">Kartın hikâyesi</div><p class="read">${esc(c.hikaye)}</p></div>
-   ${o ? "" : `<div style="overflow-x:auto"><table class="t"><tr><th>Pozisyon</th><th>Dikey</th><th>Yatay</th></tr>${POS.map(p => `<tr><td>${p.ad}</td><td>${esc(c.poz[p.ad]?.D)}</td><td>${esc(c.poz[p.ad]?.Y)}</td></tr>`).join("")}</table></div>`}`);
+  const o = okumadaki?.o; const pz = okumadaki && c.poz ? c.poz[POS[i].ad] : null;
+  const anlam = x => esc(x) || ceviriNot();
+  openDialog(`<div class="lab" style="color:${TEMA[c.set].renk}">${setAd(s)} · ${mitAd(c.set)}</div><h2>${esc(c.ad)}</h2>`, `
+   <div class="dcard">${face(c)}<div class="stack"><div class="row small"><span class="chip">${gezAd(c.gezegen)}</span><span class="chip">${burcAd(c.burc)}</span><span class="chip el-${c.element}">${elAd(c.element)}</span></div>
+    ${o ? `<div class="lab">${posAd(i)} · ${konum(o)}</div>${pz ? `<p class="read" style="font-style:italic">${esc(o === "D" ? pz.D : pz.Y)}</p>` : `<p class="small muted">${esc(o === "D" ? c.dAnahtar : c.yAnahtar)}</p>`}` : `<p class="small muted">${esc(c.dAnahtar)} · ${esc(c.yAnahtar)}</p>`}</div></div>
+   ${o ? `<div><div class="lab">${t("kd.anlam", { k: konum(o) })}</div><p class="read">${anlam(o === "D" ? c.dAnlam : c.yAnlam)}</p></div>` :
+     `<div><div class="lab">${konum("D")} · ${esc(c.dAnahtar)}</div>${c.dAnlam ? `<p class="read">${esc(c.dAnlam)}</p>` : ""}</div><div><div class="lab">${konum("Y")} · ${esc(c.yAnahtar)}</div>${c.yAnlam ? `<p class="read">${esc(c.yAnlam)}</p>` : ""}</div>`}
+   <div class="mit" style="border-color:${TEMA[c.set].renk}"><div class="lab">${t("kd.mitBag")}</div><div class="row small">${c.mitFigur.map(f => `<span class="chip">${esc(f)}</span>`).join("")}</div>
+    ${c.mitDers ? `<p class="read">${esc(c.mitDers)}</p><p class="small"><span class="muted">${t("kd.dikkat")}</span> ${esc(c.mitDikkat)}</p>` : ""}</div>
+   ${c.mitGercek ? `<div><div class="lab">${t("kd.kaynak")}</div><p class="read small">${esc(c.mitGercek)}</p></div>` : ""}
+   ${c.hikaye ? `<div><div class="lab">${t("kd.hikaye")}</div><p class="read">${esc(c.hikaye)}</p></div>` : ""}
+   ${o || !c.poz ? "" : `<div style="overflow-x:auto"><table class="t"><tr><th>${t("kd.pozisyon")}</th><th>${konum("D")}</th><th>${konum("Y")}</th></tr>${POS.map((p, j) => `<tr><td>${posAd(j)}</td><td>${esc(c.poz[p.ad]?.D)}</td><td>${esc(c.poz[p.ad]?.Y)}</td></tr>`).join("")}</table></div>`}
+   ${c.ceviriEksik?.length ? ceviriNot() : ""}`);
 }
 
 /* ---------- Kütüphane ---------- */
 function viewKartlar() {
   chrome(true, "kartlar");
-  $("#view").innerHTML = `<h2>Kartlar</h2><p class="small muted">Altı mitoloji, altı koruyucu, otuz altı kart.</p>` + D.sets.map(s => { const T = TEMA[s.id]; return `<section class="setsec" style="--c:${T.renk}">
-    <header>${koruyucuHTML(s.id, "mini")}<div class="stack" style="gap:2px;flex:1"><h3>${s.diger}</h3><span class="small muted">${s.ad} · ${s.mitoloji} · ${T.koruyucu}</span></div></header>
-    <details><summary class="small">Mitolojik çerçeve</summary><p class="read small" style="margin-top:8px">${esc(s.cerceve)}</p></details>
+  $("#view").innerHTML = `<h2>${t("kt.baslik")}</h2><p class="small muted">${t("kt.alt")}</p>` + D.sets.map(s => { const T = TEMA[s.id]; return `<section class="setsec" style="--c:${T.renk}">
+    <header>${koruyucuHTML(s.id, "mini")}<div class="stack" style="gap:2px;flex:1"><h3>${s.diger}</h3><span class="small muted">${aktifDil() === "tr" ? s.ad + " · " : ""}${mitAd(s.id)} · ${korAd(s.id)}</span></div></header>
+    <details><summary class="small">${t("kt.cerceve")}</summary>${s.cerceve ? `<p class="read small" style="margin-top:8px">${esc(s.cerceve)}</p>` : ceviriNot()}</details>
     <div class="lgrid">${D.cards.filter(c => c.set === s.id).map(c => `<button class="lcard" data-k="${c.kod}">${face(c)}<span class="nm">${esc(c.ad)}</span></button>`).join("")}</div></section>`; }).join("");
   $$(".lcard").forEach(b => b.onclick = () => kartDetay(b.dataset.k));
 }
@@ -370,8 +398,8 @@ function viewKartlar() {
 /* ---------- Geçmiş ---------- */
 function viewGecmis() {
   chrome(true, "gecmis"); const g = store.gecmis();
-  $("#view").innerHTML = `<h2>Geçmiş</h2>${g.length ? `<div class="hist">${g.map(histItem).join("")}</div>` : `<p class="muted">Henüz okuma yok. İlk okumanı ana sayfadan başlatabilirsin.</p>`}
-   <p class="note">Okumaların yalnızca bu cihazda saklanır. Uygulamayı silersen ya da tarayıcı verisini temizlersen kaybolur.</p>`;
+  $("#view").innerHTML = `<h2>${t("gc.baslik")}</h2>${g.length ? `<div class="hist">${g.map(histItem).join("")}</div>` : `<p class="muted">${t("gc.bos")}</p>`}
+   <p class="note">${t("gc.not")}</p>`;
 }
 
 /* ---------- Profil ---------- */
@@ -379,53 +407,55 @@ function viewProfil(alt) {
   chrome(true, "profil");
   if (alt === "duzenle") return viewProfilForm(false);
   const p = store.profil(); const k = store.katman(); const ef = efektAyar();
-  $("#view").innerHTML = `<h2>Profil</h2>
-   <section class="panel stack"><div class="row" style="justify-content:space-between"><div class="stack" style="gap:2px"><b>${esc(p.ad || "İsimsiz yolcu")}</b><span class="small muted">${p.burc}${p.yk ? " · yükselen " + p.yk : ""}</span></div><a class="btn" href="#profil-duzenle">Düzenle</a></div></section>
-   <section class="panel stack"><div class="lab">Üyelik</div><div class="row" style="justify-content:space-between"><b>${KATMANLAR[k].ad}</b><a class="btn" href="#premium">Planları gör</a></div>
-    ${MODE === "sunucu" ? `<label class="f">Test kodu (geliştirme için)<input id="kod" value="${esc(store.kod())}" placeholder="Sunucuda tanımlı kod"></label><button class="btn" id="kodK">Kodu uygula</button>`
-      : `<label class="f">Test katmanı (${MODE === "demo" ? "demo" : "önizleme"} modunda)<select id="tk">${Object.entries(KATMANLAR).map(([id, x]) => `<option value="${id}" ${id === k ? "selected" : ""}>${x.ad}</option>`).join("")}</select></label>
-         <button class="btn ghost" id="hakSifir">Hak sayacını sıfırla</button>`}</section>
-   <section class="panel stack"><div class="lab">Ses ve titreşim</div>
-    <label class="check"><input type="checkbox" id="efS" ${ef.ses ? "checked" : ""}> Ses efektleri</label>
-    <label class="check"><input type="checkbox" id="efT" ${ef.titresim ? "checked" : ""}> Titreşim</label></section>
-   <section class="panel stack"><div class="lab">Gizlilik</div><button class="btn ghost" id="kv">Aydınlatma metni</button>
-    <button class="btn ghost" id="sil">Verilerimi sil</button><div id="silOnay"></div></section>
-   <p class="small muted" style="text-align:center">${esc(CONFIG.APP_NAME)} · sürüm ${CONFIG.VERSION} · ${MODE === "sunucu" ? "sunucu modu" : MODE === "demo" ? "demo modu" : "önizleme modu"}</p>`;
+  $("#view").innerHTML = `<h2>${t("pr.baslik")}</h2>
+   <section class="panel stack"><div class="row" style="justify-content:space-between"><div class="stack" style="gap:2px"><b>${esc(p.ad || t("pr.isimsiz"))}</b><span class="small muted">${burcAd(p.burc)}${p.yk ? " · " + t("ana.yukselen", { b: burcAd(p.yk) }) : ""}</span></div><a class="btn" href="#profil-duzenle">${t("pr.duzenle")}</a></div></section>
+   <section class="panel stack"><div class="lab">${t("pr.dil")}</div><div class="row" style="justify-content:space-between"><b>${DILLER[aktifDil()].ad}</b><button class="btn" id="dilB">${t("pr.dilDegistir")}</button></div>
+    <p class="small muted">${t("pr.dilNot")}</p></section>
+   <section class="panel stack"><div class="lab">${t("pr.uyelik")}</div><div class="row" style="justify-content:space-between"><b>${katmanAd(k)}</b><a class="btn" href="#premium">${t("pr.planlar")}</a></div>
+    ${MODE === "sunucu" ? `<label class="f">${t("pr.testKod")}<input id="kod" value="${esc(store.kod())}" placeholder="${t("pr.testKodYer")}"></label><button class="btn" id="kodK">${t("pr.kodUygula")}</button>`
+      : `<label class="f">${t("pr.testKatman", { mod: t("mod." + MODE) })}<select id="tk">${Object.keys(KATMANLAR).map(id => `<option value="${id}" ${id === k ? "selected" : ""}>${katmanAd(id)}</option>`).join("")}</select></label>
+         <button class="btn ghost" id="hakSifir">${t("pr.hakSifirla")}</button>`}</section>
+   <section class="panel stack"><div class="lab">${t("pr.sesTitresim")}</div>
+    <label class="check"><input type="checkbox" id="efS" ${ef.ses ? "checked" : ""}> ${t("pr.ses")}</label>
+    <label class="check"><input type="checkbox" id="efT" ${ef.titresim ? "checked" : ""}> ${t("pr.titresim")}</label></section>
+   <section class="panel stack"><div class="lab">${t("pr.gizlilik")}</div><button class="btn ghost" id="kv">${t("gz.baslik")}</button>
+    <button class="btn ghost" id="sil">${t("pr.sil")}</button><div id="silOnay"></div></section>
+   <p class="small muted" style="text-align:center">${esc(CONFIG.APP_NAME)} · ${t("pr.surum", { v: CONFIG.VERSION })} · ${t("mod." + MODE)}</p>`;
+  $("#dilB").onclick = dilSecici;
   $("#kv").onclick = aydinlatma;
   $("#efS").onchange = e => { setEfekt("ses", e.target.checked); if (e.target.checked) ses.tamam(); };
   $("#efT").onchange = e => { setEfekt("titresim", e.target.checked); if (e.target.checked) titres(30); };
-  $("#tk")?.addEventListener("change", e => { store.setKatman(e.target.value); chrome(true, "profil"); toast(`${KATMANLAR[e.target.value].ad} katmanı seçildi`); });
-  $("#hakSifir")?.addEventListener("click", () => { store.setHak({}); toast("Hak sayacı sıfırlandı"); });
-  $("#kodK")?.addEventListener("click", async () => { store.setKod($("#kod").value.trim()); const h = await hakDurumu(); chrome(true, "profil"); toast(`Katman: ${KATMANLAR[h.katman].ad}`); });
-  $("#sil").onclick = () => { $("#silOnay").innerHTML = `<p class="small">Profilin, tüm okuma geçmişin ve ayarların bu cihazdan silinecek. Bu işlem geri alınamaz.</p><div class="row"><button class="btn primary" id="silE">Evet, sil</button><button class="btn ghost" id="silH">Vazgeç</button></div>`;
+  $("#tk")?.addEventListener("change", e => { store.setKatman(e.target.value); chrome(true, "profil"); toast(t("pr.katmanSecildi", { k: katmanAd(e.target.value) })); });
+  $("#hakSifir")?.addEventListener("click", () => { store.setHak({}); toast(t("pr.hakSifirlandi")); });
+  $("#kodK")?.addEventListener("click", async () => { store.setKod($("#kod").value.trim()); const h = await hakDurumu(); chrome(true, "profil"); toast(t("pr.katman", { k: katmanAd(h.katman) })); });
+  $("#sil").onclick = () => { $("#silOnay").innerHTML = `<p class="small">${t("pr.silUyari")}</p><div class="row"><button class="btn primary" id="silE">${t("pr.silEvet")}</button><button class="btn ghost" id="silH">${t("genel.vazgec")}</button></div>`;
     $("#silE").onclick = () => { store.hepsiniSil(); go("hosgeldin"); }; $("#silH").onclick = () => $("#silOnay").innerHTML = ""; };
 }
 
 /* ---------- Premium ---------- */
-const FIYAT = { premium: "79,99 TL / ay", premiumPlus: "149,99 TL / ay" };
+// Türkiye fiyatları (KDV dahil). Diğer ülkelerde fiyat Google Play'den, yerel para birimiyle gelecek.
+const FIYAT_TR = { premium: "79,99 TL", premiumPlus: "149,99 TL" };
 function viewPremium() {
   chrome(true, "profil"); const k = store.katman();
-  const tier = (id, ozellikler, best) => `<div class="tier ${best ? "best" : ""}"><div class="row" style="justify-content:space-between"><h3>${KATMANLAR[id].ad}</h3>${k === id ? `<span class="chip on">Aktif</span>` : best ? `<span class="chip on">Önerilen</span>` : ""}</div>
-    <div class="pr">${id === "ucretsiz" ? "Ücretsiz" : FIYAT[id]}</div><ul>${ozellikler.map(o => `<li>${o}</li>`).join("")}</ul>
-    ${id !== "ucretsiz" && k !== id ? `<button class="btn ${best ? "primary" : ""} block" ${CONFIG.STORE_READY ? "" : "disabled"}>${CONFIG.STORE_READY ? "Abone ol" : "Satın alma yakında"}</button>` : ""}</div>`;
-  $("#view").innerHTML = `<h2>Planlar</h2>
-   ${tier("ucretsiz", ["Günde 1, haftada 2 okuma", "Kısa okuma", "Tüm kart kütüphanesi ve günün işareti"])}
-   ${tier("premium", ["Günde 2, haftada 6 okuma", "Tam okuma: mitolojik köprüler ve kart bağları", "Ayda 2 Derin Okuma", "Reklamsız, okuma geçmişi"], true)}
-   ${tier("premiumPlus", ["Günde 2, haftada 6 okuma", "Tüm okumalar Derin Okuma", "Aylık özel okuma (yakında)", "Reklamsız, okuma geçmişi"])}
-   <p class="small muted">Fiyatlara KDV dahildir. Abonelik Google Play hesabın üzerinden yönetilir ve istediğin zaman iptal edilebilir.</p>`;
+  const fiyat = id => id === "ucretsiz" ? t("pm.ucretsiz") : aktifDil() === "tr" ? t("pm.ay", { f: FIYAT_TR[id] }) : t("pm.playFiyat");
+  const tier = (id, best) => `<div class="tier ${best ? "best" : ""}"><div class="row" style="justify-content:space-between"><h3>${katmanAd(id)}</h3>${k === id ? `<span class="chip on">${t("pm.aktif")}</span>` : best ? `<span class="chip on">${t("pm.onerilen")}</span>` : ""}</div>
+    <div class="pr">${fiyat(id)}</div><ul>${t("pm.oz." + id).split("|").map(o => `<li>${o}</li>`).join("")}</ul>
+    ${id !== "ucretsiz" && k !== id ? `<button class="btn ${best ? "primary" : ""} block" ${CONFIG.STORE_READY ? "" : "disabled"}>${CONFIG.STORE_READY ? t("pm.aboneOl") : t("pm.yakinda")}</button>` : ""}</div>`;
+  $("#view").innerHTML = `<h2>${t("pm.baslik")}</h2>${tier("ucretsiz")}${tier("premium", true)}${tier("premiumPlus")}
+   <p class="small muted">${t(aktifDil() === "tr" ? "pm.notTR" : "pm.not")}</p>`;
 }
 
 /* ---------- Başlat ---------- */
 async function init() {
   document.title = CONFIG.APP_NAME;
   gokyuzu(); sis.acilis();
-  try { D = await (await fetch("data/deste.json")).json(); } catch { $("#view").innerHTML = `<p class="muted">Kart verisi yüklenemedi. İnternet bağlantını kontrol edip uygulamayı yeniden aç.</p>`; return; }
-  D.cards.forEach(c => CARD[c.kod] = c); D.sets.forEach(s => SET[s.id] = s);
+  await dilYukle();
+  try { DT = await (await fetch("data/deste.json")).json(); } catch { $("#view").innerHTML = `<p class="muted">${t("hata.veri")}</p>`; return; }
+  await dilUygula(aktifDil());
   $("#brand").innerHTML = `${CONFIG.MEDIA.logo ? `<img src="${CONFIG.MEDIA.logo}" alt="">` : SIGIL("logo")}<span>${esc(CONFIG.APP_NAME)}</span>`;
   setBack();
   MODE = await calismaModu();
   route();
-  D.cards.forEach(c => { const i = new Image(); i.src = img(c.kod); });
   if ("serviceWorker" in navigator && location.protocol === "https:" && !window.claude) navigator.serviceWorker.register("sw.js").catch(() => {});
 }
 init();
