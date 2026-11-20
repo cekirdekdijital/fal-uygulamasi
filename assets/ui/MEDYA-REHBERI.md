@@ -12,6 +12,24 @@ Boş bırakılan yuvada uygulamanın kendi tasarımı kullanılır; yani istedi�
 | `waitingVideo` | Yorum beklenirken (yuvarlak çerçevede) | 600 × 600 px (kare) | MP4, 2–4 sn, döngüye uygun, sessiz, en fazla 1 MB | `bekleme.mp4` |
 | `cardBack` | Kapalı kartların arka yüzü | 400 × 640 px (veya 800 × 1280) | PNG/WebP | `kart-arkasi.webp` |
 
+## Koruyucu figürler (karga)
+
+Her setin bir koruyucu kargası var. Okumanın sonunda en çok kartı çıkan setin koruyucusu açılış sahnesinde ve sonuç ekranında gösterilir (eşitlikte ya da altı kart farklı setlerdeyse Kader kartının seti).
+
+| Dosya | Set | Koruyucu |
+|---|---|---|
+| `G-S1.webp` | Aetherion (Aztek) | Güneş Kargası |
+| `G-S2.webp` | Prometheion (Yunan) | Defne Kargası |
+| `G-S3.webp` | Ragnarion (İskandinav) | Hafıza Kuzgunu |
+| `G-S4.webp` | Alcherion (Aborjin) | Kızıl Toprak Kargası |
+| `G-S5.webp` | Duation (Mısır) | Ankh Kargası |
+| `G-S6.webp` | Samsarion (Uzakdoğu) | Kader Kargası |
+
+- Canva'dan dışa aktarma: 1080 × 1350 px, şeffaf arka planlı PNG, yazısız, figür ortada.
+- Uygulamaya koymadan önce 720 × 900 WebP'ye çevrilir (6 görsel toplam ~0,7 MB; PNG hâli ~11,6 MB idi). Görseli değiştirirseniz PNG'yi bana gönderin, ben çeviririm.
+- Klasör: `assets/ui/koruyucular/`.
+- Koruyucu adları ve sözleri `js/koruyucu.js` dosyasındaki `TEMA` bölümündedir.
+
 ## Örnek
 
 ```js

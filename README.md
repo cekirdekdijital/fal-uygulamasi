@@ -1,4 +1,4 @@
-# Mistik Fal (çalışma adı) — Kurulum ve Geliştirme Rehberi
+# Logos — Kurulum ve Geliştirme Rehberi
 
 Bu klasör uygulamanın ilk çalışan sürümüdür (0.1.0). Uygulama bir **PWA**'dır: telefonda uygulama gibi açılan bir web uygulaması. Aynı kod daha sonra Google Play'e Android uygulaması olarak paketlenir.
 

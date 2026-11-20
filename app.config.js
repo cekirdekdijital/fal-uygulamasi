@@ -5,8 +5,8 @@
 // ============================================================
 
 export const CONFIG = {
-  // Uygulamanın adı. Ad belli olunca yalnızca bu satırı (ve manifest.webmanifest içindeki "name") değiştirin.
-  APP_NAME: "Mistik Fal",
+  // Uygulamanın adı. Değiştirirseniz manifest.webmanifest içindeki "name" ve index.html içindeki <title> da değişmeli.
+  APP_NAME: "Logos",
   APP_SLOGAN: "Altı kart, altı mitoloji, tek yolculuk",
 
   // Sunucu (Cloudflare Worker) adresi. Boş bırakılırsa uygulama "demo modu"nda çalışır:
@@ -18,10 +18,13 @@ export const CONFIG = {
   // Görselleri PNG olarak koyacaksanız ".webp" yerine ".png" yazın.
   CARD_IMAGE: "assets/cards/{kod}.webp",
 
+  // Koruyucu karga görselleri. {set} yerine S1 … S6 gelir. Dosya yoksa uygulamanın kendi çizimi görünür.
+  GUARDIAN_IMAGE: "assets/ui/koruyucular/G-{set}.webp",
+
   // Canva'dan gelecek arayüz görselleri ve videoları (assets/ui klasörüne koyun).
   // Boş ("") bırakılan yuvada uygulamanın kendi tasarımı kullanılır.
   MEDIA: {
-    logo: "",            // ör. "assets/ui/logo.png"           — giriş ve üst başlıkta logo (kare, şeffaf PNG)
+    logo: "assets/ui/logo.webp", //           — giriş ve üst başlıkta logo (kare, şeffaf PNG)
     introVideo: "",      // ör. "assets/ui/giris.mp4"          — ilk açılış videosu (dikey 1080x1920, sessiz, en fazla 8 sn)
     introPoster: "",     // ör. "assets/ui/giris-kapak.webp"   — video yüklenirken görünen kapak
     homeBackground: "",  // ör. "assets/ui/ana-arka-plan.webp" — ana sayfa arka planı (dikey)
@@ -41,5 +44,5 @@ export const CONFIG = {
   STORE_READY: false,
 
   // Sürüm. Dosyaları güncellediğinizde bu sayıyı artırın; telefonlar yeni sürümü indirir.
-  VERSION: "0.1.0",
+  VERSION: "0.3.0",
 };
