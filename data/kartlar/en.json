@@ -1,6 +1,6 @@
 {
  "dil": "en",
- "not": "English card translations. Long texts (meaning, positions, story, mythology) will be added in the next step.",
+ "not": "English card translations.",
  "cards": {
   "S1-K1": {
    "ad": "Golden Thunder",
@@ -9,7 +9,39 @@
    "mitFigur": [
     "Tlaloc",
     "Tonatiuh"
-   ]
+   ],
+   "dAnlam": "When Golden Thunder comes upright, the sign that has gathered in the sky can finally be heard; the change you have been waiting for, but could not yet name, is calling you. This card shows that you stand on the threshold of news from the outside world, a sudden realisation, or a strong intuition that awakens the courage within you. This thunder does not come to frighten you but to wake you. A delayed decision may become clear, and a matter that seemed still may come alive. Now the gate of the sky opens a little, and when you see the sign and act on it, a new direction takes shape.",
+   "yAnlam": "When Golden Thunder comes sideways, the voice of the sky is still rolling in the distance; the energy gathers within before anything becomes visible. This card speaks of a transformation that looks quiet from the outside but is taking shape in the depths. You may not need to hurry yet, because what matters is hearing the sign clearly and understanding why it calls you. Waiting here is not passivity but conscious preparation. The intuitions that rise in you, the small signs that keep repeating and a tension you cannot explain may all be heralds of an opening that is drawing near. Before the sky speaks, it invites you to listen.",
+   "hikaye": "On a night when the stars stood in silent rows in the highest layer of the heavens, a cloud took into itself the light of the sun, which had not gone out but was only hidden. As that light grew heavy, a golden thunder was born within the sky; like a bolt that has not yet fallen, it became the call of fate that is felt before it is heard. It is said that when this sound is heard, people expect a shaking from outside, yet the real change first echoes within the soul. That is why Golden Thunder stands not for sudden ruin but for an awakening that arrives with a warning from the heavens.",
+   "mitDers": "Tlaloc's storm is both destructive and fertile; the shaking that comes from the sky also brings the rain.",
+   "mitDikkat": "Mistaking the sign for disaster and freezing in fear.",
+   "mitGercek": "Drawn from Tlaloc's association with rain, storms and the abundance of the sky, considered together with the image of Tonatiuh, who evokes the order of the heavens and solar power. As a small borrowing, the card takes inspiration from the Norse idea of a divine blow that makes the sky tremble; its core language, however, remains Aztec cosmology.",
+   "poz": {
+    "Kök": {
+     "D": "A sudden event that once woke you may have laid the foundation of the process you are in today.",
+     "Y": "A tension that has been building at the root for a long time, without a name, is now beginning to take on meaning."
+    },
+    "Şimdi": {
+     "D": "Right now a sign from the sky is urging you towards a clear move or decision.",
+     "Y": "Right now the energy is gathering within; first you need to listen to your intuition and connect the signs."
+    },
+    "Sınav": {
+     "D": "Your trial is to meet the call with courage, without putting it off.",
+     "Y": "Your trial is to stay patient in uncertainty and wait for the right moment without reacting too early."
+    },
+    "Yardımcı": {
+     "D": "The force that helps you is a sudden awareness, a divine sign that opens the mind.",
+     "Y": "The force that helps you is quiet intuition and a preparation that cannot yet be seen."
+    },
+    "Yol": {
+     "D": "In the near future a clear development may open that sets you in motion.",
+     "Y": "In the near future inner clarity comes first, and then the doors of the outer world gently open."
+    },
+    "Kader": {
+     "D": "This journey leads you to a transformation in which you choose awakening over fear.",
+     "Y": "This journey carries you to a more conscious awakening as you come to understand divine timing."
+    }
+   }
   },
   "S1-K2": {
    "ad": "Gate of the Celestial Scales",
@@ -19,7 +51,39 @@
     "Quetzalcoatl",
     "Tonatiuh",
     "The four directions"
-   ]
+   ],
+   "dAnlam": "When the Gate of the Celestial Scales comes upright, a threshold appears in your life, and to cross it the scattered parts of you are called into harmony. This card says that the right door opens not through force but through measure and openness. You may be deciding on something, reconciling two sides, clarifying your intention or finding your place. Now the order of the sky is creating an opening before you. When you set up the scales within you, the path becomes visible in a calmer and more natural way.",
+   "yAnlam": "When the Gate of the Celestial Scales comes sideways, the gate is not closed; it is simply waiting for a balance that has not yet settled into place. This card advises you to notice the missing link before rushing across a threshold. Perhaps your intention is clear but your feelings are clouded, or your decision is ready but the time has not ripened. Delay here is not an obstacle but a sacred process of adjustment. As you set the stones of your inner world in place, the unseen arches align, and the passage becomes possible in a firmer and more meaningful way.",
+   "hikaye": "It is said that at the unseen threshold of the sky stands a gate with four arches that only those whose inner and outer worlds are aligned can see. This gate opens neither to power nor to pleading; it parts silently only when heart, intention, word and deed carry one another. The keepers of the sky call this threshold the Gate of the Celestial Scales, because a person's fate sometimes changes direction not through choice but first through finding balance. When the gate opens, a person does not so much cross onto a new path as return to the alignment that was always meant to be.",
+   "mitDers": "The Aztec universe stands through the balance of the four directions and the centre; the passage opens only when that balance is established.",
+   "mitDikkat": "Using balance as an excuse to keep postponing the decision.",
+   "mitGercek": "Inspired by the four directions of Aztec cosmology, the layered order of the sky and the idea that the universe stands through balance. The order-founding, gate-opening wisdom of Quetzalcoatl and Tonatiuh's place as the celestial centre form the main inspiration in the background. As a small borrowing, the symbolic balance in the Egyptian idea of the weighing of the heart is used; the card's main language, however, remains the Aztec cosmic order.",
+   "poz": {
+    "Kök": {
+     "D": "A balance you once tried to build may have prepared the main threshold of your path today.",
+     "Y": "An unfinished search for harmony at the root may still be quietly asking you for adjustment today."
+    },
+    "Şimdi": {
+     "D": "The gate opening before you now becomes clear only when your inner and outer balance come together.",
+     "Y": "Right now the process is not on hold but in alignment; first you need to see what is missing."
+    },
+    "Sınav": {
+     "D": "Your trial is to keep your centre without being swept between two extremes.",
+     "Y": "Your trial is to stay patient until the right balance is found, instead of choosing in haste."
+    },
+    "Yardımcı": {
+     "D": "The force that helps you is a reconciling view and the harmony that a clear intention brings.",
+     "Y": "The force that helps you is divine timing working quietly and your ability to set your inner order."
+    },
+    "Yol": {
+     "D": "In the near future a new passage may open in an area where you have found your balance.",
+     "Y": "In the near future conditions align first, and then the passage becomes easier on its own."
+    },
+    "Kader": {
+     "D": "This journey carries you to a threshold of fate where you find your place and walk in greater harmony.",
+     "Y": "This journey prepares you, through a ripened balance, for a more conscious passage."
+    }
+   }
   },
   "S1-K3": {
    "ad": "The Broken Comet",
@@ -28,7 +92,39 @@
    "mitFigur": [
     "Citlalin popoca (the smoking star)",
     "Florentine Codex"
-   ]
+   ],
+   "dAnlam": "When the Broken Comet comes upright, it announces that the invisible ties that have kept you on a certain path for a long time are beginning to loosen. Thoughts, relationships or goals you once believed unchangeable may no longer carry their old meaning. The trail of light splitting in two across the sky shows that new possibilities can be born in place of the direction you have lost. This card symbolises the courage to leave the past without denying it. As the different paths ahead call you towards the unknown, your real strength will be deciding for yourself which orbit to keep. Sometimes the most important sign of fate is realising that you are ready to leave the familiar road.",
+   "yAnlam": "When the Broken Comet comes sideways, the celestial break is not yet complete; the star is caught between the pull of its old orbit and the call of a new light. You too may feel bound to an order that no longer fully belongs to you, without yet knowing what leaving it would mean. This card does not invite you to cut your ties in haste, but to understand which habits give you security and which limit your growth. The splitting of the tail is not a defeat but the first visible trace of transformation. To say goodbye to the past, you may first need to accept what it has taught you. Your new direction will become clear once this quiet unravelling within you has ripened.",
+   "hikaye": "It was said that in the first ages of the heavens, the path of every star was woven from invisible threads of light; yet one of the stars heard the call of another light beyond the orbit drawn for it. When it reached the edge of the cosmic order, its tail split in two, leaving behind two trails of light, one carrying the ties of the past, the other carrying possibilities not yet born. The keepers of the sky thought it had shattered, but the star was not lost; it had only left its old path and moved towards an unknown direction. From that day on, the Broken Comet has whispered that roads thought to have ended are sometimes new beginnings that free a person from a fate they did not choose.",
+   "mitDers": "Aztec sources regard the comet as a herald of great change; the sign announces that the old order is closing.",
+   "mitDikkat": "Reading the break only as misfortune or loss.",
+   "mitGercek": "The Nahuatl expression citlalin popoca, the smoking star, is associated with comets in the Aztec world; in historical sources these celestial events were also interpreted as signs of major change and ill omen. The depiction in the Florentine Codex of a comet with trailing extensions like light and smoke inspires the card's symbol of a tail split in two.",
+   "poz": {
+    "Kök": {
+     "D": "A clear break you went through in the past may have formed the basis of the path you follow today and of your search for freedom.",
+     "Y": "An unfinished separation or a wish for change you carry from the past may be shaping your choices today in unseen ways."
+    },
+    "Şimdi": {
+     "D": "Right now you are on an important threshold of transformation where you can leave your old order and set your own direction.",
+     "Y": "Right now you feel the need for change, but you are trying to grasp the meaning of what you would leave behind."
+    },
+    "Sınav": {
+     "D": "Your trial is to trust your own will while facing the uncertainty of leaving the familiar road.",
+     "Y": "Your trial is to patiently resolve the inner conflict between your attachment to the past and your desire for change."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your courage to see beyond old limits and your openness to unexpected possibilities.",
+     "Y": "The force that supports you is the wisdom distilled from your past experiences and your ability to grasp why change is needed."
+    },
+    "Yol": {
+     "D": "In the near future an opportunity arising outside your usual order may give your life a different direction.",
+     "Y": "In the near future a time of preparation may open in which you weigh new options and understand which ties to leave behind."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a transformation in which you move away from orbits drawn by others and take responsibility for your own choices.",
+     "Y": "This journey may prepare you to free yourself by understanding the influence of the past and to choose your own direction more consciously."
+    }
+   }
   },
   "S1-K4": {
    "ad": "The Silent Sun Throne",
@@ -38,7 +134,39 @@
     "Tonatiuh",
     "Nanahuatzin",
     "Nahui Ollin (the Fifth Sun)"
-   ]
+   ],
+   "dAnlam": "When the Silent Sun Throne comes upright, the time arrives to settle at the centre of your own life and to free yourself from the need to prove your strength to others. This card reminds you that true authority does not come from speaking loudly but from knowing what you believe and standing calmly behind your decisions. There may be uncertainty around you, differing expectations or voices trying to steer you; yet once you know your own values, the noise of the outside world loses its hold. The sun's short rays advise you to protect your energy instead of scattering it in needless struggles. Now you can take your seat on your own invisible throne and carry your own light, without standing in anyone's shadow and without casting anyone else into shadow.",
+   "yAnlam": "When the Silent Sun Throne comes sideways, the sun has not yet fully settled on its invisible throne; it is discovering the worth of its own light in silence. You too may feel the need to step away from the expectations of the outside world, to question your achievements, or to understand who you are beyond the roles others have given you. This process does not show that your strength is fading, but that it is seeking its true source. The short-rayed sun asks you to recognise the power within you without hurrying to show yourself. You do not yet have to announce your decisions or convince everyone. Once you hear your own voice first, the light you send out will be steadier and more genuine.",
+   "hikaye": "In the ancient ages of the heavens, when every star was trying to show its own light, the sun took its seat on the invisible throne at the centre of the universe, shortened its rays and wrapped itself in silence. The keepers of the sky thought it had lost its power, but the sun had learned that it no longer needed to prove its light, and that true sovereignty is not shining at every moment but standing unshaken at one's own centre. After a long silence, the stars realised that they kept the order around the sun even without hearing its command. So the Silent Sun Throne was engraved in the memory of the heavens as the sacred seat of those who draw their strength not from the approval of others but from awareness of their own being.",
+   "mitDers": "Nanahuatzin, the humblest of the gods, leaps into the fire and becomes the sun; yet the new sun begins to move only with the help of the other gods. True sovereignty is born not from display but from a courageous offering, and it is not carried alone.",
+   "mitDikkat": "Trying to carry power alone, or mistaking silence for withdrawal.",
+   "mitGercek": "Inspired by the celestial sovereignty of the Aztec sun god Tonatiuh, by the belief in Nahui Ollin that tells of the age of the Fifth Sun, and by the story of Nanahuatzin giving himself to the sacred fire at Teotihuacan and becoming the sun. In the Aztec creation account, the new sun appears yet at first remains motionless, and the cosmic cycle begins only with the contribution of the other gods; this forms the basis of the card's relationship between silence and power.",
+   "poz": {
+    "Kök": {
+     "D": "An experience in which you defended your own values may have formed the basis of the inner authority you have today.",
+     "Y": "An identity shaped in the past by others' expectations may be feeding your need today to discover your true worth."
+    },
+    "Şimdi": {
+     "D": "Right now you are in a period where you can stand at your own centre and shape your decisions with confidence, free of outside influence.",
+     "Y": "Right now you need to turn down the voice of the outside world and understand your own wishes and true strength."
+    },
+    "Sınav": {
+     "D": "Your trial is to use the power you have with dignity and responsibility, without turning it into a quest for superiority.",
+     "Y": "Your trial is to learn to accept your own worth without seeking others' approval, and to trust yourself in silence."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your trust in your own decisions and your ability to guide those around you calmly.",
+     "Y": "The force that supports you is your ability to hear your inner voice even when you are alone, and to rediscover your self-worth."
+    },
+    "Yol": {
+     "D": "In the near future an area may open where you can make your talents more visible and take on responsibility.",
+     "Y": "In the near future a period of inner preparation in which you come to know yourself better may strengthen the foundation of your next steps."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you know your own worth and use your strength to steer your own life rather than to rule others.",
+     "Y": "This journey may prepare you to shed identities defined by others, discover your inner authority and build a more genuine self."
+    }
+   }
   },
   "S1-K5": {
    "ad": "The Endless Ring of Light",
@@ -48,7 +176,39 @@
     "Nanahuatzin",
     "Tecuciztecatl",
     "Teotihuacan"
-   ]
+   ],
+   "dAnlam": "When the Endless Ring of Light comes upright, it reminds you that something you thought had ended in your life may continue in a different form. The crescent in the sky whispers that when light wanes it does not vanish; it only prepares for a new phase. You too may notice that a bond, an idea or an experience you once valued has taken on another meaning today. This card stands for the new hopes born from completed cycles and for the strength to keep your essence while you change. Now you can see the traces of the past not as a burden but as an inheritance that can light your future. Behind every ending lies the possibility of another beginning.",
+   "yAnlam": "When the Endless Ring of Light comes sideways, the crescent has not yet begun to grow; it is gathering its light on its unseen face. You too may be carrying the emotional traces of a period you thought was complete, quietly discovering what your past experiences mean today. This card advises you to understand the values your experiences have left in you, rather than seeking a new beginning right away. Sometimes the shape of a bond changes, sometimes a hope loses its old brightness; yet the wisdom they gave you can live on. The light not yet visible is not a lost possibility but the herald of a new cycle waiting to ripen. When you give the change within you time, your path can light up again.",
+   "hikaye": "In the ancient ages when the heavens were created, as the light of the sun and the light of the moon were parted, the keepers of the universe wove an endless ring of light to protect the invisible bond between these two celestial powers. One face of the ring carried the brilliance of the sun and the other the quiet glow of the moon, yet its two ends never met, because light was not meant to be completed but to be renewed without end. Over time the ring thinned into a crescent and, in every dark phase, reminded the world that the light thought to be lost was in fact hidden on the unseen face of the sky. So the Endless Ring of Light became the sacred sign of bonds that live on after endings, of cycles that begin again, and of a hope that is never wholly spent.",
+   "mitDers": "Tecuciztecatl, who hesitates to enter the fire, becomes the moon; though its light is dimmed, it keeps its place in the cycle of the sky. Light changes form but does not disappear.",
+   "mitDikkat": "Clinging to the lost brightness and failing to see light's new form.",
+   "mitGercek": "Based on the Teotihuacan myth of the creation of the Fifth Sun, in which Nanahuatzin becomes the sun and Tecuciztecatl, who enters the sacred fire after him, becomes the moon. According to the account, Tecuciztecatl at first shone as brightly as the sun, until one of the gods threw a rabbit at his face, dimming his light and giving the moon its distinctive appearance. The cosmic relationship this myth draws between sun and moon inspires the card's idea that light lives on in different forms.",
+   "poz": {
+    "Kök": {
+     "D": "The experience gained from a cycle completed in the past may have formed the basis of the hopes sprouting again in your life today.",
+     "Y": "The emotional traces of a bond or experience you feel was left unfinished may be waiting to be understood today."
+    },
+    "Şimdi": {
+     "D": "Right now you are in a period where you can begin a new cycle in your life while keeping the valuable traces of the past.",
+     "Y": "Right now you may be discovering the meaning of your past experiences and feeling your wish for renewal slowly ripen within you."
+    },
+    "Sınav": {
+     "D": "Your trial is to accept the new forms change brings while still holding on to the beauty of the past.",
+     "Y": "Your trial is to patiently understand what the past has taught you without getting lost in unfinished feelings."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is the love and experience you carry from the past into today, and your ability to hope again.",
+     "Y": "The force that supports you is your emotional memory, your intuition and the sense of acceptance quietly growing in your inner world."
+    },
+    "Yol": {
+     "D": "In the near future an idea or bond that mattered to you in the past may take on a different meaning in new circumstances.",
+     "Y": "In the near future, having completed your inner preparation, you may approach a new beginning nourished by the traces of the past."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you keep your essence through life's changing cycles and approach each new phase with hope.",
+     "Y": "This journey may prepare you to make peace with the past, grasp your emotional continuity and discover your own power of renewal."
+    }
+   }
   },
   "S1-K6": {
    "ad": "The Inverted Crown Star",
@@ -57,7 +217,39 @@
    "mitFigur": [
     "Tezcatlipoca (the smoking mirror)",
     "The four directions and the centre"
-   ]
+   ],
+   "dAnlam": "When the Inverted Crown Star comes upright, you may begin to see from a different angle an idea, a rule or an authority you have long accepted as unchangeable. The four-pointed star in the sky reminds you that all directions are bound to the same centre, yet no single point of view carries the whole truth on its own. This card stands for the courage to test the truths you inherited from others against your own experience. An order you once embraced without question may now be waiting to be reassessed. What falls to you now is not to reject everything, but to discern which principles truly belong to you and to set the rules of your own life consciously.",
+   "yAnlam": "When the Inverted Crown Star comes sideways, the sacred star has not yet turned its crown, but it has begun to doubt the directions of the sky it thought unchangeable. You too may be questioning what the rules, traditions or truths you learned from others really serve. This card does not ask you to resist at once or to change your whole order; it first calls you to understand why you have held on to certain ideas. Some principles protect you, while others may be narrowing your view without your noticing. As your inner reckoning deepens, you can see more clearly which values to keep and which to reinterpret. The star's turning begins first in your mind.",
+   "hikaye": "When the first order of the heavens was established, the sacred star that ruled the four directions carried the invisible crown at the centre of the universe and declared that all roads were unchangeable. But one night, when it saw its own light in a dark reflection like Tezcatlipoca's smoking mirror, it realised that the order it guarded might be nothing more than a familiar point of view. So it turned its crown upside down, looked again at the four directions of the sky, and discovered that the roads it had believed opposed could reach the same centre. From that day on, the Inverted Crown Star became the celestial sign reminding us that questioning what is held sacred is not betrayal of order, but sometimes the way to understand its deeper truth.",
+   "mitDers": "Tezcatlipoca's smoking mirror shows even rulers their own truth; no authority stands above questioning.",
+   "mitDikkat": "Turning questioning into a reason to tear down every order.",
+   "mitGercek": "Based on the Aztec conception of the universe around four cardinal directions and a centre, and on the association of these directions with gods and cosmic forces. It draws especially on Tezcatlipoca's links with rulership, fate, unseen forces and a person's confrontation with their own truth. The smoking mirror connected with Tezcatlipoca's name gives rise to the idea of questioning the reality one sees and one's own position. Although the sacred order of the four directions belongs to Aztec cosmology, the pairing of gods with directions varies between accounts.",
+   "poz": {
+    "Kök": {
+     "D": "An authority you questioned in the past, or a rule you thought unchangeable, may have laid the groundwork for your need today to form your own truths.",
+     "Y": "Some beliefs you inherited from the past and have not yet questioned may be steering your decisions today in unseen ways."
+    },
+    "Şimdi": {
+     "D": "Right now you can change your habitual point of view and reassess the rules that govern your life in line with your own values.",
+     "Y": "Right now you are questioning the source of ideas you accept as true, but you may not yet have reached a firm conclusion."
+    },
+    "Sınav": {
+     "D": "Your trial is to form your own independent judgement while questioning established truths, without escaping responsibility.",
+     "Y": "Your trial is to try to understand the contradictions between your old beliefs and your new awareness without fearing uncertainty."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your ability to look at events from different angles and to hold on to your own thoughts in the face of authority.",
+     "Y": "The force that supports you is your ability to observe without rushing to judgement and to weigh what you have learned critically."
+    },
+    "Yol": {
+     "D": "In the near future you may interpret a familiar order differently and set a path more in keeping with your own principles.",
+     "Y": "In the near future you may review your present responsibilities and commitments and understand which changes are needed."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you can question others' rulings and consciously set the principles of your own life.",
+     "Y": "This journey may prepare you to grasp the meaning of the beliefs you inherited, form your own truths and redefine your responsibilities."
+    }
+   }
   },
   "S2-K1": {
    "ad": "The Child Who Knows Hunger",
@@ -68,7 +260,39 @@
     "Persephone",
     "Demophon",
     "Erysichthon"
-   ]
+   ],
+   "dAnlam": "When the Child Who Knows Hunger comes upright, it announces that a real need, long waiting to be met in your life, is becoming visible. The steaming bowl reminds you that lack is not only absence; it can be a teacher that draws a person closer to others and to their own inner world. You too may begin to notice what you truly need, rather than focusing on what you do not have. This card shows that asking for help is not weakness, and that sharing can sometimes create unexpected bonds. Now, instead of hiding your hunger, you can make sense of it, and by telling your needs apart from your desires, treat yourself and those around you with more compassion.",
+   "yAnlam": "When the Child Who Knows Hunger comes sideways, the child has not yet held out the bowl to share; they are still trying to find the true name of the lack within. You too may feel a certain emptiness in your life without yet knowing whether it comes from a material need, an emotional longing, or the wish to be seen and understood. This card advises you to listen to what your lack is trying to tell you, rather than rushing to fill it with other things. The thin smoke rising from the bowl is a quiet call, a need waiting to be noticed. When you are honest and compassionate with yourself, you can begin to understand what truly nourishes you.",
+   "hikaye": "In an ancient age of famine, when people had drifted far from the gods, a small child living in a city that no ruler could feed left the last morsel they had been given on the threshold of the temple, to share with a hungry stranger. When night fell, a sacred light recalling Demeter's abundance appeared above the child's empty bowl and whispered that people are nourished not by bread alone but also by love, trust and the feeling of belonging. The next morning the child woke not to a miracle that filled the bowl, but to the wisdom of knowing their own needs and seeing the lack in others. From that day on, the Child Who Knows Hunger became a sacred sign telling that deprivation does not only weaken a person; sometimes it opens the first door to recognising true values and learning compassion.",
+   "mitDers": "Demeter's grief drives the earth into famine, and Persephone's return brings back abundance; when the need is recognised, the cycle turns again. Erysichthon's insatiable hunger, by contrast, is the price of desire that knows no limit.",
+   "mitDikkat": "Confusing real need with insatiable desire.",
+   "mitGercek": "Inspired by the account in which Demeter, goddess of fertility and agriculture, halts the earth's fertility after her daughter Persephone is taken to the underworld, and people face famine. In the Homeric Hymn to Demeter, the goddess meets mortals at Eleusis and becomes nurse to a child named Demophon, which inspires the relationship between divine power and the human need for protection. The myth of Erysichthon, punished with insatiable hunger for harming Demeter's sacred grove, strengthens the distinction between physical need and boundless desire.",
+   "poz": {
+    "Kök": {
+     "D": "An experience of lack or need in the past may have taught you to value what you have and to be sensitive to others.",
+     "Y": "A need you felt was never quite met in the past may be shaping some of your choices and expectations today without your noticing."
+    },
+    "Şimdi": {
+     "D": "Right now you are open to recognising your real needs, asking for support, sharing and meeting what is missing in your life more consciously.",
+     "Y": "Right now you may be trying to understand what the emptiness within you belongs to, and need to discover what truly nourishes you."
+    },
+    "Sınav": {
+     "D": "Your trial is to show compassion to others without ignoring your own needs, and to learn to accept help.",
+     "Y": "Your trial is to tell your needs apart from passing desires without rushing to fill the lack you feel."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your compassion, your wish to share and your ability to build trusting bonds with others when you are in need.",
+     "Y": "The force that supports you is your ability to listen to your own feelings and to accept your unmet needs without judging them."
+    },
+    "Yol": {
+     "D": "In the near future a chance may arise to express your real needs more clearly and for mutual support to grow stronger.",
+     "Y": "In the near future, by understanding the source of what you feel is missing in your life, you may discover healthier ways to meet it."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you know your own needs, value what you have and form more compassionate bonds with others.",
+     "Y": "This journey may prepare you to make peace with the sense of lack you carry from the past and to meet your inner needs more consciously."
+    }
+   }
   },
   "S2-K2": {
    "ad": "Heart of the Nomad Warrior",
@@ -77,7 +301,39 @@
    "mitFigur": [
     "Castor and Polydeuces (the Dioscuri)",
     "Orestes and Pylades"
-   ]
+   ],
+   "dAnlam": "When the Heart of the Nomad Warrior comes upright, it shows that a burden you would struggle to carry alone may grow lighter once it is shared. This card tells you that the strength to fight comes not only from toughness but from loyalty and from being able to face the same direction as someone you trust. Now the bond within a friendship, a partnership or a shared destiny may grow stronger. The road you walk may still be hard, but when you move forward without closing your heart, your courage takes on a truer form. This card reminds you that a person comes to know both their limits and their love along the way.",
+   "yAnlam": "When the Heart of the Nomad Warrior comes sideways, the road has not fully begun, and the bond between the two figures is being quietly tested. You too may be in a time of inner reflection about trusting someone, sharing a struggle or opening your heart to a shared path. This card does not ask you to pledge loyalty in haste, but to understand who you can walk in step with. Here courage takes root within before it moves outward. When you realise whom your heart wants beside you and with whom you can stand shoulder to shoulder, the direction you will take also becomes clearer.",
+   "hikaye": "It is said that beyond the great cities there were two young warriors who guarded roads whose names had been forgotten; they were thought to be born not of the same blood but of the same oath. Whenever a long road, an uncertain battle or a decision that could not be walked alone arose, their hearts beat as one, and when one stumbled, the other raised him to his feet again. The gods blessed not their swords but the promise they had given each other, for sometimes a person's greatest courage is not fighting alone but continuing to walk for someone else. So the Heart of the Nomad Warrior became the sacred sign of loyalty born on the road and of courage that is shared.",
+   "mitDers": "The immortal Polydeuces chooses to share his immortality with his mortal brother; the bond is valued above personal gain.",
+   "mitDikkat": "Letting loyalty turn into losing your own way.",
+   "mitGercek": "The themes of brotherhood, travel, protection and warrior solidarity of Castor and Polydeuces, the Dioscuri, especially inspire this card. The unshakeable friendship between Orestes and Pylades also feeds the idea that a person gains strength not alone but through a bond of loyalty.",
+   "poz": {
+    "Kök": {
+     "D": "A strong friendship or solidarity you formed in the past may have laid the foundation of your courage today.",
+     "Y": "A bond at the root that you found hard to trust, or that was left unfinished, may be adding caution to your relationships today."
+    },
+    "Şimdi": {
+     "D": "Right now, moving together and sharing the load can give you strength.",
+     "Y": "Right now you may need to listen to your inner voice to understand whom you want to walk the same road with."
+    },
+    "Sınav": {
+     "D": "Your trial is to keep your courage without letting loyalty become blind devotion.",
+     "Y": "Your trial is to find the balance between your need for trust and your desire for independence."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is a sense of companionship and the will to struggle together.",
+     "Y": "The force that supports you is your ability to sense people before forming a bond and to open your heart consciously."
+    },
+    "Yol": {
+     "D": "In the near future you may move forward shoulder to shoulder with someone towards a shared goal.",
+     "Y": "In the near future a ground of trust forms first, and then the steps to take together become clear."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you realise that shared courage opens greater doors.",
+     "Y": "This journey may prepare you to form more conscious bonds by understanding whom you want to walk with."
+    }
+   }
   },
   "S2-K3": {
    "ad": "The Unmasked King",
@@ -87,7 +343,39 @@
     "Oedipus",
     "Tiresias",
     "Sophocles, Oedipus Rex"
-   ]
+   ],
+   "dAnlam": "When the Unmasked King comes upright, the time arrives to open a space between the identity you have long shown others and the truth of your inner world. The eye watching the sky reminds you that searching for truth only outside is not enough; sometimes the most important discovery is being able to look at yourself honestly. You too may notice the real reasons behind a role you keep playing, a feeling you hide or a view you defend. This card shows that accepting your flaws does not lessen your worth; on the contrary, it can help you form more genuine relationships. Now you can set down your mask and discover the freedom of expressing yourself as you are.",
+   "yAnlam": "When the Unmasked King comes sideways, the king has not yet removed his mask, but for the first time he has begun to question his own face in its reflection in the sky. You too may feel a quiet difference between how others see you and who you really are. This card does not advise you to reveal all your secrets at once, but first to understand which roles you have taken on and why. Perhaps you hide your vulnerability to appear strong, or hold back your true thoughts to be accepted. The eye watching the sky symbolises the courage to examine yourself without judgement. As you begin to know the truth within you, you can choose more consciously when and how to share it.",
+   "hikaye": "In ancient times there was a king who believed he ruled his land, stretching in four directions, with wisdom; every night he watched the stars from the highest tower of his palace and thought he had solved all the secrets of the sky. One night an invisible eye appeared among the stars and whispered that every shape he saw in the sky might be a reflection of his own thoughts, and for the first time the king saw the gap between the face he showed others and the truth he kept within. So, without removing his crown, he set down the invisible mask on his face; he chose to appear before his people as a person able to accept not only his truths but also his mistakes and fears. From that day on, the Unmasked King became a sacred sign reminding us that the highest seat of truth is not ruling others, but moving beyond one's illusions about oneself.",
+   "mitDers": "Oedipus, who can see, does not recognise his own truth, while the blind seer Tiresias knows it; seeing and knowing are not the same.",
+   "mitDikkat": "Getting stuck in guilt and self-punishment while facing the truth.",
+   "mitGercek": "Based on Sophocles' tragedy Oedipus Rex, in which Oedipus, ruler of Thebes, searches for the truth of his past and meets facts about his own identity that he did not know. The tragedy works through the contrast between seeing and knowing, especially through the seer Tiresias, who is blind yet knows the truth, and Oedipus, who can see yet does not recognise his own. The story shows that a person may be mistaken about themselves even while in a position to govern the lives of others.",
+   "poz": {
+    "Kök": {
+     "D": "An important truth about yourself that you accepted in the past may have formed the basis of your wish today for more honest relationships.",
+     "Y": "An identity shaped in the past by others' expectations may be feeding your need today to discover your true face."
+    },
+    "Şimdi": {
+     "D": "Right now you can form an honest bond with yourself and those around you by expressing hidden feelings or your true thoughts more openly.",
+     "Y": "Right now you may be quietly trying to understand the differences between the identity you show and the truth of your inner world."
+    },
+    "Sınav": {
+     "D": "Your trial is to keep your self-respect while accepting your mistakes and vulnerabilities.",
+     "Y": "Your trial is to see the difference between criticising yourself and understanding yourself, so that inner questioning does not turn into judgement."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your ability to state truths openly and to approach your own flaws with honesty.",
+     "Y": "The force that supports you is your power of observation, your sincerity and the quiet courage you show in getting to know yourself."
+    },
+    "Yol": {
+     "D": "In the near future an encounter or conversation in which you can express yourself more genuinely may bring new openness to your relationships.",
+     "Y": "In the near future, by understanding the real needs behind the roles you have taken on, you may prepare to express yourself."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you can accept your own truth and live honestly, free of others' expectations.",
+     "Y": "This journey may prepare you to recognise the illusions you hold about yourself and to bring out your true identity more consciously."
+    }
+   }
   },
   "S2-K4": {
    "ad": "The Silent Sage's Gaze",
@@ -98,7 +386,39 @@
     "Mentor",
     "Telemachus",
     "The Odyssey"
-   ]
+   ],
+   "dAnlam": "When the Silent Sage's Gaze comes upright, it shows that you are nearing the maturity to weigh a complicated situation in your life with calm. The roof above the sage's head symbolises the inner wisdom you have developed while sheltered from the noise of the outside world. This card reminds you that you do not have to answer every question at once or prove yourself in every argument. Sometimes listening carefully, observing events from different sides and waiting for the right moment is the strongest thing to do. Now you can use what your experience has taught you to guide yourself or others. True wisdom lies not in having all the answers but in understanding which question really matters.",
+   "yAnlam": "When the Silent Sage's Gaze comes sideways, the sage has not yet answered the question put to him; he is weighing in silence the meaning behind what has been said. You too may feel that you do not know enough about a situation you face, or you may want to let your thoughts ripen before voicing them. This card advises you not to see your silence as indecision. The protective roof above the sage stands for a space where, away from outside influence, you can trust your own observations. You may not yet see all the pieces; but when you listen patiently, weigh your experience and try to understand other points of view, the insight you seek can slowly take shape.",
+   "hikaye": "In ancient times, in a land where kings issued their rulings loudly and warriors boasted of their strength, there lived a silent sage under a small roof among the mountains. When people came to ask him about their fate, he did not answer at once; he only listened closely, and with a calm gaze recalling Athena's wisdom, waited for the person to find the truth hidden in their own words. One day a young ruler asked him how to make the right decision, and the sage pointed out from beneath the roof, explaining that even the earth waiting for the rain to stop knows its own time. From that day on, the Silent Sage's Gaze became a sacred sign reminding us that wisdom is not answering every question, but guarding the silence in which the right answer can emerge.",
+   "mitDers": "Athena, in the guise of Mentor, does not give Telemachus the answers; she makes room for him to find his own way. Wisdom is showing the path, not walking it in another's place.",
+   "mitDikkat": "Letting quiet observation turn into indecision and passivity.",
+   "mitGercek": "Inspired by the guiding side of Athena, the goddess associated with wisdom, strategic thought and measured decision. In Homer's Odyssey, Athena takes the form of Mentor to guide Telemachus, encourages him to reach the maturity to make his own decisions, and supports him on his journey to trace his father. In this story, guidance is not only giving ready answers but helping a person develop their own understanding.",
+   "poz": {
+    "Kök": {
+     "D": "An experience gained patiently in the past, or the guidance of a wise person, may have laid the foundation for weighing events more maturely today.",
+     "Y": "Advice or an experience you could not make sense of in the past may, quietly reconsidered today, give you a different understanding."
+    },
+    "Şimdi": {
+     "D": "Right now you can observe events around you carefully, draw on your experience and guide yourself or others with measured decisions.",
+     "Y": "Right now you may need to listen to different views and let your thoughts ripen, rather than deciding at once."
+    },
+    "Sınav": {
+     "D": "Your trial is to understand others without turning your knowledge into a sign of superiority, and to reconsider your own thoughts when needed.",
+     "Y": "Your trial is to develop understanding patiently amid uncertainty, without letting your need for quiet reflection become a way of avoiding responsibility."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your experience, your careful power of observation and your skill at weighing events without judging them.",
+     "Y": "The force that supports you is your ability to listen quietly, to stay open to different views and to give your thoughts time to ripen."
+    },
+    "Yol": {
+     "D": "In the near future a chance may arise to guide yourself or those around you on an important matter, using your knowledge and experience.",
+     "Y": "In the near future, by gaining new information and weighing your experience, you may develop a firmer understanding of a matter that still seems unclear."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you learn from experience, use your words with measure and put your wisdom to work for the growth of others.",
+     "Y": "This journey may prepare you, by understanding the value of patient observation, to trust your own thoughts and develop your inner wisdom more consciously."
+    }
+   }
   },
   "S2-K5": {
    "ad": "The False Priestess's Word",
@@ -108,7 +428,39 @@
     "Pythia",
     "Delphi",
     "Croesus (Herodotus)"
-   ]
+   ],
+   "dAnlam": "When the False Priestess's Word comes upright, you may begin to see different truths behind a story you have long accepted as true. The two intertwining spirals remind you that words grow stronger as they are repeated, yet repetition does not make them truer. You too may feel the need to reassess others' promises, your own expectations or a story you want to believe. This card does not advise you to meet every word with suspicion, but to examine whether what you hear matches what you observe. Now you can tell what merely seems convincing from what is truly reliable, and notice that while seeking the truth, your own wishes can also shape your thinking.",
+   "yAnlam": "When the False Priestess's Word comes sideways, the priestess has not yet faced the illusion her words have created, but she has begun to sense that the echoes she hears differ from one another. You too may feel that you do not fully understand some aspects of a story you were told, a promise that was made, or expectations you built yourself. This card asks you to examine the source of the information and your own interpretations carefully, rather than accusing someone of lying at once. The words circling between the two spirals remind you that truth can sometimes mix with intentions, fears and hopes. When you observe quietly, fill in the missing pieces and avoid hasty judgement, the fog in your mind can slowly lift.",
+   "hikaye": "In ancient times, a priestess lived in a temple where people came from distant lands to learn their fate; at first she passed on the sacred words she heard just as they were, but over time she noticed that people believed only the answers they wanted to hear. One day, to calm a ruler who had come in fear, she changed the meaning of the prophecy, and her words, like two invisible intertwining spirals, passed from mouth to mouth until they became a new truth that even the priestess herself came to believe. When she heard the echo of her own words in the silence of the temple, she understood that what misleads a person is not only the lie that is told, but a beautiful story allowed to take the place of the truth. From that day on, the False Priestess's Word became a sacred sign standing for deceptions that wear the face of truth, illusions that grow stronger with repetition, and a person's reckoning with responsibility for their own words.",
+   "mitDers": "Croesus interprets the oracle as he wishes and loses his own kingdom; the error often lies not in the word itself but in the listener's desire.",
+   "mitDikkat": "Becoming so suspicious of every word that you can trust no guidance at all.",
+   "mitGercek": "Based on the role of the Pythia, the priestess who conveyed the god's words at Delphi, Apollo's oracle, and on the fact that prophecies could be interpreted in different ways. In the story of King Croesus of Lydia told by Herodotus, the king was told that if he attacked the Persians a great empire would fall; but Croesus read these words according to his own expectations and failed to see that the empire to fall might be his own. The story shows error arising not because a prophecy must be a lie, but from the ambiguity of words and the desires of the one who hears them.",
+   "poz": {
+    "Kök": {
+     "D": "Realising the true effect of a word or story you once accepted without question may have led you today to reassess some of your beliefs.",
+     "Y": "A story you were told in the past, whose meaning you were never quite sure of, may be quietly shaping your expectations today."
+    },
+    "Şimdi": {
+     "D": "Right now you can see the differences between what you hear and what you actually experience, and make more conscious judgements on an important matter.",
+     "Y": "Right now you may be trying to decode the meaning of certain words or promises and need more clarity before reaching a firm judgement."
+    },
+    "Sınav": {
+     "D": "Your trial is to accept the difference between the stories you want to believe and the facts you can verify, and to weigh your own expectations honestly.",
+     "Y": "Your trial is to draw a healthy line between your intuition and concrete observation, without reading uncertainty as deception straight away."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your critical thinking, your ability to notice inconsistencies and to ask the right questions to learn the truth.",
+     "Y": "The force that supports you is your careful listening, your intuition and your skill at making sense of different stories by comparing them."
+    },
+    "Yol": {
+     "D": "In the near future, by better grasping the true meaning of a word or story, you may base your choices on firmer knowledge.",
+     "Y": "In the near future a period of inquiry may open in which you fill in missing information and understand the different sides of an unclear matter."
+    },
+    "Kader": {
+     "D": "This journey may carry you to an awareness in which you can tell fine words from facts and take responsibility for your own statements.",
+     "Y": "This journey may prepare you, by joining your intuition with the skill of questioning, to weigh both others' words and your own beliefs more consciously."
+    }
+   }
   },
   "S2-K6": {
    "ad": "The Weary Homeless Emperor",
@@ -119,7 +471,39 @@
     "Calypso",
     "Penelope",
     "Ithaca"
-   ]
+   ],
+   "dAnlam": "When the Weary Homeless Emperor comes upright, a period appears in which you can question what the goals you have long pursued truly give you. The walking legs remind you that the destination may not be only a distant success but a life in which you feel you belong. You too may notice that amid responsibilities, expectations or achievements you have neglected your own peace. This card does not advise you to abandon what you have, but to reconsider the meaning you give it. Now you can turn the direction of your journey from outer splendour to inner peace, and take steps that create a sense of home of your own.",
+   "yAnlam": "When the Weary Homeless Emperor comes sideways, the ruler has not yet ended his march, but he has begun to wonder why he feels the same lack in every new place he reaches. You too may feel that amid long-held responsibilities, goals or expectations you have not made enough room for yourself. This card does not ask you to leave everything behind at once, but to understand the real need behind your weariness. Perhaps you long for rest, for a safe bond, or simply for a space where you can be yourself. Your journey may not be over yet; but when you ask where you want to arrive, the meaning of a true home will slowly become clear.",
+   "hikaye": "In ancient times there was an emperor who ruled countless cities and owned lands stretching in four directions; though he had palaces built in every new country he conquered, he realised that he could enter none of their gates as if returning to his own home. After years of travel he left behind his crown and his splendid robes and began to walk like an ordinary traveller, for he had understood that owning the whole world was not enough for a person to feel they belonged somewhere. One night his weary feet led him to the light of a modest house, and he saw that the warm voices rising from within carried a peace that no throne could give. From that day on, the Weary Homeless Emperor became a sacred sign reminding us that a person's true homeland may be found not in the lands they rule, but in the place where they feel accepted as they are.",
+   "mitDers": "Odysseus refuses the immortality Calypso offers and chooses Ithaca; a person's worth lies not in splendour but in where they belong.",
+   "mitDikkat": "Failing to live today while longing for the return.",
+   "mitGercek": "Based on Homer's Odyssey, in which Odysseus, king of Ithaca, spends ten years after the Trojan War trying to return home, and on the trials he meets on the seas and in foreign lands and his longing for his house. During his time with the goddess Calypso, Odysseus still wishes to return to his homeland and to Penelope despite the immortality offered to him, which shows the value of human belonging set against splendour and eternal life.",
+   "poz": {
+    "Kök": {
+     "D": "A search for belonging while you carried great responsibilities in the past may have laid the foundation for valuing your own peace more today.",
+     "Y": "An environment where you could not feel you belonged, or a time when you were constantly on the move, may be feeding your longing today for a safe home."
+    },
+    "Şimdi": {
+     "D": "Right now you can reassess your outward successes and responsibilities and move towards a way of life where you truly feel you belong.",
+     "Y": "Right now you may need to understand why the journey you are on is wearing you out and to discover where your real peace lies."
+    },
+    "Sınav": {
+     "D": "Your trial is to not neglect your own peace and need for belonging while trying to keep your position and responsibilities.",
+     "Y": "Your trial is to find a healthy balance between your need for rest and your desire to move forward, without reading weariness as failure."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your life experience, your skill at recognising your real needs and your will to create an order of your own.",
+     "Y": "The force that supports you is the awareness gained from your past journeys and your ability to sense which surroundings give you peace."
+    },
+    "Yol": {
+     "D": "In the near future a chance may arise to rearrange your responsibilities and create a living space where you feel safer and more at home.",
+     "Y": "In the near future, by reviewing your current goals, you may understand which changes in your life could bring you peace and continuity."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you know your worth beyond what you own and place a true sense of belonging at the centre of your life.",
+     "Y": "This journey may prepare you to grasp the meaning of the weariness you have long carried and to build a sense of home of your own consciously."
+    }
+   }
   },
   "S3-K1": {
    "ad": "Flameless Bursting Lightning",
@@ -130,7 +514,39 @@
     "Mjölnir",
     "Ginnungagap",
     "Niflheim and Muspelheim"
-   ]
+   ],
+   "dAnlam": "When Flameless Bursting Lightning comes upright, it shows that a tension which has long been building, giving no outward sign, may suddenly break into the open. The crossing lines symbolise a threshold beyond which the familiar order can no longer continue in the same way. You too may feel the need to act in the face of an unexpected development, a sudden decision or a situation that pushes your limits. This card reminds you that the shaking you go through does not necessarily mean ruin. Sometimes a new movement cannot begin until the ties that block progress come undone. Now, instead of suppressing the power that has been released, you can turn it into the start of a conscious change.",
+   "yAnlam": "When Flameless Bursting Lightning comes sideways, the lightning has not yet burst; the unseen power is gathering between the crossing lines. You too may be facing a restlessness you struggle to explain, a suppressed reaction or a situation you feel must change. This card does not ask you to release the built-up energy outward at once, but to understand behind which limits it is gathering. Silence here is not stagnation but the preparation for a powerful transformation. Once you notice the source of the pressure within you, you can steer the change with your own will instead of reacting suddenly and thoughtlessly. The lightning not yet heard gives you time to prepare.",
+   "hikaye": "In ancient times, before the gods had named all the forces, a silent power began to gather in the forgotten depths of Ginnungagap, where neither fire nor ice held sway. One day this unseen force burst out as lightning, recalling the shaking that Thor's hammer awakens in the sky yet carrying neither light nor flame, and it shattered the bonds of the universe that were thought unchangeable. At first the gods believed this break threatened creation, but among the scattered fragments they saw roads and forms that had never existed before. From that day on, Flameless Bursting Lightning became the primal sign reminding us that not every great change begins with a visible signal, and that sometimes the strongest transformation is born when a silently gathered power is suddenly set free.",
+   "mitDers": "When the fire of Muspelheim meets the ice of Niflheim, the first life appears; the clash of opposites is as creative as it is destructive.",
+   "mitDikkat": "Releasing built-up power in an uncontrolled burst of anger.",
+   "mitGercek": "The might of Thor, associated with thunder, and his hammer Mjölnir, used against the giants, inspire the card's theme of sudden, shaking power. In the Norse creation account, the primordial void Ginnungagap and the appearance of the first beings where the cold of Niflheim meets the heat of Muspelheim support the idea that a new existence can be born from the meeting of opposing forces. Although some modern interpretations stress Thor producing lightning directly with his hammer, this link is not clearly made in all surviving Old Norse sources.",
+   "poz": {
+    "Kök": {
+     "D": "A sudden rupture or unexpected change you went through in the past may have formed the basis of the process you are in today.",
+     "Y": "An unspoken tension or suppressed reaction from the past may be the hidden source of your restlessness today."
+    },
+    "Şimdi": {
+     "D": "Right now, as built-up energy is released, an unexpected space for action may open in which you can change your familiar order.",
+     "Y": "Right now you feel the need for change strongly, but you may be trying to understand in which direction this energy should be released."
+    },
+    "Sınav": {
+     "D": "Your trial is to steer the power that emerges towards constructive change, without being carried away by uncontrolled reactions to sudden events.",
+     "Y": "Your trial is to understand the source of the tension building within you without denying it, and not to let the pressure turn into a thoughtless outburst."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your ability to act quickly in unexpected conditions and to see new possibilities within a broken order.",
+     "Y": "The force that supports you is your ability to notice the signs of your restlessness and to prepare yourself before change comes."
+    },
+    "Yol": {
+     "D": "In the near future an unexpected development may open new room for movement in a matter that has long stayed the same.",
+     "Y": "In the near future a growing need for change may lead you to reassess your preparations before taking an important step."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you discover your own strength in the face of sudden ruptures and can turn uncertainty into new beginnings.",
+     "Y": "This journey may prepare you to recognise the transformative power building within you and to bring about change through conscious choices, not only under the pressure of outside conditions."
+    }
+   }
   },
   "S3-K2": {
    "ad": "The Scream in the Void",
@@ -140,7 +556,39 @@
     "Ginnungagap",
     "Ymir",
     "Gjallarhorn"
-   ]
+   ],
+   "dAnlam": "When the Scream in the Void comes upright, it shows that an inner tension you have long been unable to name is beginning to become audible. This card symbolises suppressed feelings or postponed realisations gathering at the centre and finally calling out to you. Now the emptiness within you may be not only a lack but a space opened so that you can hear the truth. The intensity you feel may shake you; yet this shaking can also free a truth that has been hidden. The card advises you to escape the noise and hear your own echo, to make sense of what you feel without denying it, and to take seriously that first sound with which transformation begins.",
+   "yAnlam": "When the Scream in the Void comes sideways, the scream has not yet reached the surface; it is taking shape within a silent whirlpool. You too may feel an intense but vague turbulence in your inner world without knowing exactly what is unsettling you. This card suggests listening patiently to the unheard voice rather than reacting at once. Sometimes an echo turning within wants first to be understood before it can be resolved. The uncertainty you feel now may not be aimlessness but the preparation of a call whose meaning is slowly ripening. When you look carefully into the void, you may realise that what calls you is not fear but the wish to transform.",
+   "hikaye": "Before time began, in the depths of Ginnungagap, when no being could yet speak, a scream was born; but since there was no ear to hear it, the sound began to circle around itself instead of spreading outward. As the cold of Niflheim and the heat of Muspelheim drew near each other, this silent scream became a whirlpool and set the direction of the first movements. Later, as the gods built the universe, they found the trace of this unseen echo at the heart of every great rupture. From that day on, the Scream in the Void became the sacred sign of unnamed feelings, suppressed truths and a transformation that has not yet found its form.",
+   "mitDers": "Before all things there was the \"yawning void\", and the first being, Ymir, came forth from it; the void is not nothingness but possibility not yet given form. The sound of Gjallarhorn announces great change in advance.",
+   "mitDikkat": "Silencing your inner voice and filling the emptiness with distraction.",
+   "mitGercek": "The primordial void Ginnungagap, the first movement born where the cold of Niflheim meets the heat of Muspelheim, and the appearance of Ymir after this meeting inspire this card. The echo of Gjallarhorn, the sign of the announcement and cosmic shaking before Ragnarök, also feeds the card's theme of a vibration that is \"unheard but approaching\".",
+   "poz": {
+    "Kök": {
+     "D": "A feeling you suppressed or a truth you ignored in the past may want to be heard again today.",
+     "Y": "A nameless restlessness from the past may still be quietly circling in your inner world."
+    },
+    "Şimdi": {
+     "D": "Right now your inner voice may be growing clearer and calling you to an important reckoning.",
+     "Y": "Right now you may be trying to understand an inner intensity you cannot quite name."
+    },
+    "Sınav": {
+     "D": "Your trial is to listen to what the feeling that has surfaced wants to say, without running from it.",
+     "Y": "Your trial is to carry uncertainty patiently instead of suppressing it, and to make out the voice within."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your courage to hear your own truth and your ability to transform inner intensity creatively.",
+     "Y": "The force that supports you is your ability to stay with silence and to go deeper without rushing to judgement."
+    },
+    "Yol": {
+     "D": "In the near future a matter that has long remained nameless may become visible in a clearer and more transformative way.",
+     "Y": "In the near future, by understanding the cause of the whirlpool within you, you may realise what to turn towards."
+    },
+    "Kader": {
+     "D": "This journey may carry you to an awareness in which you recognise your own echo and can fill the void with meaning.",
+     "Y": "This journey may prepare you for a depth in which you sense unheard calls and build your transformation from within."
+    }
+   }
   },
   "S3-K3": {
    "ad": "The Silent Centre of Chaos",
@@ -150,7 +598,39 @@
     "Ginnungagap",
     "Yggdrasil",
     "Ragnarök"
-   ]
+   ],
+   "dAnlam": "When the Silent Centre of Chaos comes upright, it reminds you that there is an inner point where you can stay steady at your core, even as movement, uncertainty or unravelling increase around you. This card says that it is more important not to lose your centre than to control everything. Structures breaking outside, events speeding up or relationships changing direction may shake you; yet staying composed at exactly this moment lets you see the real truth. Now you should follow not the noise but the essence that remains at the core. Silence here is not withdrawal but the power to read the storm from within.",
+   "yAnlam": "When the Silent Centre of Chaos comes sideways, the centre has not yet been fully found, but its call has begun to be felt. You too may be searching for what to hold on to in a complicated process, trying to separate your thoughts from the noise. This card suggests finding inner alignment rather than making hasty decisions. Sometimes the solution lies not in fixing the outer chaos at once, but in first finding your own axis again. The pause you are living through is not an empty gap but a space opened so that you can descend to your inner centre. As calm draws near, you can see more clearly what is temporary and what is essence.",
+   "hikaye": "In ancient times, gods and giants believed that chaos was nothing but rupture and noise. Yet it was said that at the deepest point of Ginnungagap lay a silent centre that neither wind nor fire could touch; there, every conflict lost its own voice. According to legend, when great unravellings drew near, certain wise beings felt the echo of this centre and understood not where the ruin would be scattered, but which essence would remain. So the Silent Centre of Chaos became the sacred sign reminding us that even the greatest turmoil holds a hidden balance and clarity at its heart.",
+   "mitDers": "In the Völuspá, Yggdrasil trembles during Ragnarök yet remains the axis that bears the nine worlds; if the centre holds, chaos is temporary.",
+   "mitDikkat": "Turning calm into numbness or an escape from events.",
+   "mitGercek": "The primordial void Ginnungagap suggests that chaos is not only destruction but the silent tension before creation. Yggdrasil holding the nine worlds on one axis also inspires the idea of an unseen centre between unravelling and order. The card's world of meaning draws on how, even as everything is shaken in Ragnarök, the cosmic order does not vanish entirely but makes room for a new beginning.",
+   "poz": {
+    "Kök": {
+     "D": "The inner balance that kept you standing even in great turmoil in the past may still be carrying you today.",
+     "Y": "A period in the past when you lost your centre may have led you now to seek a firmer inner axis."
+    },
+    "Şimdi": {
+     "D": "Right now, staying calm despite the turmoil around you can help you see the right direction.",
+     "Y": "Right now it may be more fruitful to clarify your inner voice first and then weigh outer conditions."
+    },
+    "Sınav": {
+     "D": "Your trial is to act without losing touch with your essence as outside pressures grow.",
+     "Y": "Your trial is to find your own centre patiently in a moment of uncertainty, rather than choosing a direction in haste."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your mental clarity and your ability to stay connected to your inner balance even under pressure.",
+     "Y": "The force that supports you is your skill at stepping back to reflect and gathering your scattered energy again."
+    },
+    "Yol": {
+     "D": "In the near future a matter that seems complicated may become easier to understand as long as you stay centred.",
+     "Y": "In the near future you may go through a brief period of turning inward before clarity, and then set a firmer direction."
+    },
+    "Kader": {
+     "D": "This journey may carry you to building an inner balance that does not waver amid change.",
+     "Y": "This journey may prepare you to understand that no outer order will last until you have found your own axis."
+    }
+   }
   },
   "S3-K4": {
    "ad": "The Shattered Seal of Fate",
@@ -161,7 +641,39 @@
     "Urðarbrunnr",
     "Fenrir",
     "Gleipnir"
-   ]
+   ],
+   "dAnlam": "When the Shattered Seal of Fate comes upright, a threshold appears where you can reassess the hold of an obligation you have long accepted as unchangeable. The small circle at the centre reminds you that you can keep your own will while outer conditions change. You too may realise that a decision made in the past, a role you took on, or others' expectations do not have to determine your future entirely. This card stands for the freedom of choice that emerges as old ties come undone. Now you can take responsibility for choosing between continuing on the familiar road and setting a new direction. When the seal of fate shatters, what is lost is not meaning but the belief that you are bound to a single possibility.",
+   "yAnlam": "When the Shattered Seal of Fate comes sideways, the first cracks have appeared around the seal, but the invisible ties holding it together have not yet fully come undone. You too may have begun to question some responsibilities, habits or expectations in your life that you thought unavoidable. This card does not ask you to cut all your ties at once, but to understand which arise from real necessity and which from ideas you adopted in the past. The small circle at the centre reminds you that you can keep your essence while noticing the possibility of change. You may not yet know which road you will choose; but even seeing that you have options is the first step that weakens the old seal. Liberation begins with first believing in what is possible.",
+   "hikaye": "In ancient times, when the boundaries of the heavens and the nine worlds were not yet fixed, an invisible seal that recalled the Norns' laws of fate held the roads stretching before every being within a sacred circle. One day a nameless traveller who questioned the single road fate had offered him touched the centre of the seal; the sharp bonds around the circle shattered, yet the small light at its middle did not go out. The gods thought this break would destroy all fates, but among the scattered fragments they noticed choices and different roads never seen before. From that day on, the Shattered Seal of Fate became the sacred sign of questioning the binding force of the past's rulings without erasing them entirely, and of turning towards new possibilities by taking responsibility for one's own choices.",
+   "mitDers": "In Norse myth even the gods are subject to the fate set by the Norns; yet the breaking of Gleipnir, which binds Fenrir, at Ragnarök tells us that even the strongest bond comes undone when its time has come.",
+   "mitDikkat": "Making freedom an excuse to escape every responsibility.",
+   "mitGercek": "The Norns Urðr, Verðandi and Skuld, associated with the well Urðarbrunnr near the roots of Yggdrasil, are the card's main inspiration as the mythological figures who set the fates of beings. In the Völuspá, the Norns determining destinies and laying down the laws of life forms the basis for the relationship between human will and predestined fate. The gods binding Fenrir with the magical fetter Gleipnir, and that fetter breaking during Ragnarök, also inspire the idea of an order thought inevitable coming undone.",
+   "poz": {
+    "Kök": {
+     "D": "Questioning a rule or obligation you once thought unchangeable may have laid the groundwork for making your choices more independently today.",
+     "Y": "Some expectations and responsibilities you inherited from the past may be limiting your choices today without your noticing."
+    },
+    "Şimdi": {
+     "D": "Right now you can reassess the conditions you believe keep you tied to a certain path, and turn towards different options.",
+     "Y": "Right now you are questioning the limits of a situation you accepted as unavoidable, but may still be working out which changes you can make."
+    },
+    "Sınav": {
+     "D": "Your trial is to take responsibility for your own choices without letting your wish for freedom turn into a thoughtless break.",
+     "Y": "Your trial is to understand the inner conflict between the security the familiar order gives and your curiosity about new possibilities."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your ability to look at seemingly fixed conditions from different angles and to create new options grounded in your own will.",
+     "Y": "The force that supports you is your capacity to question, your mental flexibility and your skill at noticing alternatives that are not yet visible."
+    },
+    "Yol": {
+     "D": "In the near future a change or reassessment of a condition you feel limits you may allow you to choose a different road.",
+     "Y": "In the near future, by reviewing your current commitments and responsibilities, you may discover in which areas you have more freedom of choice."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you can question the limits set by the past and give your life a new direction through your own choices.",
+     "Y": "This journey may prepare you to reinterpret rulings you thought unchangeable and to develop your freedom through conscious choices."
+    }
+   }
   },
   "S3-K5": {
    "ad": "The Upturned World Cage",
@@ -172,7 +684,39 @@
     "Midgard",
     "Jörmungandr",
     "Völuspá"
-   ]
+   ],
+   "dAnlam": "When the Upturned World Cage comes upright, you may begin to see an order you have long accepted as reliable and unchangeable from an entirely different angle. Some of the limits you once thought protected you may now be narrowing your room to move. This card reminds you that it is not necessarily the outside world that changes, but the way you perceive it that can transform. As familiar rules, roles or relationships take on different meanings, you may briefly feel you have lost your bearings. Yet the upturned cage can also reveal passages you could not see before. Now you can consciously choose which parts of the old order to keep and which to rebuild.",
+   "yAnlam": "When the Upturned World Cage comes sideways, the world's axis has not yet changed completely, but the reliability of familiar directions has begun to be questioned. You too may feel that an environment, relationship or order you have long been part of no longer feels as familiar as it once did. This card advises you not to read this sense of strangeness as danger right away. Sometimes, before conditions change, the meaning a person gives them transforms. Examining which limits of the structure you are in are real and which are habit can give you a new view. You do not need to step out of the cage yet; first you should understand whether what you took for a door is really a wall.",
+   "hikaye": "In ancient times, when the nine worlds were separated by invisible boundaries, a sacred cage woven by the gods to protect order whispered to the beings within which way was up, which road was right and which boundary could not be crossed. One day a mysterious vibration rising from the roots of Yggdrasil turned the cage's axis upside down, and all the beings saw that the world they had thought unchangeable might be nothing more than an order they were used to. At first the gods took this transformation for the start of a new ruin, but some of those who believed themselves imprisoned in the cage discovered that behind the overturned boundaries lay passages they had never noticed. From that day on, the Upturned World Cage became a sacred sign reminding us that the order surrounding a person is sometimes made of their own thoughts, and that true freedom may begin, before changing the world, with questioning the angle from which one looks at it.",
+   "mitDers": "Jörmungandr, encircling Midgard, is both a protecting boundary and a threat; in the Völuspá the world that sinks into the sea rises again. Order may be overturned, but it does not vanish.",
+   "mitDikkat": "Clinging to the old cage out of fear of losing your bearings.",
+   "mitGercek": "Yggdrasil in Norse cosmology, the sacred world tree linking the different worlds, forms the basis of the card's idea of universal order. In the Gylfaginning, the gods building Midgard as a sheltered place against the giants, and the great serpent Jörmungandr lying around the world, inspire the idea of a world enclosed by protective boundaries. In the Völuspá, the world sinking into the sea during Ragnarök and then rising again shows that a cosmic order thought unchangeable can transform.",
+   "poz": {
+    "Kök": {
+     "D": "An unexpected change in an order you once considered safe may have laid the groundwork for looking at the world from different angles today.",
+     "Y": "A familiar environment or order beginning to feel strange to you in the past may be affecting your sense of security and freedom today."
+    },
+    "Şimdi": {
+     "D": "Right now, by weighing conditions you thought unchangeable from a different angle, you can discover new meanings in the structures that limit your life.",
+     "Y": "Right now you may be trying to understand why the order you are in no longer feels as safe as before, and to adjust to your changing perceptions."
+    },
+    "Sınav": {
+     "D": "Your trial is to tell which limits are truly necessary, without losing your bearings as the familiar order changes.",
+     "Y": "Your trial is to weigh different points of view patiently, without letting a sense of estrangement turn into the belief that everything is wrong."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your ability to weigh events from different directions and your skill at creating a new order suited to changing conditions.",
+     "Y": "The force that supports you is your ability to question your habits and to observe the structures around you carefully before making any change."
+    },
+    "Yol": {
+     "D": "In the near future, familiar conditions taking on a different appearance may let you consider options and room for movement you had not noticed before.",
+     "Y": "In the near future, by better understanding the changes around you, you may decide which habits to keep and which ideas to reconsider."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you can reinterpret your own reality in changing conditions and arrange your life by more conscious principles.",
+     "Y": "This journey may prepare you to question the meaning of the limits you thought safe and to meet the possibilities beyond the familiar world with a more open mind."
+    }
+   }
   },
   "S3-K6": {
    "ad": "The Reborn Shadow Bird",
@@ -182,7 +726,39 @@
     "Völuspá",
     "Líf and Lífþrasir",
     "The eagle of the renewed world"
-   ]
+   ],
+   "dAnlam": "When the Reborn Shadow Bird comes upright, it reminds you that after a period you thought had ended, a different way of being is possible. The unseen wings rising from scattered lines symbolise that the trust, direction or meaning you lost in the past can be rebuilt without being the same as before. You too may realise that the experiences you left behind did not only change you, but gave you new abilities and perspectives. This card advises you to accept your growth without trying to return to how you were. Now you can turn the traces of the past into part of your new beginnings and approach the possibilities before you with more courage and hope. Being reborn is not erasing the past, but being able to exist beyond it.",
+   "yAnlam": "When the Reborn Shadow Bird comes sideways, the bird has not yet spread its wings; it is quietly turning the remnants of its old form into a new wholeness. You too, after a hard period you have left behind, may need to make sense of what you lived through rather than turning straight to new goals. This card reminds you not to see the process of recovery as a delay. Every experience can become a different part of the life you will rebuild. Right now you may discover which side of you is growing stronger, which habits are falling away and what you want to carry into the future. Not rising yet does not mean your wings have not formed; your new beginning may be quietly taking shape.",
+   "hikaye": "After an ancient ruin like the great shaking of Ragnarök, in the forgotten void between the nine worlds, the shadow of a bird that had lost all its forms quietly lived on among scattered stars and broken celestial bonds. It had neither its old wings nor any memory of which sky it belonged to; yet an unseen call rising from the depths of a blue cosmic whirlpool began to gather its shattered traces together again. Instead of trying to return to the form it once had, the shadow wove new wings from the broken lines and, for the first time, rose towards a direction of its own choosing. From that day on, the Reborn Shadow Bird became the sacred sign not only of surviving destruction, but of an essence thought lost returning to life in a changed form, and of the possibility of an entirely new life born from the ashes of the old world.",
+   "mitDers": "After Ragnarök the world rises again from the sea, and Líf and Lífþrasir carry life onward; destruction is not the end but a threshold.",
+   "mitDikkat": "Resisting the new life by trying to bring back the old identity.",
+   "mitGercek": "The card's main mythological source is the Völuspá, where after Ragnarök the world rises again from the sea, turns green and new life appears. The same poem describes an eagle flying over the renewed world, which allows a symbolic link between life after destruction and the figure of the bird. In Snorri Sturluson's Gylfaginning, Líf and Lífþrasir survive the great destruction and carry on the human line, supporting the idea that existence, even when interrupted, can continue in new forms.",
+   "poz": {
+    "Kök": {
+     "D": "Being able to rebuild yourself after an important change in the past may have formed the basis of the resilience and drive to grow you have today.",
+     "Y": "An unfinished process of recovery from the past may be making you seek more preparation and reassurance as you approach new beginnings today."
+    },
+    "Şimdi": {
+     "D": "Right now you are in a period where, leaving behind the limits of the past, you can create a new beginning in your life with the experience you have gained.",
+     "Y": "Right now you may be making sense of the changes you are living through and quietly shaping your new identity and the direction you want to take."
+    },
+    "Sınav": {
+     "D": "Your trial is to accept your changed self while taking the chance to begin again, letting go of the expectation of returning entirely to your old life.",
+     "Y": "Your trial is to give yourself the time you need to recover, without letting the hardships of the past determine your future possibilities."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your ability to learn from past experience, adapt to new conditions and grow hope again after change.",
+     "Y": "The force that supports you is the patience you show yourself, your inner resilience and your openness to discovering abilities that have not yet emerged."
+    },
+    "Yol": {
+     "D": "In the near future the experience gained from past changes may help you turn towards a new goal or chance to grow.",
+     "Y": "In the near future a process of growth may take shape in which you redefine yourself and prepare more firmly for new beginnings."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you turn the ruptures of the past into part of your growth and move towards a new direction in life of your own choosing.",
+     "Y": "This journey may prepare you to accept the new self formed after change and to build your future independent of the limits of the past."
+    }
+   }
   },
   "S4-K1": {
    "ad": "The Moonlight Stag",
@@ -191,7 +767,39 @@
    "mitFigur": [
     "The Dreaming",
     "Ancestral journeys"
-   ]
+   ],
+   "dAnlam": "When the Moonlight Stag comes upright, it reminds you that as you move along an uncertain path, you can draw support from your intuition and from the quiet signs around you. The sacred stag appearing beneath three crescents symbolises that not every answer is spoken aloud; sometimes the right direction can be felt through a calm awareness that comes from within. You too may begin to understand your own needs better in a matter you have long been undecided about. This card stresses the importance of connecting with nature, listening to trustworthy guides and making room for your inner voice. Now you can seek your path not with fear but with careful observation and intuitive trust, and choose your next steps more consciously.",
+   "yAnlam": "When the Moonlight Stag comes sideways, the sacred stag has not yet stepped out of the depths of the forest; it waits, among the changing phases of moonlight, for the traveller to sense their own direction. You too may be trying to understand which signs to trust in your life, finding it hard to tell your intuition from your worries. This card advises you to listen to the silence of your inner world rather than trying to resolve uncertainty at once. Sometimes, before guidance can come from outside, a person must be ready to accept it. When you give your feelings time, notice the trustworthy support around you and avoid hasty decisions, the first lines of a path that seems dark can begin to appear.",
+   "hikaye": "In the first nights of the realm of spirits, a mysterious stag lived among the roots of four ancient intertwined trees, lighting lost paths; its antlers gathered moonlight, and its steps awakened memories hidden deep in the earth. One night a traveller who had lost his way saw the stag's pale light in the darkness of the forest, and as he began to follow it, he heard among the whispers of the trees forgotten voices from his own past. The stag did not tell him which road to choose; it only stood beneath three crescents and waited for him to notice the direction his heart had heard. From that day on, the Moonlight Stag became a sacred symbol reminding us that when a person listens to their own intuition, they can find guidance in the quiet signs of nature.",
+   "mitDers": "In the Dreaming traditions the land carries the traces of ancestral journeys; the way is found by reading the signs of nature. The stag is not native to Australia; it is the card's own original guide.",
+   "mitDikkat": "Handing your intuition over to outside approval, or reading the signs in haste.",
+   "mitGercek": "The card's main inspiration comes from the way, in these traditions, the journeys of ancestral beings shaped the earth, natural features took on meaning, and people formed a spiritual bond with the lands they live on. Dreaming narratives are not the same in all Aboriginal communities; they differ according to particular lands, languages and cultural traditions. Deer are also not native animals of Australia; they were brought to the continent after European settlement.",
+   "poz": {
+    "Kök": {
+     "D": "A direction you found in the past by trusting your intuition, or with the support of a trustworthy guide, may have formed the basis of your inner confidence today.",
+     "Y": "An intuitive awareness you did not take seriously in the past, or support you quietly received, may be waiting to take on new meaning today."
+    },
+    "Şimdi": {
+     "D": "Right now you can combine your intuition with careful observation and set a surer direction for yourself in an uncertain matter.",
+     "Y": "Right now you may be trying to tell your inner voice from your worries and need to understand your feelings before you decide."
+    },
+    "Sınav": {
+     "D": "Your trial is to choose your own direction consciously, without letting trust in your intuition turn into ignoring the facts.",
+     "Y": "Your trial is to weigh your inner signs patiently, without confusing the sensitivity you feel in uncertainty with fear."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your intuitive sensitivity, your bond with nature and your ability to accept trustworthy guidance when needed.",
+     "Y": "The force that supports you is your ability to observe quietly, to listen to your feelings and your openness to discovering your own inner direction."
+    },
+    "Yol": {
+     "D": "In the near future an encounter that catches your attention, or a new awareness, may help you weigh the options before you more clearly.",
+     "Y": "In the near future, by making sense of the uncertainties in your inner world, you may discover more calmly which way you want to go."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you trust your own intuition, notice the support around you and choose your life's path more consciously.",
+     "Y": "This journey may prepare you to learn the language of your inner guidance and to build self-trust even amid uncertainty."
+    }
+   }
   },
   "S4-K2": {
    "ad": "The Winged River's Memory",
@@ -200,7 +808,39 @@
    "mitFigur": [
     "The Dreaming (Jukurrpa, Tjukurpa)",
     "Songlines"
-   ]
+   ],
+   "dAnlam": "When the Winged River's Memory comes upright, it reminds you that an experience from your past may give you new meaning today. The two linked loops of the infinity sign symbolise that memories are not only events left behind; they carry an unseen current that feeds your thoughts and choices today. You too may recall a piece of knowledge, a word or an experience you thought you had long forgotten. This card stresses the importance of sharing the valuable traces of the past and passing on what you have learned to others. Now you can look at your own story with different eyes and carry into your future the wisdom distilled from what you have lived. As the river flows, memories change shape, but the meaning they carry is never wholly lost.",
+   "yAnlam": "When the Winged River's Memory comes sideways, the river has not yet spread its wings; it keeps the memories it carries from the past in its own depths. You too may be trying to understand why certain memories keep returning to your mind, or why something you heard in the past feels different today. This card reminds you that not every memory needs to be explained or shared at once. Some experiences take on their true meaning only as time passes. When you weigh the memories moving through your inner world without judging them, you can notice which pieces of knowledge strengthen you and which now call for a different reading. The river's quiet flow asks you to absorb the wisdom of the past before carrying it into the future.",
+   "hikaye": "In the first ages of the realm of spirits, a mysterious river born among the roots of intertwined ancient trees gathered in its waters the voices forgotten on earth, the words never spoken and the memories of the past that were fading away. One day, when its path was cut off by a great rock, an unseen power that would not let its memories be lost gave it wings of water, and the river left its bed and carried its memories to distant lands that only the wind could reach. Wherever the river passed, people noticed the feelings stirred in them by old stories they had never heard, and began to understand the invisible bonds between past and present. From that day on, the Winged River's Memory became a sacred sign reminding us that what has been lived is never wholly lost, and that memories, passed on in different forms, can become the wisdom of new lives.",
+   "mitDers": "A songline carries a route, and the knowledge of that route, from generation to generation in song; memory is not a static archive but a road that is walked.",
+   "mitDikkat": "Either rejecting the past entirely or living inside it.",
+   "mitGercek": "In some of these traditions, the journeys of ancestral beings are associated with the forming of rivers, water sources and landforms; the knowledge of these journeys is preserved through stories, songs and cultural narratives handed down through the generations. In particular, the ancestral routes known as songlines, which link geographical places while also carrying knowledge from the past, inspire the card's theme of memory and continuity.",
+   "poz": {
+    "Kök": {
+     "D": "An important experience, piece of advice or family story passed down to you may have formed the basis of the values that shape your life today.",
+     "Y": "A memory you could not fully make sense of in the past, or something you once heard, may be waiting to take on new meaning in your inner world today."
+    },
+    "Şimdi": {
+     "D": "Right now, by recalling what your past experiences have taught you, you can give your present choices a deeper meaning.",
+     "Y": "Right now you may be trying to understand how the memories resurfacing in your mind connect with what you feel today."
+    },
+    "Sınav": {
+     "D": "Your trial is to keep the valuable knowledge of the past without letting old experiences alone determine your life today.",
+     "Y": "Your trial is to weigh patiently the meanings that memories from the past awaken in you today, without interpreting them in haste."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your memory, what you have learned from past experience and your ability to share valuable knowledge with others.",
+     "Y": "The force that supports you is your ability to sense the meanings within your memories and to quietly reconsider your past experiences."
+    },
+    "Yol": {
+     "D": "In the near future something you recall from the past, or a renewed connection, may help you weigh the options before you differently.",
+     "Y": "In the near future, by better grasping the meaning of an old experience, you may bring clarity to thoughts that are not yet complete."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you keep the wisdom of the past, pass your own experience on to others and form meaningful links between the different periods of your life.",
+     "Y": "This journey may prepare you to discover the deeper meaning of your memories and to use what you have learned from the past more consciously in the future."
+    }
+   }
   },
   "S4-K3": {
    "ad": "Whisper of the Roots",
@@ -209,7 +849,39 @@
    "mitFigur": [
     "The Dreaming",
     "Country"
-   ]
+   ],
+   "dAnlam": "When Whisper of the Roots comes upright, a period appears in which you can see more clearly the value of the unseen bonds that keep you standing. Roots reaching deep into the earth remind you that your strength is fed not only by your own efforts, but also by the surroundings you belong to, your relationships and the values that come from the past. You too may come to appreciate anew a support you have long overlooked, or a commitment that gives your life meaning. This card advises you to honour your roots without losing your independence. Now you can strengthen the relationships that nourish you and build a firmer, more conscious bond between your own being and the life around you.",
+   "yAnlam": "When Whisper of the Roots comes sideways, the roots of the ancient tree have not yet fully reached one another; they are still searching for the unseen connections deep in the soil. You too may be questioning where you feel you belong, which values truly nourish you, or what place the ties you carry from your past have in your life today. This card does not ask you to build a strong sense of belonging at once, but to come to know patiently the relationships and experiences that have shaped you. Sometimes a person notices their roots only when they feel they have drifted away from them. When you give your inner questions time, you can see more clearly which bonds you want to keep and which you want to understand anew.",
+   "hikaye": "In the ancient ages of the realm of spirits, the roots of trees reaching in four directions joined one another in the unseen depths of the soil, and each tree felt the life of the whole forest beyond its own leaves. One day a young tree that wanted to grow alone decided to separate its roots from the others; then it heard a mysterious whisper rising from the earth and learned that the strength that nourished it came not only from its own trunk but from countless unseen relationships around it. When the tree reached its roots back into the depths of the soil, four sacred stags appeared around it, and an invisible eye opened among its branches so that it could see the bonds of life hidden beneath the ground. From that day on, Whisper of the Roots became a sacred sign reminding us that a person draws strength not only from their own being, but from the land they belong to, the relationships they form and the bonds that stretch from the past to the present.",
+   "mitDers": "In the concept of Country, a person belongs to the land as much as they are responsible for it; roots bring obligations as well as rights.",
+   "mitDikkat": "Turning belonging into dependence or pressure.",
+   "mitGercek": "In these traditions, the relationships of ancestral beings with the earth are linked to the spiritual meanings of lands, plants, animals and natural features. In Aboriginal cultures, the concept of Country covers not only a geographical area but the cultural and spiritual relationships between people, ancestors, living beings and the land they live on. Oral narratives and knowledge of ancestral routes handed down over generations help people keep their bond with the place they live and understand their responsibilities towards it.",
+   "poz": {
+    "Kök": {
+     "D": "The support you received from your family, the surroundings you grew up in or strong relationships you formed may have laid the foundation of the resilience you have today.",
+     "Y": "A sense of belonging you could not fully understand in the past, or a question about your origins, may be feeding your need today to know yourself better."
+    },
+    "Şimdi": {
+     "D": "Right now, by noticing the relationships that nourish you and the values that give your life meaning, you can develop a firmer sense of belonging.",
+     "Y": "Right now you may be trying to understand with which people, places and values you have a genuine bond."
+    },
+    "Sınav": {
+     "D": "Your trial is to keep the valuable bonds that come from the past while maintaining your individuality and independent choices.",
+     "Y": "Your trial is to discover the meaning of your own roots without letting the wish to belong turn into giving in to others' expectations."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your trustworthy relationships, the values you gained from the past and the mutual commitment you share with the life around you.",
+     "Y": "The force that supports you is your ability to question your own origins and to tell apart the bonds that truly nourish you."
+    },
+    "Yol": {
+     "D": "In the near future a chance may arise to strengthen the valuable relationships in your life and create surroundings where you feel more at home.",
+     "Y": "In the near future, by reassessing some values that come from your past, you may understand which bonds you want to strengthen in your life."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you draw strength from your roots, keep your mutual bond with those around you and build a firm sense of belonging in your own life.",
+     "Y": "This journey may prepare you to know your origins more deeply and to understand the bonds of the past anew in line with your own values."
+    }
+   }
   },
   "S4-K4": {
    "ad": "The Tree the Wind Forgot",
@@ -219,7 +891,39 @@
     "The Dreaming",
     "Country",
     "Knowledge carried by the wind (in some communities)"
-   ]
+   ],
+   "dAnlam": "When the Tree the Wind Forgot comes upright, you may recall your own worth in an area where you have long felt unnoticed or felt your voice was not heard enough. The three vertical lines symbolise the tree that goes on standing on its roots even when the movement around it has stopped. You too may begin to see the abilities you have without waiting for others' attention, appreciation or support. This card reminds you that being forgotten does not mean being worthless. Now you can take steps to express yourself, revive a side of you that you have neglected, and consciously create the place you deserve in your life. Even if your voice is not heard, your presence goes on carrying meaning.",
+   "yAnlam": "When the Tree the Wind Forgot comes sideways, the old tree has not yet discovered the voice rising from its own roots; it waits in silence for the wind to return one day. You too may feel that you are not seen enough in your life, that your efforts go unnoticed, or that a bond in which you once felt strong has weakened. This card advises you that you do not have to keep trying harder to remind others of yourself. Sometimes a feeling of loneliness can create a chance to redefine within yourself the worth you expect from others. When you understand the needs within the silence, you can discover which relationships nourish you and how to make more room for your own being.",
+   "hikaye": "In the ancient forests of the realm of spirits, as the wind touched the branches of every tree and carried its voice to distant lands, it forgot to pass by an old tree at the edge of the forest, and over time the tree sank into a deep silence in which not even its own whisper could be heard. At first the tree waited for the wind to come back, but as the seasons passed it noticed its leaves falling and its branches growing quiet, while the spark of life it kept beneath the soil still lived on. One night, listening to the voices of the trees around it in the moonlight, it heard for the first time a fine vibration rising from its own roots, and understood that it did not have to wait for the wind to touch it again in order to be remembered. From that day on, the Tree the Wind Forgot became the sacred sign of keeping one's presence without being lost in oblivion, of building a self-worth independent of the world's attention, and of finding one's own voice again within silence.",
+   "mitDers": "In Dreaming thought, a place's worth comes not from being seen but from the story it carries; being forgotten is not the same as being worthless.",
+   "mitDikkat": "Making your own worth depend on others remembering you.",
+   "mitGercek": "In these traditions, the relationships between land, trees, wind, living beings and ancestral beings are bound up with the spiritual and cultural meaning of the place where people live; the concept of Country covers not only a person's presence in a landscape but the relationships of mutual belonging and responsibility they form with it.",
+   "poz": {
+    "Kök": {
+     "D": "Keeping your strength during a time when you were not noticed enough may have formed the basis of the self-worth you have today.",
+     "Y": "An experience in which you felt your voice was not heard may be affecting your need today to be seen and accepted."
+    },
+    "Şimdi": {
+     "D": "Right now you can remember your own worth without waiting for others' appreciation, and bring forward a side of yourself you have long kept in the background.",
+     "Y": "Right now you may feel insufficiently understood and be trying to grasp how this feeling relates to your sense of your own worth."
+    },
+    "Sınav": {
+     "D": "Your trial is to keep the value of your own presence without making your wish to be visible depend on others' approval.",
+     "Y": "Your trial is to understand your inner needs with compassion, without reading a sense of loneliness or being forgotten as personal worthlessness."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your inner resilience, your skill at recognising your own values and your ability to keep growing independent of others' attention.",
+     "Y": "The force that supports you is your ability to listen to yourself in silence and to grow within yourself first the acceptance you expect from outside."
+    },
+    "Yol": {
+     "D": "In the near future, by expressing again a talent or idea you have long neglected, you may open a new space of visibility for yourself.",
+     "Y": "In the near future, by understanding in which settings you can express yourself more freely, you may prepare for new steps that strengthen your own voice."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you know the worth of your own presence without needing others to remember you, and can create a place of your own in life.",
+     "Y": "This journey may prepare you to recognise the needs behind the feeling of being forgotten and to develop your inner strength independently of others' approval."
+    }
+   }
   },
   "S4-K5": {
    "ad": "The Petrified Flower Garden",
@@ -228,7 +932,39 @@
    "mitFigur": [
     "The Dreaming",
     "Ancestral traces in the rocks"
-   ]
+   ],
+   "dAnlam": "When the Petrified Flower Garden comes upright, you can develop a new understanding between your wish to preserve a beauty you once valued and the natural change of life. The three rings that cross and link with one another symbolise that moments once lived can endure in different layers of meaning without being lost. You too may notice what place a memory, relationship or achievement you have long kept holds in your life today. This card advises you to preserve the value of the past without letting it leave you motionless. Now you can keep beautiful memories alive not in their unchanging forms but through the meaning they have given you, and make room for new beauty as well.",
+   "yAnlam": "When the Petrified Flower Garden comes sideways, the garden's keeper has not yet turned the flowers to stone, but fearing they might wither, wishes to stop the flow of time. You too may be wary of a period, relationship or beautiful experience you value greatly changing. This card does not suggest rejecting your attachment to the past, but understanding why you want to preserve it exactly as it is. Sometimes the fear of loss can make it harder to open up to new experiences. When you accept the value of your memories while seeing change as a natural part of life, you can allow the beauty you wish to preserve to live within you without limiting you.",
+   "hikaye": "In the first springs of the realm of spirits, there was a mysterious flower garden blooming among four ancient trees, and its flowers took on different colours every season, celebrating nature's passing beauty. One day the garden's keeper, afraid that the flowers would wither and vanish, placed three invisible rings around them, and all the flowers turned to stone at their most beautiful moment, sheltered from the touch of time. Years later a traveller who came to the garden saw that the petrified flowers were still enchanting but could no longer dance with the wind, and understood the difference between preserving beauty and stopping the flow of life. From that day on, the Petrified Flower Garden became a sacred sign reminding us that while we preserve the precious beauties of the past, we must also allow them to change, and that true permanence lies not in form but in the meaning left behind.",
+   "mitDers": "In some accounts the traces of ancestral beings become permanent in rocks and water sources; what is precious is preserved not by freezing but by changing form.",
+   "mitDikkat": "Freezing beauty and stopping the flow of life.",
+   "mitGercek": "In some of these traditions, the earth was shaped during the journeys of ancestral beings, and their traces live on in rocks, trees, water sources and other natural features; this inspires the card's idea of a living being turning into a lasting form of nature. In some Dreaming narratives presented by the National Museum of Australia, the idea that natural features carry the traces and spiritual presence of ancestral beings holds an important place. Aboriginal peoples, however, do not have a single shared mythology; the narratives differ according to particular communities, languages and lands.",
+   "poz": {
+    "Kök": {
+     "D": "Being able to preserve a memory or experience you valued in the past may have laid the foundation for noticing the lasting beauties in your life today.",
+     "Y": "A beautiful period you did not want to end may be affecting the hesitation you feel towards change today."
+    },
+    "Şimdi": {
+     "D": "Right now you can develop a more mature view in which you keep the valuable traces of the past while also making room for new experiences.",
+     "Y": "Right now you may be trying to understand why a situation you do not want to change matters so much to you."
+    },
+    "Sınav": {
+     "D": "Your trial is to adapt to life's changing conditions while keeping your beautiful memories, and not to place the past before the present.",
+     "Y": "Your trial is to not let the fear of losing what you value turn into a clinging that blocks its natural growth."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is what you have learned from the beauties of the past and your ability to keep valuable experiences alive in meaningful ways under new conditions.",
+     "Y": "The force that supports you is your ability to understand your emotional attachments and your skill at showing yourself patience in the face of change."
+    },
+    "Yol": {
+     "D": "In the near future, by adapting an experience you valued in the past to new conditions, you may carry its meaning on in your life.",
+     "Y": "In the near future you may better understand which aspects of a bond or habit you want to preserve could be open to change."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you can preserve the beauties of the past while still allowing life to bloom with new flowers.",
+     "Y": "This journey may prepare you to understand the attachments behind your fear of change, and to keep the lasting meaning of beautiful things alive by accepting their passing forms."
+    }
+   }
   },
   "S4-K6": {
    "ad": "The Rock That Speaks with Rain",
@@ -237,7 +973,39 @@
    "mitFigur": [
     "The Dreaming",
     "The Rainbow Serpent (Kakadu and some communities)"
-   ]
+   ],
+   "dAnlam": "When the Rock That Speaks with Rain comes upright, you may notice that a situation which has long stood unchanged is beginning to take on new meaning through small but steady influences. The lines curling into one another symbolise that even if no single experience changes you at once, over time each can leave lasting traces in your thinking. This card reminds you that being strong does not mean staying rigid in every circumstance. You too may approach the words of people around you, different experiences or the new perspectives life offers with more openness. Now you can turn your patience from a passive wait into a conscious power of learning, and discover that you can keep your essence while you change.",
+   "yAnlam": "When the Rock That Speaks with Rain comes sideways, the first drops of rain have reached the surface of the rock but have not yet left clear marks. You too may be trying to understand what the small, repeating experiences in your life or the words you hear are trying to tell you. This card reminds you that you do not have to change at once or make firm decisions. Sometimes an idea needs to be heard again at different times before it can ripen. When you listen quietly, observe your reactions and weigh the new information that reaches you, some hardened ideas in your inner world may begin to soften. What the rain teaches gains meaning to the extent that the rock is ready to receive it.",
+   "hikaye": "In the ancient ages of the realm of spirits, an old rock standing near the roots of four sacred trees had watched the changing colours of the sky for thousands of seasons, but because it had never left its place, it believed it could never learn the stories of the world. One day a long rain began, and with each drop it left on the rock's surface voices carried from distant lands, and the rock discovered that it could communicate with other beings without breaking its silence. These conversations, lasting through the seasons, formed three fine curling traces on the rock; it was now a little different from its old form, yet every change had given it a new understanding. From that day on, the Rock That Speaks with Rain became the sacred sign reminding us that patience is not only waiting, but staying open to the small and constant touches of life and growing a deep wisdom over time.",
+   "mitDers": "In some accounts the Rainbow Serpent shapes waterways and rocks; form arises through patient and constant contact.",
+   "mitDikkat": "Confusing patience with being closed to change.",
+   "mitGercek": "Some of these traditions tell how rocky outcrops, water sources, rivers and other natural features were shaped by the journeys of ancestral beings; these places are bound up with the stories that describe them and with the spiritual relationships formed with the land. In some local narratives of the Kakadu region of Australia, the ancestral being rendered in English as the Rainbow Serpent is associated with water sources and features of the land; the name, qualities and stories of this figure, however, vary between communities.",
+   "poz": {
+    "Kök": {
+     "D": "Repeated experiences you met with patience in the past may have laid the foundation for approaching events with more understanding and maturity today.",
+     "Y": "Small experiences or advice you did not weigh enough in the past may be waiting to take on new meaning today."
+    },
+    "Şimdi": {
+     "D": "Right now, by carefully weighing different ideas from those around you, you can approach a long-unchanged matter more flexibly.",
+     "Y": "Right now you may be trying to discover the meaning of the small developments you are living through and need to absorb them before you decide."
+    },
+    "Sınav": {
+     "D": "Your trial is to let new experiences help you grow, without turning your resilience into rigidity.",
+     "Y": "Your trial is to be patient with a learning process that takes time, without giving in to the wish for quick results."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your patience, your ability to accept different views and to learn from experience slowly but lastingly.",
+     "Y": "The force that supports you is your ability to listen quietly, to give your thoughts time and to notice the value of small changes."
+    },
+    "Yol": {
+     "D": "In the near future small, repeating developments may help you form a more mature understanding of a matter you have long seen the same way.",
+     "Y": "In the near future, by absorbing new experiences, you may understand which of your ideas are beginning to change and where you need patience."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you learn from life's small touches, join resilience with understanding and meet change with patience.",
+     "Y": "This journey may prepare you to grasp the meaning of your experiences over time and to develop your inner transformation without hurrying."
+    }
+   }
   },
   "S5-K1": {
    "ad": "Prophecy of the Iron Chain",
@@ -249,7 +1017,39 @@
     "Apep",
     "Book of Gates (11th hour)",
     "Book of the Dead"
-   ]
+   ],
+   "dAnlam": "When the Prophecy of the Iron Chain comes upright, you can see more clearly how a promise you made in the past, a responsibility you took on or a commitment you keep is shaping your choices today. The black chains winding around each other remind you that not every bond carries the same meaning. Some give you security and continuity, while others may now ask to be reassessed. This card does not advise you to free yourself from all your ties, but to understand which ones you keep consciously. Now you can set the limits of your responsibilities and weigh the relationships you built in the past more fairly. True freedom is not breaking every chain, but knowing which bonds you carry by your own will.",
+   "yAnlam": "When the Prophecy of the Iron Chain comes sideways, the guardian of the underworld has not yet decoded the meaning of the chains; he is carefully examining the tangled bonds around the red seal. You too may be questioning why you keep certain responsibilities in your life, or how valid the promises you made in the past still are today. This card asks you to understand from which needs and choices your commitments arose, rather than changing them at once. Sometimes a duty that has become habit can look like a responsibility truly chosen. When you give yourself time, you can tell more clearly the bonds that support you from the obligations you feel narrow your room to move. Learning the meaning of the chains is the first step to carrying them consciously.",
+   "hikaye": "In the dark passages of the Duat, a nameless guardian charged with protecting Ra's night journey discovered a mysterious chamber where invisible chains were kept, forged from the promises people had made in the past and the responsibilities they had left unfinished. The red seal at the centre of the chamber showed that every chain carried two different meanings; some bonds protected a person, while others, once the reason for them was forgotten, limited their journey. Instead of breaking the chains at random, the guardian chose to understand from which promise each had been born, and created a sacred sign that separated true responsibilities from commitments that had lost their meaning. From that day on, the Prophecy of the Iron Chain became the underworld sign reminding us to notice how the bonds formed in the past can shape our future, and to choose consciously the responsibilities we must carry on the way to freedom.",
+   "mitDers": "In the Book of Gates, the chaining of Apep protects the cosmic order; a bond is not always captivity, it can also be the restraint of a dangerous power.",
+   "mitDikkat": "Mistaking commitments kept out of guilt for responsibility.",
+   "mitGercek": "The card's main mythological source is the passage of the sun god Ra through the otherworld realm called the Duat during the night, and his encounter on this journey with Apep, or Apophis, the serpent who threatens cosmic order. In the eleventh hour of the ancient Egyptian underworld text known as the Book of Gates, Apep is shown rendered powerless with bonds and chains; this scene shows that binding can mean not only captivity but also the restraint of a dangerous power. The gates, guardians and sacred words to be spoken in the tradition of the Book of the Dead also stress the importance of knowledge and responsibility on a person's journey.",
+   "poz": {
+    "Kök": {
+     "D": "An important promise you made or responsibility you took on in the past may have formed the basis of the commitments and choices in your life today.",
+     "Y": "An obligation you never fully questioned why you accepted may be shaping your choices today without your noticing."
+    },
+    "Şimdi": {
+     "D": "Right now, by weighing more clearly the responsibilities that come from the past, you can decide which bonds you want to keep consciously.",
+     "Y": "Right now you may be trying to understand why some of your commitments continue and to discover the real limits of your responsibilities."
+    },
+    "Sınav": {
+     "D": "Your trial is to keep your own will and personal limits while owning your responsibilities, without taking on more than you should.",
+     "Y": "Your trial is to decode the meaning of your commitments without hasty decisions, while separating your habits from your real obligations."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your past experience, the care you give to your word and your ability to manage your responsibilities consciously.",
+     "Y": "The force that supports you is your patient questioning, your ability to notice your own limits and your skill at tracing the source of your commitments."
+    },
+    "Yol": {
+     "D": "In the near future, by rearranging a responsibility you have long carried, you may create a more balanced and sustainable path.",
+     "Y": "In the near future, by reassessing the meaning of an obligation from the past, you may better understand on what terms you want to continue."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you take responsibility for the bonds you formed in the past while also keeping your freedom of choice.",
+     "Y": "This journey may prepare you to understand the hold of old promises and habits and to redefine your commitments more consciously."
+    }
+   }
   },
   "S5-K2": {
    "ad": "Heart of the Black Labyrinth",
@@ -258,7 +1058,39 @@
    "mitFigur": [
     "Book of Two Ways (Coffin Texts)",
     "Osiris"
-   ]
+   ],
+   "dAnlam": "When the Heart of the Black Labyrinth comes upright, it shows that you can draw near to the centre of feelings you have long struggled to make sense of and thoughts that keep repeating. The spiral curling inward reminds you that while you keep looking for the way out in outer conditions, you may have missed an important truth in your own inner world. You too may notice why you give the same reactions in similar situations, or why you keep away from certain feelings. This card advises you to make sense of your inner turmoil without judging yourself. Now you can approach the questions you have avoided more openly and discover the links between your past experiences and your present choices. The centre of the labyrinth may be the beginning of the way out.",
+   "yAnlam": "When the Heart of the Black Labyrinth comes sideways, the traveller has not yet reached the centre of the labyrinth; among passages that look alike, they are trying to understand which path is their own. You too may be finding it hard to get your bearings among repeating thoughts or emotional reactions you cannot explain. This card does not ask you to find every answer at once, but to observe your inner world patiently. Sometimes returning to the same question again and again can be the sign of a need not yet understood. When you look into the source of your feelings and ask yourself honest questions, the labyrinth's tangled paths can slowly begin to make sense. Before reaching the centre, you must come to know the way.",
+   "hikaye": "In the dark passages of the Duat, a mysterious labyrinth would sometimes appear before travellers seeking to reach the presence of Osiris, a labyrinth with no stone walls, made only of their own thoughts. Those who entered it noticed that, circling around the fears they had hidden in the past, the reckonings they had postponed and the truths they could not tell themselves, they kept arriving at the same paths again and again. One day a nameless traveller stopped searching for the exit and turned towards the red light at the centre of the labyrinth, and there, instead of a door, found the voice of their own heart that they had long avoided hearing. From that day on, the Heart of the Black Labyrinth became a sacred sign reminding us that the way out of darkness does not always begin by moving outward, but by understanding the tangled paths of one's own inner world and facing the feelings one has hidden.",
+   "mitDers": "In the Book of Two Ways the soul passes only by knowing the names of the gates and their guardians; the way out of the labyrinth runs through knowledge.",
+   "mitDikkat": "Turning self-questioning into an endless loop of thought.",
+   "mitGercek": "The Book of Two Ways, found among the ancient Egyptian Coffin Texts, is the card's main source, as it depicts the different paths, gates and guardians that a soul moving through the underworld may meet. In these texts, two routes stretching over land and water show that the journey consists not only of moving forward but of recognising the obstacles one meets and gaining the knowledge one needs. The confrontation with one's own deeds on the otherworld journey associated with Osiris also inspires the theme of discovering inner truth.",
+   "poz": {
+    "Kök": {
+     "D": "Understanding a feeling you avoided facing in the past may let you see more clearly the source of some behaviour that repeats today.",
+     "Y": "An experience you could not fully make sense of in the past may be leading you back to similar thoughts and feelings today."
+    },
+    "Şimdi": {
+     "D": "Right now, by making sense of the complex feelings in your inner world, you can draw closer to the heart of a matter that has long occupied you.",
+     "Y": "Right now you are tracing the source of your repeating thoughts and emotional reactions, but may not yet see all the connections."
+    },
+    "Sınav": {
+     "D": "Your trial is to understand what the difficult feelings within you are trying to tell you, facing them without blaming yourself.",
+     "Y": "Your trial is to stay patient while circling the same thoughts, and not to let your inner questioning become a fruitless repetition."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your ability to be honest with yourself, to trace the source of your feelings and to draw meaning from complex experiences.",
+     "Y": "The force that supports you is your careful introspection, your patience and your ability to accept, without judging, feelings you have not yet resolved."
+    },
+    "Yol": {
+     "D": "In the near future the awareness you develop about a long-repeating thought or emotional reaction may help you make new choices.",
+     "Y": "In the near future, by getting to know your own patterns of thought and feeling better, you may discover which matters need deeper reflection."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you understand the complexity of your inner world and make more conscious choices with what you have learned from past experience.",
+     "Y": "This journey may prepare you to discover the meaning of your repeating emotional patterns and to approach your own inner truth more patiently."
+    }
+   }
   },
   "S5-K3": {
    "ad": "The Well of Lost Souls",
@@ -269,7 +1101,39 @@
     "Amduat",
     "Ra",
     "Osiris"
-   ]
+   ],
+   "dAnlam": "When the Well of Lost Souls comes upright, a threshold appears where you can notice again a feeling, value or wish from which you believe you have long drifted away. The unseen well behind the mouth of the cave symbolises that what you think you have lost may sometimes only have been forgotten in the depths of your life. You too may reconnect with a side of yourself that once mattered to you but that you gradually set aside. This card does not advise you to return entirely to your old self, but to bring the valuable pieces of your past into your life today. Now you can approach yourself with more understanding and, by noticing the needs you have neglected, strengthen your inner wholeness.",
+   "yAnlam": "When the Well of Lost Souls comes sideways, the traveller is still standing at the threshold of the cave, listening to the voice rising from the depths of the well without knowing which memory it belongs to. You too may feel that something is missing in your life, while still trying to understand which need, or which value you left behind in the past, this feeling comes from. This card suggests discovering what the feeling of lack is telling you, rather than trying to fill it at once. Sometimes a forgotten interest, a postponed wish or a neglected feeling wants to be remembered again. When you give silence time, the meaning of the call rising from the depths of the well can slowly become clear.",
+   "hikaye": "In one of the quietest regions of the Duat there was an ancient well hidden beneath dark caves, and in its depths echoed the names, dreams and memories left behind by souls who had forgotten their way. One day a nameless traveller who believed they had lost their own voice reached the threshold of the cave, and from within the well rose a whisper, familiar yet long unheard, calling them back to the traces of their forgotten self. When the traveller looked into the depths of the well, they realised that the darkness was not empty, and that the values, wishes and feelings they had left behind were quietly waiting there. From that day on, the Well of Lost Souls became a sacred underworld sign reminding us that a person can recognise again the pieces of themselves they believed lost, and that sometimes looking into the darkness is necessary to build a new wholeness.",
+   "mitDers": "Each night Ra passes through the dark caverns of the Duat and is reborn in the morning; the lost piece waits in the darkness, it does not vanish.",
+   "mitDikkat": "Avoiding the pains of the past and leaving the pieces there.",
+   "mitGercek": "The ancient Egyptian underworld text known as the Book of Caverns depicts the sun god Ra's passage through the dark regions of the Duat, the beings in those regions and the cosmic journey that leads to rebirth. The account includes dark caverns, scenes associated with Osiris and the different states of existence Ra meets during the night. In the Egyptian Amduat tradition too, Ra's night journey is linked with the cycle of the sun that passes through darkness and appears again in the morning.",
+   "poz": {
+    "Kök": {
+     "D": "An important value or wish you left behind in the past may lie at the root of your search today to feel more whole.",
+     "Y": "An emotional need you did not take seriously enough in the past may be the source of a feeling of lack you find hard to explain today."
+    },
+    "Şimdi": {
+     "D": "Right now, by rediscovering a side of yourself you have long neglected, you can build a stronger bond with your own needs.",
+     "Y": "Right now you may be trying to understand what is missing in your inner world and reassessing some wishes you left behind in the past."
+    },
+    "Sınav": {
+     "D": "Your trial is not to overlook your present self and needs while recognising again the valuable sides you believe you lost in the past.",
+     "Y": "Your trial is to trace the source of the lack within you patiently and without judging yourself, rather than filling it with fear."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is the awareness you have gained from past experience and your ability to recognise forgotten needs again.",
+     "Y": "The force that supports you is your ability to make time for inner silence and to approach feelings you cannot yet name with understanding."
+    },
+    "Yol": {
+     "D": "In the near future you may meet a chance to bring back into your life an interest or value you set aside in the past.",
+     "Y": "In the near future you may better understand which need is linked to a feeling of lack you have long carried within you."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you integrate the sides of yourself you neglected in the past with your life today, and recognise your own values more clearly.",
+     "Y": "This journey may prepare you to discover your forgotten needs and to develop your inner wholeness more consciously."
+    }
+   }
   },
   "S5-K4": {
    "ad": "Mask of the Silent Scream",
@@ -280,7 +1144,39 @@
     "Book of the Dead, spell 125",
     "The feather of Ma'at",
     "Osiris"
-   ]
+   ],
+   "dAnlam": "When the Mask of the Silent Scream comes upright, a threshold appears where you can finally give words to a feeling you have long held inside but struggled to express. The line down the middle of the diamond-shaped mask reminds you that there is a boundary between the strong face you show the world and the real needs of your inner world. You too may notice that you hide some thoughts so as not to upset others, out of fear of being misunderstood, or to appear strong. This card does not advise you to reveal all your feelings to everyone, but to be honest with yourself. Now, by creating a safe space for communication, you can turn the silent scream within you into words that can be understood, and express yourself more genuinely.",
+   "yAnlam": "When the Mask of the Silent Scream comes sideways, the traveller has not yet opened the mask, but has begun to understand which feeling the voice echoing within comes from. You too may keep repeating in your mind some things you want to say, without yet knowing how or with whom to share them. This card reminds you that you do not have to break your silence at once. Sometimes, to be able to express a feeling, you must first recognise it within yourself. When you weigh what you feel, which boundaries you want to protect and in what conditions you would feel safe, the voice behind the mask can slowly become clear. The time of preparation is part of finding your voice.",
+   "hikaye": "In the dark halls of the Duat there was a diamond-shaped mask with black stripes that kept the fears, hurts and unspoken words people did not dare to show the world. One day a nameless traveller who believed they always had to appear strong put the mask on their face and felt all their feelings fall silent, while a scream grew within them, echoing between stone walls. A silent guardian met at the passage leading to the presence of Osiris advised the traveller not to break the mask, but to name the feeling hidden beneath it, and when the traveller said for the first time that they were afraid, the line at the centre of the mask parted and let their voice be heard. From that day on, the Mask of the Silent Scream became a sacred underworld sign reminding us that feelings hidden to protect oneself can grow heavier over time, and that true courage is not always appearing strong, but being able to express one's own truth safely.",
+   "mitDers": "In the presence of Osiris it is not the words spoken that decide, but the heart weighed against the feather of Ma'at; a mask protects, but it does not take the place of truth.",
+   "mitDikkat": "The compulsion to always appear strong.",
+   "mitGercek": "Funerary masks used in ancient Egypt were associated with protecting a person's identity and the continuity of their existence in the otherworld; they were made not only to cover the face but to represent an idealised identity and to serve a protective role. Spell 125 of the Book of the Dead, linked with the judgement scene before Osiris, contains the declarations in which the deceased defends their deeds aloud, known in modern scholarship as the Negative Confession; the weighing of the heart against the feather of Ma'at, standing for truth and cosmic order, inspires the relationship between the words spoken outwardly and the truth a person carries.",
+   "poz": {
+    "Kök": {
+     "D": "Being able, later on, to express a feeling you could not voice in the past may have formed the basis of your wish today to be more honest with yourself.",
+     "Y": "A thought or feeling you hid in the past in order to appear strong may be affecting the hesitation you feel today in expressing yourself."
+    },
+    "Şimdi": {
+     "D": "Right now you can create a space where you can express a need or thought you have long hidden through safe and open communication.",
+     "Y": "Right now you may be trying to understand which feelings you hide and why, and need to weigh the right conditions for expressing yourself."
+    },
+    "Sınav": {
+     "D": "Your trial is to respect both your own boundaries and the other person's feelings while expressing your true emotions.",
+     "Y": "Your trial is to notice which of your feelings are waiting to be expressed, without letting your need for silence become constant self-suppression."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your ability to recognise your feelings, to put your thoughts into words clearly and your courage to communicate honestly with people you trust.",
+     "Y": "The force that supports you is your ability to listen to yourself without judgement and your skill at making sense of your feelings before sharing them."
+    },
+    "Yol": {
+     "D": "In the near future, by sharing a thought you have long wanted to express under the right conditions, you may communicate more openly on an important matter.",
+     "Y": "In the near future, by better understanding the source of some hidden feelings, you may decide when and how you want to express them."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which, moving away from the compulsion to appear strong, you accept your true feelings and can express them consciously.",
+     "Y": "This journey may guide you to recognise the needs you hide behind the mask and towards an inner preparation in which you can develop your own voice with confidence."
+    }
+   }
   },
   "S5-K5": {
    "ad": "The Sleeping Shadow Serpent",
@@ -290,7 +1186,39 @@
     "Mehen",
     "Apep",
     "Amduat"
-   ]
+   ],
+   "dAnlam": "When the Sleeping Shadow Serpent comes upright, you may notice that a talent, wish or power to change that you have long kept hidden within you is now ready to move. The serpent coiling between two points symbolises that the road between beginning and outcome is not always straight, and that some powers ripen in silence. You too may have developed the inner resolve to take the first step on something you did not dare to before. This card does not advise you to use your gathered energy without thinking, but to direct it by defining your purpose. Now you can turn your wish for change into a concrete choice and, while respecting your limits, start a new movement in your life.",
+   "yAnlam": "When the Sleeping Shadow Serpent comes sideways, the ancient serpent has not yet opened its eyes, but it is preparing for the moment of waking as it senses the vibrations around it. You too may be aware of a situation in your life you want to change, yet not have decided which step to take or when to act. This card reminds you not to read your waiting as weakness. For some decisions to grow firm, your wish and the real conditions need to come into harmony. When you observe your desire to move, separate your fears from your needs and weigh your options, you can see more clearly in which direction your hidden power can be used. The serpent's silence is the preparation for awakening.",
+   "hikaye": "In one of the forgotten passages of the Duat, a black serpent recalling the protective coils of Mehen slept silently around an ancient knot that hid a red spark of life at its centre. While the other beings of the underworld mistook its stillness for weakness, every night the serpent listened to the vibrations of the darkness and learned which gate should open and which power should stay hidden for now. One night, when the balance of the ancient passages shifted, the serpent opened its eyes, but instead of shattering the knots around it, it loosened its coils and let the red light reach a new road. From that day on, the Sleeping Shadow Serpent became a sacred underworld sign reminding us that true power lies not always in acting at once, but in knowing one's own nature, sensing the right time and directing gathered energy consciously.",
+   "mitDers": "In the same underworld, Mehen protects Ra and Apep threatens him; the serpent's power is neither good nor evil in itself, it depends on how it is directed.",
+   "mitDikkat": "Using the awakened energy impulsively and without control.",
+   "mitGercek": "In ancient Egyptian underworld accounts, serpents can stand not only for danger and disorder but also for protection, renewal and the upholding of cosmic order. In the underworld text known as the Amduat, the sun god Ra is encircled during his night journey by the protective serpent god Mehen, which forms the basis of the serpent's hidden and protective power. Apep, by contrast, is the great serpent who threatens Ra's night journey and is associated with cosmic disorder; the opposing roles of the two figures show that the serpent symbol does not in itself mean evil.",
+   "poz": {
+    "Kök": {
+     "D": "Your courage in the past to bring to life a wish you had long kept hidden may have formed the basis of the power to change you have today.",
+     "Y": "A decision you postponed in the past, or a talent you did not feel ready to use, may be the source of the potential you are reassessing today."
+    },
+    "Şimdi": {
+     "D": "Right now you can create room to move in which you bring an idea you have long been ripening into your life with a conscious step.",
+     "Y": "Right now you feel the wish for change within you, but may be trying to understand towards which purpose to use this energy."
+    },
+    "Sınav": {
+     "D": "Your trial is to direct your awakening power with patience, will and conscious choices, without turning it into hasty reactions.",
+     "Y": "Your trial is to judge realistically when you are ready to act, without letting your need for preparation turn into endless postponement."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your inner courage, your determination and your skill at using, under the right conditions, the talents you have long been developing.",
+     "Y": "The force that supports you is your intuitive awareness, your patience and your ability to carefully develop talents that have not yet come to light."
+    },
+    "Yol": {
+     "D": "In the near future chances may take shape for you to make concrete a change you have been considering and to make a new beginning by your own will.",
+     "Y": "In the near future, by understanding which of your goals is ready to move, you may create firmer conditions for a new beginning."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you know your own power, show courage in the face of change and direct your energy through conscious choices.",
+     "Y": "This journey may prepare you to discover your hidden potential, complete your inner preparation and approach more consciously the transformation you will begin by your own will."
+    }
+   }
   },
   "S5-K6": {
    "ad": "Moon Mirror of the Underworld",
@@ -300,7 +1228,39 @@
     "Thoth",
     "Khonsu",
     "Ra's passage through the Duat"
-   ]
+   ],
+   "dAnlam": "When the Moon Mirror of the Underworld comes upright, you can weigh with a more integrated view thoughts, feelings or behaviours about yourself that you have long kept apart. The four half-rings arranged one within another symbolise that the same truth can appear at different depths and from different angles. You too may notice that the traits you find hard to accept are as much a part of your life experience as the sides you see as strengths. This card advises you to look honestly at all your sides without defining yourself by a single identity. Now you can weigh your past choices with your present awareness and strengthen your inner wholeness by treating yourself with more understanding. What the mirror shows is not a fixed verdict but a chance to know yourself more clearly.",
+   "yAnlam": "When the Moon Mirror of the Underworld comes sideways, the traveller is still standing on the shore of the lake, trying to understand which of the different reflections appearing on the rippling water is their own. You too may find yourself caught between different ideas about yourself as you weigh certain behaviours or emotional reactions. This card reminds you not to accept every reflection you see as a certain truth. Sometimes fears, expectations or past experiences can make you perceive yourself differently from how you are. When you give your feelings time, compare your observations with your real experiences and weigh yourself without judgement, you can notice which reflections are passing and which show your deeper needs.",
+   "hikaye": "In one of the deepest passages of the Duat there was a dark lake that no star could reach, and on its surface were hidden four separate reflections of a moon not seen in the sky. One day a nameless traveller who wished to escape the dark traces of their own past came to the shore of the lake and saw in the water not a stranger's face, but the faces they themselves had worn at different times throughout their life. At first the traveller wanted to choose one of these images, but the lake's silent keeper told them that all the reflections were born of the same essence, and that the water would grow still only when they could see them all without denying any. From that day on, the Moon Mirror of the Underworld became a sacred underworld sign reminding us that a person can reach a deeper awareness when they accept their bright and shadowed sides as one whole.",
+   "mitDers": "Thoth measures time by the phases of the moon; in every phase the moon is the same moon. The different faces of the self, too, are phases of a single whole.",
+   "mitDikkat": "Claiming only the face you like and rejecting what remains in shadow.",
+   "mitGercek": "In ancient Egypt, Thoth is the god of wisdom, writing and reckoning associated with the moon; his link with the moon's changing phases inspires the idea of an unseen order being understood over time. Khonsu is also an important Egyptian god associated with the moon, linked especially with its cyclical movement. The sun god Ra passing through the Duat during the night and being reborn in the morning also shows that darkness is not only absence but a stage in which transformation takes place.",
+   "poz": {
+    "Kök": {
+     "D": "Understanding a side of yourself you once found hard to accept may have formed the basis for developing a more integrated sense of self today.",
+     "Y": "An identity others showed you in the past, or a meaning you gave yourself, may be affecting how you see yourself today."
+    },
+    "Şimdi": {
+     "D": "Right now, by weighing your strong and vulnerable sides together, you can approach a matter in your life more honestly and in a more balanced way.",
+     "Y": "Right now you may be caught between different ideas about yourself and trying to understand which of your feelings reflect your real needs."
+    },
+    "Sınav": {
+     "D": "Your trial is to accept the awareness your past choices have given you, without judging them harshly as you face yourself.",
+     "Y": "Your trial is to separate your feelings from your observations, without treating passing thoughts about yourself as fixed truths."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your self-awareness, your emotional honesty and your ability to see your different sides as parts of the same whole.",
+     "Y": "The force that supports you is your introspection, the understanding you show yourself and your skill at patiently questioning your own perceptions."
+    },
+    "Yol": {
+     "D": "In the near future a new awareness you develop about yourself may help you approach in a more balanced way a situation you have long seen differently.",
+     "Y": "In the near future, by reviewing some of your ideas about yourself, you may discover which points of view feel more realistic to you."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you accept your bright and shadowed sides, make peace with past experience and know yourself more wholly.",
+     "Y": "This journey may prepare you to tell apart the different reflections of yourself and for a deeper awareness in which you can discover your inner truth without judgement."
+    }
+   }
   },
   "S6-K1": {
    "ad": "Gate of the Turning Hourglass",
@@ -311,7 +1271,39 @@
     "Di Jun",
     "The ten suns",
     "The Fusang tree"
-   ]
+   ],
+   "dAnlam": "When the Gate of the Turning Hourglass comes upright, you may notice that a period in your life is coming to completion and making room for a new stage. The triangle narrowing between two lines symbolises that the experience you have gathered in the past is condensing in your present choices, and that a new point of passage is forming before you. You too may begin to weigh more concretely a change you have long been considering. This card advises you to take the step you are ready for without trying to speed up time. Now you can use what the past has taught you, review the responsibilities you have completed and, by your own will, lay the first stones of a new order of life. The gate takes on meaning when you choose to move forward.",
+   "yAnlam": "When the Gate of the Turning Hourglass comes sideways, the traveller has not yet turned the hourglass; they are carefully watching the passage that will form between the two chambers of time. You too may sense that a period in your life is about to change, yet not have decided under what conditions you want to move into the new stage. This card reminds you not to read waiting as being unable to move forward. Some passages ask first for an understanding of the responsibilities that must be completed or the decisions that must be clarified. When you weigh your priorities now, you can notice which process is nearing its end and which needs preparation. Though the sand has not yet begun to flow, the conditions of the new cycle are quietly forming.",
+   "hikaye": "In ancient times, in the shade of the Fusang tree, a mysterious hourglass hung between the end of night and the beginning of morning, and its two chambers linked the roads completed in the past with possibilities not yet opened. One day a nameless traveller who believed they had missed their own time on their celestial journey came before the hourglass and tried to stop the falling grains, but with every interference the glass turned and showed the sign of another passage. At last the traveller stopped trying to control time, watched the gate opening before them, and understood that instead of returning to the past, they could create the start of a new period through their present choice. From that day on, the Gate of the Turning Hourglass became the sacred sign of noticing the right moment of passage instead of trying to change the flow of time, of accepting the periods that have ended, and of stepping consciously into new beginnings.",
+   "mitDers": "The ten suns rise in turn from the Fusang tree; in the tale of Hou Yi, when all ten rise at once, the world is scorched. Every passage has its order and its time.",
+   "mitDikkat": "Forcing the passage impatiently before its time has come.",
+   "mitGercek": "In ancient Chinese mythological accounts, Xihe is described as the consort of the celestial ruler Di Jun and the mother of the ten suns; the suns appearing in the sky in turn, in connection with the sacred tree called Fusang, inspire the orderly progress of the cosmic cycle. In some later accounts Xihe drives the sun's chariot and accompanies the sun on its journey across the sky, strengthening the idea of a celestial figure who guides the movement of time; not all ancient sources, however, describe Xihe as the driver of the sun's chariot. The idea of celestial journey and orderly change in these accounts forms the card's mythological basis.",
+   "poz": {
+    "Kök": {
+     "D": "An important period of life you completed in the past, or a change you made consciously, may have formed the basis of your choices today.",
+     "Y": "A passage you postponed in the past while waiting for the right time may be affecting how you approach new beginnings today."
+    },
+    "Şimdi": {
+     "D": "Right now, by weighing a process that is coming to completion, you can take a conscious and concrete step to move into a new stage.",
+     "Y": "Right now you may be observing the conditions of an approaching change and working out which preparations you need to complete before you act."
+    },
+    "Sınav": {
+     "D": "Your trial is to make the decisions change requires as you turn towards a new beginning, without overlooking the responsibilities of the past.",
+     "Y": "Your trial is to find the balance between preparing and acting, without letting the need to wait for the right time become endless postponement."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is what you have learned from past experience, your skill at judging time and your ability to manage the passages in your life consciously.",
+     "Y": "The force that supports you is your patience, your skill at careful planning and your ability to weigh conditions realistically before starting a new period."
+    },
+    "Yol": {
+     "D": "In the near future a responsibility nearing completion, or changing conditions, may create a chance for you to move into a new stage of life.",
+     "Y": "In the near future the conditions of the passage you are considering may become clearer, helping you decide which step to take and when."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you can turn past experience into new beginnings and guide the important passages of your life by your own will.",
+     "Y": "This journey may lead you to understand the natural flow of time better, to recognise the processes that must be completed and to prepare consciously for new periods."
+    }
+   }
   },
   "S6-K2": {
    "ad": "Ring of Eternal Return",
@@ -322,7 +1314,39 @@
     "The twelve moons",
     "Di Jun",
     "Shan Hai Jing"
-   ]
+   ],
+   "dAnlam": "When the Ring of Eternal Return comes upright, you may notice that a situation you have met before is reappearing in your life under different conditions. The two linked rings symbolise that similar experiences do not always have to produce the same results. You too may see more clearly the difference between how you reacted in the past and the choices you make today. This card advises you to see repeating events not as an unchangeable fate but as chances to put what you have learned into practice. Now you can act differently in a familiar situation and review your old habits consciously. When the cycle begins again, you no longer have to be the old person within it.",
+   "yAnlam": "When the Ring of Eternal Return comes sideways, the traveller has not yet completed the passage at the centre of the infinity sign; they are trying to understand why the familiar roads before them resemble one another. You too may feel that similar relationships, decisions or situations keep repeating in your life. This card suggests that before trying to change the cycle, you observe the habits and expectations that create it. Sometimes understanding why an experience repeats comes before living it differently. When you compare your past reactions with your present needs, you can notice which behaviours keep bringing you back to the same point and which new options are possible.",
+   "hikaye": "In the first ages of celestial time, beneath the sacred waters where Changxi bathed her moons, there was hidden a mysterious sign of time made of two linked silver rings, which carried an echo of the past with every turn. One day a nameless traveller who believed they kept repeating the same mistakes began to walk within these rings, and noticed that although they met a familiar gate at every turn, the details around them and their own thoughts were changing. When the traveller, instead of trying to break the ring, discovered at each encounter a meaning they had not seen before, they understood that the same gate now offered them different choices. From that day on, the Ring of Eternal Return became the sign of time reminding us that the experiences that recur in life are not an unchangeable destiny, and that every repetition carries a sacred chance for a person to grow in awareness and give a new response to old patterns.",
+   "mitDers": "Changxi bathes the twelve moons anew in every cycle; repetition is the rhythm of renewal.",
+   "mitDikkat": "Treating repetition as fate and not changing the pattern.",
+   "mitGercek": "The ancient Chinese work Shan Hai Jing, the Classic of Mountains and Seas, tells how Changxi, consort of the celestial ruler Di Jun, gave birth to the twelve moons and bathed them; this account can be linked symbolically with the regular renewal of celestial beings and the repeating rhythms of time. Changxi's twelve moons belong to a separate mythological account from Xihe's ten suns used in card S6-K1. The cycles of sun and moon in Chinese mythology inspire the idea of a celestial order that explains the repeating movements of nature.",
+   "poz": {
+    "Kök": {
+     "D": "What you learned from a repeating experience in the past may have laid the groundwork for approaching similar situations more consciously today.",
+     "Y": "A habit or pattern of behaviour you kept up in the past without noticing may be leading you today to look into the meaning of the similar situations you meet."
+    },
+    "Şimdi": {
+     "D": "Right now, meeting a situation you have experienced before, you may find a chance to apply what you learned from the past through a different choice.",
+     "Y": "Right now you may feel that certain events in your life keep repeating and be trying to understand which of your habits they are linked to."
+    },
+    "Sınav": {
+     "D": "Your trial is to make a new choice in line with what you have learned, without falling back automatically on old reactions in a familiar situation.",
+     "Y": "Your trial is to examine patiently the behaviours and expectations that create repeating experiences, without seeing them as unchangeable fate."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your ability to learn from past experience, to recognise similar situations and to develop different behaviour when needed.",
+     "Y": "The force that supports you is your careful observation, your inner awareness and your skill at weighing repeating patterns without judging yourself."
+    },
+    "Yol": {
+     "D": "In the near future, when a familiar situation comes up again, you may be able to create a different outcome using what you learned in the past.",
+     "Y": "In the near future, by better understanding the source of a repeating habit or way of deciding, you may discover new options for change."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you turn the repetitions in your life into chances for conscious learning and can give new responses to old experiences.",
+     "Y": "This journey may prepare you to recognise the patterns of behaviour that stretch from the past to the present and to make more conscious choices in repeating situations."
+    }
+   }
   },
   "S6-K3": {
    "ad": "Memory Seeping from the Future",
@@ -333,7 +1357,39 @@
     "Ryūgū Palace",
     "Otohime",
     "Tamatebako"
-   ]
+   ],
+   "dAnlam": "When Memory Seeping from the Future comes upright, you may notice that a thought about a future not yet lived can give new meaning to your present decisions. The arrow-tipped spiral moving outward symbolises a possibility appearing in your mind and gradually growing clearer. You too may discover a step you can take today as you think about the kind of life you want to build in the future. This card advises you to see your intuitions not as certain prophecies but as signs that help you understand your own expectations. Now you can turn a strong vision of the future into concrete goals and weigh new options in the light of your past experience. What has not yet been lived can inspire your will today.",
+   "yAnlam": "When Memory Seeping from the Future comes sideways, the traveller is still standing at the centre of the silver spiral, trying to understand what the faint image before them is telling them. You too may carry a strong feeling about your future, a dream that feels familiar, or an expectation you find hard to explain. This card reminds you not to accept the possibilities coming alive in your mind as events that will happen at once. Sometimes the thoughts you form about the future arise from your present needs and past experiences combining in a different way. When you give yourself time, you can tell which images are fed by your desires and which by your worries, and seek a more conscious direction amid uncertainty.",
+   "hikaye": "In the unseen layers of time, within a mysterious passage recalling the changing seasons of the Ryūgū Palace, there was a silver spiral carrying faint images of moments not yet lived. One day a nameless traveller who worried constantly about their own future felt, at the centre of the spiral, that they recognised a road they had never yet taken, and discovered that the image before them was not a memory left from the past, but a possibility born of their own hopes for the future. Instead of believing the image would certainly come true, the traveller tried to understand which of their desires and fears it was showing them; and so a distant possibility became an awareness that could guide their present choices. From that day on, Memory Seeping from the Future became a sacred sign of time reminding us that a person does not have to know the future in advance, and can shape their present path more consciously by reflecting on possibilities not yet lived.",
+   "mitDers": "The time Urashima thinks is short corresponds to a very long time in the outer world; the perception of time is relative, and opening the box is a step with no way back.",
+   "mitDikkat": "Neglecting today's responsibilities while trying to know the future.",
+   "mitGercek": "In the Japanese legend of Urashima Tarō, the fisherman Urashima helps a sea turtle and is taken to the Ryūgū Palace beneath the sea, where he is welcomed by Princess Otohime. When he returns to land, he learns that far more time has passed in the outer world than the short while he thought he had spent in the palace; the durations and details vary between versions of the story. In some widespread versions the box called tamatebako, given by Otohime, is also linked with the irreversibility of time. This mythological example inspires the theme of time being perceived differently and of a person meeting an age they do not yet know.",
+   "poz": {
+    "Kök": {
+     "D": "A strong dream you formed about your future in the past may have formed the basis of the goals you pursue and the decisions you make today.",
+     "Y": "A possibility you wished for in the past but have not yet made sense of may be affecting your expectations of the future today."
+    },
+    "Şimdi": {
+     "D": "Right now, by seeing more clearly a goal you want to reach in the future, you can arrange your present choices in that direction.",
+     "Y": "Right now you may be trying to understand a vague intuition or expectation about your future and need to weigh the possible paths."
+    },
+    "Sınav": {
+     "D": "Your trial is to take a conscious step by comparing a strong vision of the future with real conditions, without mistaking it for a certain outcome.",
+     "Y": "Your trial is to tell your hopes from your worries, without giving too much meaning to possibilities that have not yet come about."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your ability to think ahead, your creative perspective and your skill at preparing by weighing possible developments.",
+     "Y": "The force that supports you is your ability to observe your intuitions patiently and to stay open to different possibilities while making sense of vague thoughts."
+    },
+    "Yol": {
+     "D": "In the near future a new perspective or an inspiring idea may help you set a different path for your long-term goals.",
+     "Y": "In the near future, by better understanding the conditions of a possibility you are considering, you may discover which of your expectations need concrete preparation."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you can turn your dreams of the future into conscious choices and approach possibilities not yet realised with creativity.",
+     "Y": "This journey may prepare you to make sense of your intuitions and expectations about the future, and to set your own direction more consciously by accepting uncertainty."
+    }
+   }
   },
   "S6-K4": {
    "ad": "The Broken Mirror of Time",
@@ -344,7 +1400,39 @@
     "Ame-no-Iwato",
     "Yata no Kagami",
     "Kojiki and Nihon Shoki"
-   ]
+   ],
+   "dAnlam": "When the Broken Mirror of Time comes upright, you may notice that you can give a different meaning to an event from your past than the one you have long seen it through. The three lines parting at the top symbolise that the same moment can carry different feelings and judgements. You too may discover other sides of an experience you once saw as a clear failure, loss or wrong decision. This card does not advise you to try to change the past, but to rethink its meaning in your life today. Now you can review your old judgements, approach yourself more fairly and develop a new view without letting the past limit your present choices more than it should.",
+   "yAnlam": "When the Broken Mirror of Time comes sideways, the traveller has not yet put the pieces of the mirror together; in each broken surface they watch a different image of the same event. You too may carry differing feelings or judgements about a situation you lived through in the past. This card does not ask you to decide at once which interpretation is certainly right. Sometimes, to grasp the meaning of an event, you need to separate what you knew at the time from what you have learned since. When you give yourself time, weigh the conditions of the past more carefully and make room for other points of view, you can understand which aspects of a memory that seems fragmented are shaping your life today.",
+   "hikaye": "In a forgotten temple of celestial time there was a mysterious mirror of time, made in the likeness of Amaterasu's sacred mirror, which showed all the moments of the past on a single surface. One day a nameless traveller who believed that a decision they had made in the past had determined their whole life looked into the mirror; the surface split with three fine cracks, and reflections of the same event appeared, carrying different feelings, choices and outcomes. At first the traveller wanted to restore the mirror to its former state, but realising that none of the pieces showed the whole truth on its own, they began to study them side by side. From that day on, the Broken Mirror of Time became a sacred sign of time reminding us that even if what happened in the past cannot be changed, the meanings given to it can be reconsidered, and that sometimes a shattered memory can help us see a wider truth.",
+   "mitDers": "When Amaterasu withdraws into the cave, the world sinks into darkness; her reflection in the mirror draws her out and the light returns. Truth sometimes becomes visible through a reflection.",
+   "mitDikkat": "Binding the past to a single, unchangeable verdict.",
+   "mitGercek": "In the Ame-no-Iwato account recorded in the Japanese Kojiki and Nihon Shoki, the world sinks into darkness when the sun goddess Amaterasu withdraws into a cave, and the other gods seek various ways to bring her out again. The sacred mirror used in this account, Yata no Kagami, plays an important part in Amaterasu's encounter with her own reflection and is linked with the return of light to the world. The mirror is regarded as one of the sacred objects of the Japanese Shinto tradition. This mythological account is the card's main source, in the sense of a hidden truth becoming visible through a reflection and an interrupted order being restored.",
+   "poz": {
+    "Kök": {
+     "D": "Being able to weigh an important event in your past from different sides may have laid the foundation for making more flexible and understanding decisions today.",
+     "Y": "Different memories of an event you could not fully make sense of in the past may be leading you today to question your thoughts about that experience again."
+    },
+    "Şimdi": {
+     "D": "Right now, by looking from a new angle at a situation you once judged with certainty, you can give your present choices more freedom.",
+     "Y": "Right now you may be caught between different thoughts about a past event and trying to understand which interpretation better suits your present needs."
+    },
+    "Sınav": {
+     "D": "Your trial is to weigh what happened within its own conditions, without judging your past choices harshly by what you know today.",
+     "Y": "Your trial is to accept the aspects of the past that remain unclear, without turning its fragmented memories into a single fixed verdict."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your flexibility of thought, your skill at weighing different points of view and your ability to make new sense of past experiences.",
+     "Y": "The force that supports you is your patient questioning, your power of observation and your ability to examine, without judgement, memories you have not yet made whole."
+    },
+    "Yol": {
+     "D": "In the near future, reassessing an event from your past may help you move away from a thought you have long found limiting.",
+     "Y": "In the near future, by weighing different information or perspectives about the past, you may grasp more clearly what an event means today."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you do not define your past by a single verdict, weigh your experiences from different sides and shape your present life more freely.",
+     "Y": "This journey may prepare you to understand the different reflections of the past and to weigh the events you have lived through with your growing awareness rather than fixed judgements."
+    }
+   }
   },
   "S6-K5": {
    "ad": "Shadow of a Forgotten Moment",
@@ -353,7 +1441,39 @@
    "mitFigur": [
     "Meng Po",
     "Naihe Bridge"
-   ]
+   ],
+   "dAnlam": "When the Shadow of a Forgotten Moment comes upright, you may notice that a small experience you once thought ordinary carries an unexpected meaning for you today. The three separate horizontal lines symbolise that the moments overlooked in the flow of time are not wholly without worth. You too may recall with different feelings an old conversation, a small kindness or an encounter you did not take seriously. This card does not advise you to search the past for some great hidden secret, but to see the value of the small experiences that have shaped your life. Now you can pay closer attention to the details of everyday life and carry into your present choices the awareness that moments you thought unimportant have given you.",
+   "yAnlam": "When the Shadow of a Forgotten Moment comes sideways, the traveller is still standing between the three lines of time, trying to understand which experiences the faint shadows from the past belong to. You too may sometimes feel that a familiar sound, scent or image awakens in you a feeling you cannot explain. This card reminds you not to assume that behind every feeling there must lie some great hidden event. Some memories show themselves not through clear images but through small associations. When you observe your feelings without forcing them and do not pressure yourself to remember the past completely, you can better understand which small experiences are linked to the values you hold today.",
+   "hikaye": "On the unseen shore of ancient times there was a silent garden inspired by the tradition of Meng Po's forgetting, and above it hung three silver lines of time that kept the moments people had passed by without noticing. One day a nameless traveller who believed nothing in their life ever changed walked between the lines and saw the shadows of a laugh heard in childhood, a hand held out to them years before and the warmth of an ordinary morning. The traveller realised that none of these moments had been a great event, yet the small traces they had left over time had shaped the values they held today. From that day on, the Shadow of a Forgotten Moment became a sacred sign of time reminding us that time is woven not only from great turning points, but also from small moments that pass unnoticed and quietly add meaning to a person's life.",
+   "mitDers": "In folk belief, Meng Po's drink makes the soul forget its past life so that a new one can begin; forgetting and remembering are both part of the journey.",
+   "mitDikkat": "Over-reading small signs, or dismissing everyday moments as worthless.",
+   "mitGercek": "In later Chinese folk belief, Meng Po is described as the figure who, at the end of the journey through the otherworld, offers souls a drink that makes them forget their past lives. This tradition, associated with the Naihe Bridge and the drink of forgetting, inspires the symbolic relationship between remembering the past and leaving it behind. The Meng Po narrative is a tradition that developed over time, blending Chinese folk religion with Buddhist and Taoist influences; it is not a fixed part of early Chinese mythology.",
+   "poz": {
+    "Kök": {
+     "D": "A small experience you once thought unimportant may have played a more meaningful part than you think in forming a value or behaviour you have today.",
+     "Y": "The emotional trace left by a moment you did not pay enough attention to in the past may be the source of a familiar feeling you find hard to explain today."
+    },
+    "Şimdi": {
+     "D": "Right now, thanks to a small detail you remember from the past, you may notice again an important value you have overlooked in daily life.",
+     "Y": "Right now you may be exploring the meaning of a familiar feeling or association and observing how small experiences from the past are reflected in your life today."
+    },
+    "Sınav": {
+     "D": "Your trial is not to overlook the values and insights small experiences have given you while focusing on the big events of your life.",
+     "Y": "Your trial is to observe patiently the feelings that vague emotional traces from the past awaken in you, without trying to force an explanation."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is the attention you give to small details, your ability to notice the precious moments of the past and to draw meaning from everyday experience.",
+     "Y": "The force that supports you is your emotional sensitivity, your patience and your skill at observing, without judging yourself, associations you have not yet made sense of."
+    },
+    "Yol": {
+     "D": "In the near future a small detail of an old memory, or an everyday encounter, may help you notice again an important value in your life.",
+     "Y": "In the near future a familiar feeling or small association may prompt you to explore the link between your past experiences and your present thoughts."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you understand that your life is not made only of great turning points and consciously cherish the value of small moments.",
+     "Y": "This journey may prepare you to notice the quiet traces of the past, to explore the meaning of everyday experience and to approach the small details of your life with more sensitivity."
+    }
+   }
   },
   "S6-K6": {
    "ad": "The Knotted Thread of Time",
@@ -364,27 +1484,65 @@
     "The red thread",
     "Wei Gu",
     "Dinghun Dian"
-   ]
+   ],
+   "dAnlam": "When the Knotted Thread of Time comes upright, you can see more clearly how the decisions you made, the relationships you formed or the responsibilities you took on in the past are bound together today. The three lines meeting at a common point symbolise that developments you thought independent of one another can affect the same matter in your life. You too may reassess which bonds you want to keep in a matter where you are caught between different expectations. This card does not advise you to cut all the ties you formed in the past, but to decide what they mean today. Now, through open communication, conscious choice and mutual understanding, you can bring order to a situation that seems tangled and give your future a more balanced direction.",
+   "yAnlam": "When the Knotted Thread of Time comes sideways, the traveller is still standing before the sacred knot, trying to understand from which times the tangled threads have come. You too may need to draw connections between the promises you made in the past, your present needs and your expectations of the future. This card reminds you that you do not have to untangle every relationship or responsibility that seems complicated at once. Sometimes the first step to loosening a knot is noticing which thread belongs to you and which to the expectations of others. When you weigh your bonds carefully, you can understand more clearly which responsibilities should continue and which need to be talked through again.",
+   "hikaye": "In a mysterious celestial garden where moonlight touched every age of time at once, there was a sacred three-stranded knot, inspired by Yue Lao's red threads of fate, binding together the promises of the past, the choices of the present and the possibilities of the future. One day a nameless traveller who felt trapped between old promises and new goals in life came before the knot and pulled the threads hard, but with every pull noticed how roads that seemed far apart met at the same centre. When at last, instead of trying to cut the threads, the traveller told apart which bond was responsibility, which was habit and which was a choice freely kept, the knot loosened and a new road opened before them. From that day on, the Knotted Thread of Time became a sacred sign of time reminding us that the bonds between past and future can shape a person's life, but that understanding the meaning of these bonds and choosing how to respond to them is an important part of personal maturity.",
+   "mitDers": "In the folk tale, the red thread Yue Lao ties can stretch and tangle but it does not break; bonds can knot, and untying them takes patience.",
+   "mitDikkat": "Losing your own boundaries through a fatalistic attachment.",
+   "mitGercek": "In Chinese tradition, Yue Lao, the Old Man Under the Moon, is the mythological figure associated with marriage and matchmaking, believed to create the bonds of fate between people with red threads. In the Dinghun Dian (the Inn Where Marriages Are Settled) story dating back to the Tang dynasty, an old figure whom a young man named Wei Gu meets in the moonlight explains that the feet of those who will marry are tied together by invisible red threads. This tradition inspires the idea of relationships that reach beyond time and distance.",
+   "poz": {
+    "Kök": {
+     "D": "An important decision you made or a relationship you formed in the past may have laid the groundwork for seeking balance between different responsibilities today.",
+     "Y": "A promise or mutual expectation that was never fully clarified in the past may be the source of the relational complexity you are trying to untangle today."
+    },
+    "Şimdi": {
+     "D": "Right now, by weighing together the different responsibilities that stretch from the past to the present, you can make more balanced choices in a complicated matter in your life.",
+     "Y": "Right now you may be trying to understand how different relationships and expectations affect one another, and weighing which bonds to give priority to."
+    },
+    "Sınav": {
+     "D": "Your trial is to make balanced decisions that respect the bonds you formed in the past while also protecting your present needs and personal boundaries.",
+     "Y": "Your trial is to tell which of the tangled responsibilities truly belong to you, without rushing to untangle them."
+    },
+    "Yardımcı": {
+     "D": "The force that supports you is your ability to understand the mutual expectations in your relationships, to communicate openly and to find ways of reconciliation in complicated situations.",
+     "Y": "The force that supports you is your patient judgement, your ability to listen to different points of view and to examine carefully bonds that have not yet become clear."
+    },
+    "Yol": {
+     "D": "In the near future, by rearranging a responsibility or relationship that comes from the past, you may create a healthier balance between your different goals in life.",
+     "Y": "In the near future, by better understanding the source of some responsibilities that seem bound together, you may decide in which matters clarity or a frank conversation is needed."
+    },
+    "Kader": {
+     "D": "This journey may carry you to a maturity in which you weigh consciously the bonds you formed in the past, balance mutual responsibilities and steer your own future through freer choices.",
+     "Y": "This journey may prepare you to discover the meaning of relationships and responsibilities formed at different times and to decide more consciously which bonds you want to keep."
+    }
+   }
   }
  },
  "sets": {
   "S1": {
-   "ad": "The Heavens"
+   "ad": "The Heavens",
+   "cerceve": "In Aztec cosmology the universe is ordered around four directions and a centre; the sky has thirteen layers and the underworld nine. The world has passed through five ages of the sun, and the present age is the Fifth Sun (Nahui Ollin). According to the Teotihuacan account, this sun was born when Nanahuatzin gave himself to the fire, yet it began to move only with the help of the other gods. Order does not sustain itself; it is kept through movement, devotion and reciprocity."
   },
   "S2": {
-   "ad": "Humanity"
+   "ad": "Humanity",
+   "cerceve": "Greek mythology portrays the human being as standing between the gods and fate, responsible for their own choices. The Delphic maxim \"Know thyself\", the idea that excess (hubris) meets its due, and the hero's journey home (nostos) are the basic patterns of this world. The set name Prometheion refers to Prometheus, the titan who took fire from the gods and gave it to humankind."
   },
   "S3": {
-   "ad": "Chaos"
+   "ad": "Chaos",
+   "cerceve": "In the Norse accounts (Völuspá, Gylfaginning), the universe begins in the primordial void called Ginnungagap, where the ice of Niflheim meets the fire of Muspelheim. The nine worlds rest upon the tree Yggdrasil; fate is set by the Norns, and even the gods are subject to it. Ragnarök is a great destruction, but according to the Völuspá the world grows green again afterwards."
   },
   "S4": {
-   "ad": "Spirits"
+   "ad": "Spirits",
+   "cerceve": "This set is inspired by the Dreaming traditions of Aboriginal Australian peoples, known by names such as Jukurrpa and Tjukurpa. These traditions are not one shared mythology; they differ by community, language and land. A common thread is that the journeys of ancestral beings shaped the earth, that knowledge is passed on through songs and travelling routes (songlines), and that the concept of Country expresses the mutual responsibility between people, ancestors and land."
   },
   "S5": {
-   "ad": "The Underworld"
+   "ad": "The Underworld",
+   "cerceve": "In Egyptian belief the sun god Ra passes each night through the otherworld called the Duat and is reborn in the morning. The Amduat, the Book of Gates and the Book of Caverns describe the hours, gates and dangers of this journey. Apep, the serpent who threatens order, and Mehen, the protecting serpent, face each other on the same journey. In spell 125 of the Book of the Dead, the heart is weighed against the feather of Ma'at, who stands for truth and cosmic order."
   },
   "S6": {
-   "ad": "Time"
+   "ad": "Time",
+   "cerceve": "This set draws on Chinese and Japanese narratives; the set name Samsarion refers to saṃsāra, the cycle of birth, death and rebirth in Indian and Buddhist thought. In Chinese accounts, Xihe's ten suns rise in turn from the Fusang tree, Changxi bathes the twelve moons, Meng Po makes souls forget the past, and Yue Lao binds people together with red threads. In Japanese accounts, Urashima Tarō meets the relativity of time, and Amaterasu meets her own reflection in the mirror."
   }
  },
  "motifler": {
