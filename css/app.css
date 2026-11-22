@@ -320,3 +320,9 @@ html[data-yazi="arap"] .aiout i{color:var(--muted)}
 .feragat .bildir{flex:none;font:inherit;font-size:11px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:2px 10px;cursor:pointer}
 .feragat .bildir:disabled{opacity:.6;cursor:default}
 .intro.bolge h2{font-size:18px;margin-top:4px}
+/* Hediye kodu */
+.hediye summary{cursor:pointer;color:var(--ink,#8496e0);list-style:none}
+.hediye summary::-webkit-details-marker{display:none}
+.hediye summary::before{content:"✦ "}
+.hediye input{text-transform:uppercase;letter-spacing:.06em}
+#hdM:empty{display:none}
