@@ -20,8 +20,11 @@ export const katmanId = k => KATMANLAR[k] ? k : ESKI[k] || "ucretsiz";
 export const FIYAT_TR = { gumus: "124,99 TL", altin: "199,99 TL", elmas: "249,99 TL" };
 
 // Okuma türleri: hangi model, en fazla kaç token çıktı, hedef uzunluk.
+// Claude 5.5 modelleri varsayılan olarak önce "düşünür"; düşünme de max_tokens'tan harcar.
+// ek: isteğe eklenen ayarlar. Haiku'da düşük çaba (çoğu zaman düşünmeden yazar), Sonnet'te ön düşünme kapalı.
+// max_tokens yalnızca üst sınırdır; ücret kullanılan kadar ödenir.
 export const OKUMALAR = {
-  kisa:  { ad: "Kısa okuma",  model: "claude-haiku-5-5",  maxTokens: 1200, kelime: "300–400" },
-  tam:   { ad: "Tam okuma",   model: "claude-haiku-5-5",  maxTokens: 2600, kelime: "650–850" },
-  derin: { ad: "Derin okuma", model: "claude-sonnet-5-5", maxTokens: 2800, kelime: "650–850" },
+  kisa:  { ad: "Kısa okuma",  model: "claude-haiku-5-5",  maxTokens: 3000, kelime: "300–400", ek: { output_config: { effort: "low" } } },
+  tam:   { ad: "Tam okuma",   model: "claude-haiku-5-5",  maxTokens: 5000, kelime: "650–850", ek: { output_config: { effort: "low" } } },
+  derin: { ad: "Derin okuma", model: "claude-sonnet-5-5", maxTokens: 5000, kelime: "650–850", ek: { thinking: { type: "between_tools" }, output_config: { effort: "medium" } } },
 };
