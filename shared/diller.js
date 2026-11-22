@@ -40,6 +40,6 @@ export function yerelIstem(dil, metin, kartlar, cs) {
     pos: [0, 1, 2, 3, 4, 5].map(i => s(`pos.${i}.ad`)),
     dikey: s("konum.D"), yatay: s("konum.Y"),
     basliklar: { kopru: s("istem.kopru"), bag: s("istem.bag"), gok: s("istem.gok"), kapanis: s("istem.kapanis") },
-    uyari: s("istem.uyari"), uyariTam: s("istem.uyariTam"), not: DILLER[dil].istemNot || "",
+    not: DILLER[dil].istemNot || "",
   };
 }
