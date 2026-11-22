@@ -374,5 +374,12 @@
 "bd.not": "Notiz (optional)",
 "bd.gonder": "Senden",
 "bd.tesekkur": "Danke, deine Meldung ist eingegangen.",
-"bd.hata": "Die Meldung konnte nicht gesendet werden. Bitte versuche es erneut."
+"bd.hata": "Die Meldung konnte nicht gesendet werden. Bitte versuche es erneut.",
+"hd.baslik": "Hast du einen Geschenkcode?",
+"hd.yer": "LOGOS-XXXX-XXXX",
+"hd.btn": "Einlösen",
+"hd.tamam": "Dein {k}-Plan ist freigeschaltet. Er begleitet dich bis {t}.",
+"hd.gecersiz": "Dieser Code ist ungültig oder wurde bereits verwendet.",
+"hd.bitis": "Bis {t}",
+"hd.baglanti": "Der Code konnte nicht geprüft werden. Prüfe deine Internetverbindung und versuche es erneut."
 }

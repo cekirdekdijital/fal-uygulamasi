@@ -348,5 +348,12 @@
 "bd.not": "Not (isteğe bağlı)",
 "bd.gonder": "Gönder",
 "bd.tesekkur": "Bildirimin alındı, teşekkürler.",
-"bd.hata": "Bildirim gönderilemedi. Tekrar dene."
+"bd.hata": "Bildirim gönderilemedi. Tekrar dene.",
+"hd.baslik": "Hediye kodun var mı?",
+"hd.yer": "LOGOS-XXXX-XXXX",
+"hd.btn": "Kullan",
+"hd.tamam": "{k} planın açıldı. {t} tarihine kadar seninle.",
+"hd.gecersiz": "Bu kod geçersiz ya da daha önce kullanılmış.",
+"hd.bitis": "{t} tarihine kadar",
+"hd.baglanti": "Kod denetlenemedi. İnternet bağlantını kontrol edip yeniden dene."
 }
