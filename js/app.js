@@ -315,7 +315,8 @@ async function acilis(picks) {
   const p = store.profil(); const M = SECIM.kim === "misafir" ? SECIM.misafir : null;
   const kisi = M ? { ad: M.ad, dt: M.dt, yk: M.yk, burc: sunSign(M.dt) } : p;
   const P = { ...kisi, niyet: SECIM.niyet, soru: SECIM.soru.trim() };
-  const k = KATMANLAR[store.katman()]; const mod = k.okuma === "tam" && SECIM.derin ? "derin" : k.okuma;
+  const k = KATMANLAR[store.katman()]; let mod = k.okuma === "tam" && SECIM.derin ? "derin" : k.okuma;
+  const tOk = DEV() ? testOkuma() : ""; if (tOk) mod = tOk; // geliştirici görünümü: okuma türü denemesi (sunucu yalnızca tam erişim kodunda uygular)
   const A = analyze(D, picks, P); const B = baskinSet(A.cs); koruyucuOnYukle(B.set);
   const At = analyze(DT, picks, P); const yerel = yerelIstem(aktifDil(), metinler(), kartCevirisi(), At.cs);
   const id = Date.now().toString(36);
@@ -492,6 +493,7 @@ function hesapPenceresi(tur = "giris", sonra) {
     } catch (er) { msg(t(H.hataAnahtari(er))); $("#hsOk").disabled = false; }
   };
 }
+function testOkuma() { try { return localStorage.getItem("logos.testOkuma") || ""; } catch { return ""; } }
 function viewProfil(alt) {
   chrome(true, "profil");
   if (alt === "duzenle") return viewProfilForm(false);
@@ -499,6 +501,7 @@ function viewProfil(alt) {
   const gelistirici = !DEV() ? "" : `<section class="panel stack"><div class="lab">${t("mod." + MODE)}</div>
     ${MODE === "sunucu" ? `<label class="f">${t("pr.testKod")}<input id="kod" value="${esc(store.kod())}" placeholder="${t("pr.testKodYer")}"></label><button class="btn" id="kodK">${t("pr.kodUygula")}</button>`
       : `<label class="f">${t("pr.testKatman", { mod: t("mod." + MODE) })}<select id="tk">${Object.keys(KATMANLAR).map(id => `<option value="${id}" ${id === k ? "selected" : ""}>${katmanAd(id)}</option>`).join("")}</select></label>`}
+    <label class="f">Okuma türü (test)<select id="tOk">${[["", "Plana göre"], ["kisa", "Kısa"], ["tam", "Tam"], ["derin", "Derin"]].map(([v, a]) => `<option value="${v}" ${v === testOkuma() ? "selected" : ""}>${a}</option>`).join("")}</select></label>
     <button class="btn ghost" id="hakSifir">${t("pr.hakSifirla")}</button></section>`;
   $("#view").innerHTML = `<h2>${t("pr.baslik")}</h2>
    <section class="panel stack"><div class="row" style="justify-content:space-between"><div class="stack" style="gap:2px"><b>${esc(p.ad || t("pr.isimsiz"))}</b><span class="small muted">${burcAd(p.burc)}${p.yk ? " · " + t("ana.yukselen", { b: burcAd(p.yk) }) : ""}</span></div><a class="btn" href="#profil-duzenle">${t("pr.duzenle")}</a></div></section>
@@ -522,6 +525,7 @@ function viewProfil(alt) {
   $("#efT").onchange = e => { setEfekt("titresim", e.target.checked); if (e.target.checked) titres(30); };
   $("#tk")?.addEventListener("change", e => { store.setKatman(e.target.value); chrome(true, "profil"); toast(t("pr.katmanSecildi", { k: katmanAd(e.target.value) })); });
   $("#hakSifir")?.addEventListener("click", () => { store.setHak({}); toast(t("pr.hakSifirlandi")); });
+  $("#tOk")?.addEventListener("change", e => { try { localStorage.setItem("logos.testOkuma", e.target.value); } catch {} });
   $("#kodK")?.addEventListener("click", async () => { store.setKod($("#kod").value.trim()); const h = await hakDurumu(); chrome(true, "profil"); toast(t("pr.katman", { k: katmanAd(h.katman) })); });
   $("#sil").onclick = () => { $("#silOnay").innerHTML = `<p class="small">${t("pr.silUyari")}</p><div class="row"><button class="btn primary" id="silE">${t("pr.silEvet")}</button><button class="btn ghost" id="silH">${t("genel.vazgec")}</button></div>`;
     $("#silE").onclick = async () => { await H.cikisYap().catch(() => {}); store.hepsiniSil(); go("hosgeldin"); }; $("#silH").onclick = () => $("#silOnay").innerHTML = ""; };
