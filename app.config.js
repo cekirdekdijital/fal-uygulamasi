@@ -53,12 +53,12 @@ export const CONFIG = {
 
   // Geliştirici görünümü: true iken çalışma modu etiketi, test planı seçici ve hak sıfırlama görünür.
   // Mağazaya göndermeden önce false yapın; kullanıcı yalnızca gerçek uygulamayı görür.
-  GELISTIRICI: true,
+  GELISTIRICI: false,
 
   // Test için premium kodları sunucuda tanımlanır (README'ye bakın).
   // Uygulama mağazası satın alması bir sonraki aşamada eklenecek.
   STORE_READY: false,
 
   // Sürüm. Dosyaları güncellediğinizde bu sayıyı artırın; telefonlar yeni sürümü indirir.
-  VERSION: "0.8.4",
+  VERSION: "0.9.0",
 };
