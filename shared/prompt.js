@@ -2,6 +2,7 @@
 // mod: "kisa" | "tam" | "derin"
 import { POS, SIGN, TAGS, NIYET } from "./motor.js";
 import { OKUMALAR } from "./katmanlar.js";
+import { BURC_OZ, NITELIK, burcAcisi, gokyuzu } from "./gok.js";
 
 const clip = (t, n) => {
   t = String(t || ""); if (t.length <= n) return t;
@@ -32,38 +33,50 @@ MİTOLOJİ KURALLARI
 NESNELLİK KURALLARI
 - Her kartta fırsatla birlikte "Dikkat" yönünü dengeli ver.
 - Övgü ve kesinlik dili yerine gözlem dili kullan: "gösteriyor", "işaret ediyor", "davet ediyor".
-- Her yargını verilen veriye dayandır.`;
+- Her yargını verilen veriye dayandır.
+
+HARMAN KURALLARI (mit + gök + hayat)
+- Okuma üç katmanı tek bir anlatıda birleştirir: Mit katmanı (kartın figürü ve mitin dersi), Gök katmanı (kartın gezegeni ve burcu, kullanıcının Güneş ve yükselen burcuyla açısı, okuma anının gökyüzü) ve Hayat katmanı (pozisyonun sorusu, niyet, soru).
+- Katmanları ayrı maddeler gibi sıralama. Mit sahnesinden gök diline, oradan kullanıcının hayatına akan bağlı cümleler kur; her kartta en az bir cümle mit ile gök katmanını birbirine bağlasın.
+- Kartın "Astrolojik gerekçe"sini (neden bu gezegen ve burç) mitin dersiyle aynı fikirde buluştur.
+- Açılar burç düzeyindedir: derece, orb ya da kesin zaman verme. Uyumlu açıyı destek, gerilimli açıyı ders ve olgunlaşma diliyle anlat; yönü belirleyen yine kartın dikey ya da yatay konumudur.
+- Gökyüzü bilgisini yalnızca verilen değerlerden kullan. Verilmeyen gezegen konumu, retro, transit ya da tutulma uydurma. Ay "geçişte" ise iki burcu birlikte an ya da yalnızca evreyi kullan.
+- Burç ışık ve gölge yönlerini kesin karakter hükmü gibi değil, "eğilim" ve "davet" diye ver.
+- "Önceki okumalar" verildiyse yeniden çıkan kartı tek cümleyle "yeniden karşına çıkan" diye an ve anlamındaki sürekliliği göster; başka geçmiş ayrıntısı uydurma. Verilmediyse önceki okumalardan söz etme.
+- Kapanış, okumanın nihai yorumudur: baskın mitin dersi, gökyüzünün şu anki çağrısı (Ay evresi) ve kullanıcının niyeti ya da sorusu tek bir yol gösterici mesajda birleşir.`;
 
 const BICIM = {
   kisa: `ÇIKTI BİÇİMİ (Markdown, toplam 300–400 kelime)
 # Okumaya 2–4 kelimelik bir ad
-Açılış: 1–2 cümle.
+Açılış: 1–2 cümle; okumanın genel enerjisi ve okuma anının Ay evresine kısa bir dokunuş.
 ## 1. Kök: Kart adı (Dikey/Yatay)
-35–50 kelime: kartın bu pozisyondaki anlamı ve bir mitolojik figürle bağı.
+35–50 kelime: kartın bu pozisyondaki anlamı, bir mitolojik figürle bağı ve tek ifadelik gök bağı (açı ya da kartın gezegeni).
 (6 pozisyonun her biri için aynı yapı)
 ## Kapanış
-1–2 cümle.`,
+2 cümle: nihai yorum; mitin dersi, gökyüzünün çağrısı ve kullanıcının niyeti tek mesajda.`,
   tam: `ÇIKTI BİÇİMİ (Markdown, toplam 650–850 kelime)
 # Okumaya 2–4 kelimelik bir ad
 Açılış: 2–3 cümle, okumanın genel enerjisi ve hâkim mitolojik çerçeve.
 ## 1. Kök: Kart adı (Dikey/Yatay)
-70–100 kelime: kartın bu konum ve pozisyondaki anlamı, mitolojik bağı (figür ve ders), dikkat yönü; anlamlıysa burç ilişkisi.
+70–100 kelime, harman kuralına göre: mit sahnesi (figür ve ders) → gök bağı (kartın gezegeni ve burcu, kullanıcının burçlarıyla açısı) → bu pozisyonun sorusu ve niyetle hayata iniş; dikkat yönü.
 (6 pozisyonun her biri için aynı yapı)
 ## Mitolojik Köprüler
 Tek paragraf: farklı mitolojilerden gelen kartların ortak motifleri ve farkları. Köprü yoksa baskın mitolojinin bakışı.
 ## Kartların Bağı
 Tek paragraf: kartlar arası destek ve gerilimler, baskın element ve tema.
 ## Göklerin Notu
-2–3 cümle astrolojik vurgu.
+3–4 cümle: okuma anının gökyüzü (Güneş mevsimi, Ay evresi ve burcu) kartların baskın element ve gezegenleriyle nasıl konuşuyor; kullanıcının Güneş ve yükselen burcunun ışık ve gölge yönleri bu okumada nereye düşüyor.
 ## Kapanış
-1–2 cümlelik yol gösterici mesaj.`,
+3–4 cümle: nihai yorum; üç katmanı tek bir yol gösterici mesajda birleştir, soru varsa ona bağla.`,
 };
 BICIM.derin = BICIM.tam + `
 
 DERİN OKUMA EKİ
 - Kartları tek tek değil, Kök'ten Kader'e uzanan tek bir yolculuk olarak birbirine bağla.
 - Mitolojik köprülerde kültürlerin aynı motifi nasıl farklı anlattığını somut figürlerle karşılaştır.
-- Yatay kartların hangi olgunlaşmayı beklediğini, dikey kartların hangi eylemi çağırdığını açıkça ayır.`;
+- Yatay kartların hangi olgunlaşmayı beklediğini, dikey kartların hangi eylemi çağırdığını açıkça ayır.
+- Her kartta "Ödünç motif" verildiyse onu ana mitle karşılaştırarak kullan.
+- Göklerin Notu'nda Ay'ın kullanıcının Güneş burcuna açısını yolculuğun zamanlamasına bağla.`;
 
 // yerel: Türkçe dışı çıktı için (shared/diller.js yerelIstem). Talimat ve veri Türkçe kalır; yalnızca çıktı dili değişir.
 function dilEki(y, A, mod) {
@@ -78,19 +91,37 @@ function dilEki(y, A, mod) {
 - Pozisyon adları: ${pos}. Dikey → ${y.dikey}, Yatay → ${y.yatay}.
 - Set adlarında yalnızca uluslararası adları kullan (Aetherion, Prometheion, Ragnarion, Alcherion, Duation, Samsarion).
 - Mitolojik figür ve metin adlarını o dilde yerleşik yazımlarıyla ver.
+- Burç, gezegen, Ay evresi ve açı adlarını o dilde yerleşik astroloji karşılıklarıyla yaz.
 - Bölüm başlıkları: ${mod === "kisa" ? "" : `"Mitolojik Köprüler" → "${y.basliklar.kopru}", "Kartların Bağı" → "${y.basliklar.bag}", "Göklerin Notu" → "${y.basliklar.gok}", `}"Kapanış" → "${y.basliklar.kapanis}".${y.not ? `\n- ${y.not}` : ""}`;
 }
 
-export function buildPrompt(D, A, P, mod = "tam", yerel = null) {
+const AYLAR = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+const tarihTR = t => { const d = new Date(t + 3 * 3600e3); return `${d.getUTCDate()} ${AYLAR[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
+const burcSatir = b => { const o = BURC_OZ[b]; const s = SIGN[b]; return o ? `${b} (${s.el}, ${o.nit.toLowerCase()} nitelik: ${NITELIK[o.nit]}, yönetici ${s.yon}; ışık: ${o.isik}; gölge: ${o.golge})` : "bilinmiyor"; };
+const aciMetin = (a, b) => { const x = burcAcisi(a, b); return x ? `${x.ad} (${x.anlam})` : "—"; };
+
+/** zaman: okuma anı (ms) · gecmis: [{tarih, picks:[{kod,o}]}] aynı kişinin son okumaları (en fazla 3) */
+export function buildPrompt(D, A, P, mod = "tam", yerel = null, { zaman = Date.now(), gecmis = [] } = {}) {
   const SET = Object.fromEntries(D.sets.map(s => [s.id, s]));
+  const KART = Object.fromEntries(D.cards.map(c => [c.kod, c]));
   const kisa = mod === "kisa";
-  const s = SIGN[P.burc] || { el: "?", yon: "?" };
+  const G = gokyuzu(zaman);
+  const ayAdi = G.ay.gecis ? `${G.ay.burc} (${G.ay.gecis} ile geçişte)` : G.ay.burc;
   const L = [];
   L.push(`KULLANICI
-Güneş burcu: ${P.burc} (${s.el}, yönetici ${s.yon})
-Yükselen: ${P.yk || "bilinmiyor"}
+Güneş burcu: ${burcSatir(P.burc)}
+Yükselen: ${P.yk ? burcSatir(P.yk) : "bilinmiyor"}
 Niyet: ${NIYET[P.niyet] || "Genel"}
 Soru: ${P.soru ? `"${String(P.soru).slice(0, 200)}"` : "yok"}`);
+  L.push(`\nGÖKYÜZÜ (okuma anı: ${tarihTR(zaman)})
+Güneş: ${G.gunes.burc} mevsimi${G.gunes.gecis ? ` (${G.gunes.gecis} burcundan yeni geçti)` : ""}; mevsimin teması: ${BURC_OZ[G.gunes.burc].isik}.
+Ay: ${ayAdi}, ${G.evre.ad} (%${G.aydinlik} aydınlık): ${G.evre.anlam}.
+Ay'ın kullanıcının Güneş burcuna açısı: ${aciMetin(G.ay.burc, P.burc)}${P.yk ? `; yükselene: ${aciMetin(G.ay.burc, P.yk)}` : ""}.
+Güneş mevsiminin kullanıcının Güneş burcuna açısı: ${aciMetin(G.gunes.burc, P.burc)}.`);
+  // Önceki okumalarda yeniden çıkan kartlar
+  const tekrar = [];
+  (gecmis || []).slice(0, 3).forEach(g => (g.picks || []).forEach((p, i) => { const j = A.cs.findIndex(c => c.kod === p.kod); if (j >= 0 && KART[p.kod]) tekrar.push(`${KART[p.kod].ad}: önceki okumada (${tarihTR(Date.parse(g.tarih) || zaman)}) ${POS[i]?.ad || "?"} pozisyonunda ${p.o === "D" ? "dikey" : "yatay"}, şimdi ${POS[j].ad} pozisyonunda ${A.cs[j].o === "D" ? "dikey" : "yatay"}`); }));
+  if (tekrar.length) L.push(`\nÖNCEKİ OKUMALAR (yeniden çıkan kartlar)\n${tekrar.slice(0, 4).map(x => "- " + x).join("\n")}`);
   L.push(`\nOKUMA ÇIKARIMLARI
 Enerji yönü: ${A.dik} dikey, ${6 - A.dik} yatay. ${A.enerji}.
 Elementler: ${Object.entries(A.elc).map(([e, n]) => e + " " + n).join(", ")}.${A.domEl[1] >= 3 ? " Baskın: " + A.domEl[0] + "." : ""}${A.missing.length ? " Eksik: " + A.missing.join(", ") + "." : ""}
@@ -114,6 +145,8 @@ Kart bağları:\n${A.pairs.map(p => `- ${POS[p.a.i].ad}→${POS[p.b.i].ad}: ${p.
       `Bu pozisyonda: ${c.o === "D" ? pz.D : pz.Y}`,
       `Mitolojik figürler: ${c.mitFigur.join(", ")}`,
       `Mitin dersi: ${c.mitDers}`,
+      `Gök bağı: kartın burcu ${c.burc} → kullanıcının Güneşine ${aciMetin(c.burc, P.burc)}${P.yk ? `; yükselene ${aciMetin(c.burc, P.yk)}` : ""}${kisa ? "" : `; Ay'ın burcuna ${aciMetin(c.burc, G.ay.burc)}`}`,
+      `Astrolojik gerekçe: ${clip(c.gerekce, kisa ? 180 : 360)}`,
     ];
     if (!kisa) satir.push(
       `Astroloji: ${c.gezegen}, ${c.burc}, ${c.element}. Kullanıcıyla: ${u.label} (${u.detay.join("; ")})`,
@@ -121,6 +154,7 @@ Kart bağları:\n${A.pairs.map(p => `- ${POS[p.a.i].ad}→${POS[p.b.i].ad}: ${p.
       `Dikkat: ${c.mitDikkat}`,
       `Özgün kurgu (kartın hikâyesi): ${firstSentence(c.hikaye)}`,
     );
+    if (mod === "derin" && c.mitOdunc) satir.push(`Ödünç motif: ${c.mitOdunc}`);
     satir.push(`Yorumlayıcı notu: ${kisa ? clip(c.notKisa, 220) : c.notKisa}`);
     L.push(satir.join("\n"));
   });
