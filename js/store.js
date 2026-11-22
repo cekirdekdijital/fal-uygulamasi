@@ -2,7 +2,7 @@ import { katmanId } from "../shared/katmanlar.js";
 // Cihazda saklanan veriler: profil, okuma geçmişi, yerel hak sayacı.
 // Not: Bu veriler yalnızca bu cihazdadır. Uygulama silinirse ya da tarayıcı verisi temizlenirse kaybolur.
 
-const K = { profil: "fal.profil", gecmis: "fal.gecmis", hak: "fal.hak", cihaz: "fal.cihaz", katman: "fal.katman", kod: "fal.kod" };
+const K = { profil: "fal.profil", gecmis: "fal.gecmis", hak: "fal.hak", cihaz: "fal.cihaz", katman: "fal.katman", kod: "fal.kod", bitis: "fal.bitis" };
 const get = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } };
 const set = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
 
@@ -17,10 +17,26 @@ export const store = {
   setKatman: k => set(K.katman, k),
   kod: () => get(K.kod, ""),
   setKod: k => set(K.kod, k),
+  bitis: () => get(K.bitis, null),
+  setBitis: b => set(K.bitis, b || null),
   hak: () => get(K.hak, {}),
   setHak: h => set(K.hak, h),
   hepsiniSil: () => { try { Object.values(K).forEach(k => localStorage.removeItem(k)); } catch {} },
 };
+
+// Geliştirici görünümü: app.config.js GELISTIRICI ya da bu cihazda adrese bir kez ?gelistirici=ac eklenerek açılır (?gelistirici=kapat ile kapanır).
+// Son kullanıcılar bu görünümü görmez; sunucu tam erişimi yalnızca gizli kodla verir.
+let GEL = null;
+export function gelistiriciAcik(varsayilan) {
+  if (GEL !== null) return GEL;
+  try {
+    const q = new URLSearchParams(location.search).get("gelistirici");
+    if (q === "ac") localStorage.setItem("logos.gelistirici", "1");
+    if (q === "kapat") localStorage.removeItem("logos.gelistirici");
+    GEL = !!varsayilan || localStorage.getItem("logos.gelistirici") === "1";
+  } catch { GEL = !!varsayilan; }
+  return GEL;
+}
 
 // İstanbul saatine göre gün, hafta ve ay anahtarları
 export function zamanAnahtarlari(d = new Date()) {

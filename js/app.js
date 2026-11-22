@@ -2,7 +2,7 @@
 import { CONFIG } from "../app.config.js";
 import { KATMANLAR, OKUMALAR, UCRETLI, FIYAT_TR } from "../shared/katmanlar.js";
 import { POS, SIGNS, SIGN, TAGS, NIYET, sunSign, analyze } from "../shared/motor.js";
-import { store, zamanAnahtarlari } from "./store.js";
+import { store, zamanAnahtarlari, gelistiriciAcik } from "./store.js";
 import { okumaIste, hakDurumu, calismaModu, OkumaHatasi, reklamOncesi, bolgeDurumu, beklemeKaydet, bildirGonder } from "./ai.js";
 import * as H from "./hesap.js";
 import { ses, titres, gokyuzu, kivilcim, kivilcimEl, efektAyar, setEfekt, azHareket, sis, ortam } from "./fx.js";
@@ -14,7 +14,7 @@ const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAl
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const sleep = ms => new Promise(r => setTimeout(r, azHareket() ? Math.min(ms, 60) : ms));
 let D = null, DT = null, CARD = {}, SET = {}, MODE = "demo";
-const DEV = () => !!CONFIG.GELISTIRICI;
+const DEV = () => gelistiriciAcik(CONFIG.GELISTIRICI);
 let BOLGE = { izinli: true }; // Türkiye dışından erişimde okuma kapalı, bekleme listesi açık
 // DT: Türkçe ana deste (analiz ve yorum istemi için) · D: seçili dile çevrilmiş görüntüleme destesi
 
@@ -320,12 +320,14 @@ async function acilis(picks) {
   const A = analyze(D, picks, P); const B = baskinSet(A.cs); koruyucuOnYukle(B.set);
   const At = analyze(DT, picks, P); const yerel = yerelIstem(aktifDil(), metinler(), kartCevirisi(), At.cs);
   const id = Date.now().toString(36);
+  // Aynı kişinin son 45 gündeki tamamlanmış okumaları (misafir okumalarında gönderilmez)
+  const onceki = M ? [] : store.gecmis().filter(r => r.durum === "tamam" && !r.misafir && !r.demo && Date.now() - Date.parse(r.tarih) < 45 * 864e5).slice(0, 3).map(r => ({ tarih: r.tarih, picks: r.picks.map(p => ({ kod: p.kod, o: p.o })) }));
   store.addGecmis({ id, tarih: new Date().toISOString(), picks, profil: { burc: P.burc, yk: P.yk, niyet: P.niyet, soru: P.soru }, mod, metin: "", baslik: "", durum: "bekliyor", koruyucu: B.set, dil: aktifDil(), ...(M ? { misafir: { ad: M.ad, burc: P.burc } } : {}) });
   if (M) SECIM.misafir = { ad: "", dt: "", yk: "", onay: false };
   // Yorum isteği açılış animasyonu başlamadan gönderilir; bekleme animasyonun arkasında kalır.
   CTL?.abort(); CTL = new AbortController(); const t0 = performance.now(); let tIlk = null;
   const LIVE = window.__LIVE = { id, text: "", bitti: false };
-  okumaIste({ D: DT, A: At, Dy: D, Ay: A, dil: aktifDil(), yerel, profil: P, picks, mod, signal: CTL.signal, onText: text => {
+  okumaIste({ D: DT, A: At, Dy: D, Ay: A, dil: aktifDil(), yerel, profil: P, picks, mod, gecmis: onceki, signal: CTL.signal, onText: text => {
     if (tIlk === null) tIlk = performance.now();
     LIVE.text = text; const out = $("#aiout"); if (out && LIVE.id === id) { out.innerHTML = mdAkan(text); oracleKapat(); }
   } }).then(r => {
@@ -494,6 +496,27 @@ function hesapPenceresi(tur = "giris", sonra) {
   };
 }
 function testOkuma() { try { return localStorage.getItem("logos.testOkuma") || ""; } catch { return ""; } }
+/* ---------- Hediye kodu ---------- */
+const tarihYaz = iso => { try { return new Date(iso).toLocaleDateString(yerelKod(), { day: "numeric", month: "long", year: "numeric" }); } catch { return ""; } };
+function hediyeKutusu() {
+  if (MODE !== "sunucu") return "";
+  return `<details class="hediye"><summary class="small">${t("hd.baslik")}</summary>
+    <div class="row" style="gap:8px;margin-top:8px"><input id="hdK" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="${t("hd.yer")}" style="flex:1;min-width:0"><button class="btn" id="hdB">${t("hd.btn")}</button></div>
+    <p class="small" id="hdM" role="status"></p></details>`;
+}
+function hediyeOlay(yenile) {
+  const b = $("#hdB"); if (!b) return;
+  b.onclick = async () => {
+    const kod = $("#hdK").value.trim(); if (!kod) return;
+    const eski = store.kod(); b.disabled = true; $("#hdM").textContent = "…";
+    store.setKod(kod); const h = await hakDurumu(); b.disabled = false;
+    if (h.cevrimdisi) { store.setKod(eski); $("#hdM").textContent = t("hd.baglanti"); return; }
+    if (h.katman && h.katman !== "ucretsiz" && (h.hediye || h.bitis || h.tamErisim)) {
+      ses.tamam?.(); toast(h.bitis ? t("hd.tamam", { k: katmanAd(h.katman), t: tarihYaz(h.bitis) }) : t("pr.katman", { k: katmanAd(h.katman) })); yenile();
+    } else { store.setKod(eski); $("#hdM").textContent = t("hd.gecersiz"); }
+  };
+}
+
 function viewProfil(alt) {
   chrome(true, "profil");
   if (alt === "duzenle") return viewProfilForm(false);
@@ -507,7 +530,7 @@ function viewProfil(alt) {
    <section class="panel stack"><div class="row" style="justify-content:space-between"><div class="stack" style="gap:2px"><b>${esc(p.ad || t("pr.isimsiz"))}</b><span class="small muted">${burcAd(p.burc)}${p.yk ? " · " + t("ana.yukselen", { b: burcAd(p.yk) }) : ""}</span></div><a class="btn" href="#profil-duzenle">${t("pr.duzenle")}</a></div></section>
    <a class="panel rehberkart" href="#rehber">${SIGIL("small")}<div class="stack" style="gap:2px"><b>${t("pr.rehber")}</b><span class="small muted">${t("pr.rehberAlt")}</span></div><span aria-hidden="true">›</span></a>
    ${hesapBolumu()}
-   <section class="panel stack"><div class="lab">${t("pr.uyelik")}</div><div class="row" style="justify-content:space-between"><b>${katmanAd(k)}</b><a class="btn" href="#premium">${t("pr.planlar")}</a></div></section>
+   <section class="panel stack"><div class="lab">${t("pr.uyelik")}</div><div class="row" style="justify-content:space-between"><div class="stack" style="gap:2px"><b>${katmanAd(k)}</b>${k !== "ucretsiz" && store.bitis() ? `<span class="small muted">${t("hd.bitis", { t: tarihYaz(store.bitis()) })}</span>` : ""}</div><a class="btn" href="#premium">${t("pr.planlar")}</a></div>${hediyeKutusu()}</section>
    <section class="panel stack"><div class="lab">${t("pr.dil")}</div><div class="row" style="justify-content:space-between"><b>${DILLER[aktifDil()].ad}</b><button class="btn" id="dilB">${t("pr.dilDegistir")}</button></div>
     <p class="small muted">${t("pr.dilNot")}</p></section>
    <section class="panel stack"><div class="lab">${t("pr.sesTitresim")}</div>
@@ -525,6 +548,7 @@ function viewProfil(alt) {
   $("#efT").onchange = e => { setEfekt("titresim", e.target.checked); if (e.target.checked) titres(30); };
   $("#tk")?.addEventListener("change", e => { store.setKatman(e.target.value); chrome(true, "profil"); toast(t("pr.katmanSecildi", { k: katmanAd(e.target.value) })); });
   $("#hakSifir")?.addEventListener("click", () => { store.setHak({}); toast(t("pr.hakSifirlandi")); });
+  hediyeOlay(() => viewProfil());
   $("#tOk")?.addEventListener("change", e => { try { localStorage.setItem("logos.testOkuma", e.target.value); } catch {} });
   $("#kodK")?.addEventListener("click", async () => { store.setKod($("#kod").value.trim()); const h = await hakDurumu(); chrome(true, "profil"); toast(t("pr.katman", { k: katmanAd(h.katman) })); });
   $("#sil").onclick = () => { $("#silOnay").innerHTML = `<p class="small">${t("pr.silUyari")}</p><div class="row"><button class="btn primary" id="silE">${t("pr.silEvet")}</button><button class="btn ghost" id="silH">${t("genel.vazgec")}</button></div>`;
@@ -550,7 +574,9 @@ function viewPremium() {
     <div class="pr">${fiyat(id)}</div><ul>${t("pm.oz." + id).split("|").map(o => `<li>${o}</li>`).join("")}</ul>
     ${id !== "ucretsiz" && k !== id && CONFIG.STORE_READY ? `<button class="btn ${best ? "primary" : ""} block" data-abone="${id}">${t("pm.aboneOl")}</button>` : ""}</div>`;
   $("#view").innerHTML = `<h2>${t("pm.baslik")}</h2>${tier("ucretsiz")}${tier("gumus")}${tier("altin", true)}${tier("elmas")}
+   <section class="panel stack">${hediyeKutusu()}</section>
    <p class="small muted">${t("pm.notTR")}</p>`;
+  hediyeOlay(() => viewPremium());
   $$("[data-abone]").forEach(b => b.onclick = () => {
     if (H.hesapAcik() && !H.kullanici()) { toast(t("pm.hesapGerek")); return hesapPenceresi("giris", () => go("premium")); }
     // Google Play satın alma akışı Android sürümünde window.LogosOdeme.satinAl(planId) ile bağlanacak

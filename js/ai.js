@@ -6,7 +6,7 @@ import { CONFIG } from "../app.config.js";
 import { KATMANLAR } from "../shared/katmanlar.js";
 import { buildPrompt } from "../shared/prompt.js";
 import { POS } from "../shared/motor.js";
-import { store, zamanAnahtarlari } from "./store.js";
+import { store, zamanAnahtarlari, gelistiriciAcik } from "./store.js";
 import { t, tv } from "./i18n.js";
 import { kimlikBelgesi } from "./hesap.js";
 
@@ -32,7 +32,7 @@ export async function calismaModu() {
 /* ---------- Bölge, bekleme listesi, içerik bildirimi (yalnızca sunucu modunda) ---------- */
 // Hizmet yalnızca izin verilen ülkelerde (şimdilik Türkiye) açıktır. Geliştirici görünümünde ?bolge=dis ile ekran denenebilir.
 export async function bolgeDurumu() {
-  if (CONFIG.GELISTIRICI && new URLSearchParams(location.search).get("bolge") === "dis") return { izinli: false, ulke: "DE", deneme: true };
+  if (gelistiriciAcik(CONFIG.GELISTIRICI) && new URLSearchParams(location.search).get("bolge") === "dis") return { izinli: false, ulke: "DE", deneme: true };
   if ((await calismaModu()) !== "sunucu") return { izinli: true };
   try { const r = await fetch(`${CONFIG.API_URL}/api/bolge`); if (r.ok) return await r.json(); } catch {}
   return { izinli: true, bilinmiyor: true }; // bağlantı yoksa engelleme; sunucu her istekte ayrıca denetler
@@ -66,7 +66,7 @@ export async function hakDurumu() {
   if (mod === "sunucu") {
     try {
       const r = await fetch(`${CONFIG.API_URL}/api/hak?cihaz=${encodeURIComponent(store.cihaz())}&kod=${encodeURIComponent(store.kod())}`, { headers: await baslik() });
-      if (r.ok) { const j = await r.json(); store.setKatman(j.katman); return j; }
+      if (r.ok) { const j = await r.json(); store.setKatman(j.katman); store.setBitis(j.bitis); return j; }
       if (r.status === 451) return { ...yerelHak("ucretsiz"), gunKalan: 0, katman: store.katman(), bolge: true };
     } catch {}
     return { ...yerelHak(store.katman()), katman: store.katman(), cevrimdisi: true };
@@ -78,14 +78,14 @@ export async function hakDurumu() {
 export class OkumaHatasi extends Error { constructor(kod, mesaj) { super(mesaj); this.kod = kod; } }
 
 // D, A: Türkçe deste ve analiz (istem için) · Dy, Ay: seçili dildeki görüntüleme destesi ve analiz (demo için)
-export async function okumaIste({ D, A, Dy = D, Ay = A, dil = "tr", yerel = null, profil, picks, mod, onText, signal }) {
+export async function okumaIste({ D, A, Dy = D, Ay = A, dil = "tr", yerel = null, profil, picks, mod, gecmis = [], onText, signal }) {
   const calisma = await calismaModu();
   const P = { burc: profil.burc, yk: profil.yk, niyet: profil.niyet, soru: profil.soru };
 
   if (calisma === "sunucu") {
     const r = await fetch(`${CONFIG.API_URL}/api/okuma`, {
       method: "POST", signal, headers: await baslik({ "content-type": "application/json" }),
-      body: JSON.stringify({ cihaz: store.cihaz(), kod: store.kod(), profil: P, picks, mod, dil }),
+      body: JSON.stringify({ cihaz: store.cihaz(), kod: store.kod(), profil: P, picks, mod, dil, gecmis }),
     });
     if (!r.ok) { let j = {}; try { j = await r.json(); } catch {} throw new OkumaHatasi(j.kod || "sunucu", j.kod && t("hata." + j.kod) !== "hata." + j.kod ? t("hata." + j.kod) : j.mesaj || t("hata.sunucu")); }
     const reader = r.body.getReader(); const dec = new TextDecoder(); let text = "";
@@ -101,7 +101,7 @@ export async function okumaIste({ D, A, Dy = D, Ay = A, dil = "tr", yerel = null
   if (mod === "derin" && kalan.derinKalan <= 0) mod = kk.okuma === "derin" ? "tam" : kk.okuma;
 
   if (calisma === "onizleme") {
-    const sample = await getSample(); const pr = buildPrompt(D, A, P, mod, yerel);
+    const sample = await getSample(); const pr = buildPrompt(D, A, P, mod, yerel, { gecmis });
     try {
       const { text } = await sample(pr.system + "\n\n---\n\n" + pr.user, { signal, cache: false, modelTier: mod === "derin" ? "default" : "quick", onText: ({ text }) => onText(text) });
       yerelHakKullan(mod === "derin"); return { text, mod };
