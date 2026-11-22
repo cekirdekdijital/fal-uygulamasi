@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Logos · Hesap ve veri silme</title>
+<link rel="icon" href="assets/icons/icon-192.png">
+<style>
+:root{--bg:#0e1124;--panel:#161a33;--ink:#ebe8f3;--muted:#a2a7c8;--line:#2a3058;--blue:#8496e0;color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif;padding:24px max(16px,env(safe-area-inset-left)) 48px}
+main{max-width:680px;margin:0 auto}h1{font-size:24px;margin:8px 0}h2{font-size:17px;color:var(--blue);margin:28px 0 8px}
+.k{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}code{background:#0008;padding:2px 6px;border-radius:4px}
+.dil{display:flex;gap:8px}.dil button{font:inherit;background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:4px 12px;cursor:pointer}.dil button[aria-pressed=true]{color:var(--ink);border-color:var(--blue)}
+[hidden]{display:none!important}a{color:var(--blue)}
+</style></head><body><main>
+<img src="assets/ui/logo.webp" alt="" width="64" height="64">
+<div class="dil"><button type="button" data-l="tr" aria-pressed="true">Türkçe</button><button type="button" data-l="en" aria-pressed="false">English</button></div>
+
+<section lang="tr" data-l="tr">
+<h1>Logos · Hesap ve veri silme</h1>
+<p>Logos uygulaması ÇEKİRDEK DİJİTAL - ERDEM ÇELİK tarafından sunulur. Bu sayfa hesabınızı ve verilerinizi nasıl silebileceğinizi açıklar.</p>
+<h2>1. Uygulama içinden (önerilen)</h2>
+<div class="k">Profil → Hesap → <b>Hesabımı sil</b>. Hesabınız ve hesaba bağlı plan bilgileri hemen silinir.<br>Cihazdaki profil ve okuma geçmişi için: Profil → Hukuki metinler → <b>Verilerimi sil</b>.</div>
+<h2>2. Uygulamaya erişemiyorsanız</h2>
+<div class="k">Hesabınıza kayıtlı e-posta adresinden <code>cekirdekdijital@gmail.com</code> adresine <b>"Hesap silme talebi"</b> konulu bir e-posta gönderin. Talebiniz en geç 30 gün içinde sonuçlandırılır ve size bilgi verilir.</div>
+<h2>Silinen ve saklanan veriler</h2>
+<ul>
+<li>Silinir: e-posta adresi, şifre, hesap kimliği, hesaba bağlı okuma sayaçları ve plan bilgisi.</li>
+<li>Cihazınızdaki profil ve okuma geçmişi yalnızca cihazınızdadır; "Verilerimi sil" ile ya da uygulamayı kaldırarak silinir.</li>
+<li>Abonelik kaydı, vergi ve ticaret mevzuatının öngördüğü süre boyunca saklanır.</li>
+<li>Hesabı silmek Google Play aboneliğini iptal etmez. Aboneliği Google Play → Ödemeler ve abonelikler bölümünden iptal edin.</li>
+</ul>
+<p>Ayrıntılar: <a href="gizlilik.html">Gizlilik Politikası</a></p>
+</section>
+
+<section lang="en" data-l="en" hidden>
+<h1>Logos · Account and data deletion</h1>
+<p>The Logos app is provided by ÇEKİRDEK DİJİTAL - ERDEM ÇELİK. This page explains how to delete your account and data.</p>
+<h2>1. In the app (recommended)</h2>
+<div class="k">Profile → Account → <b>Delete my account</b>. Your account and its plan details are deleted immediately.<br>For the profile and reading history on your device: Profile → Legal texts → <b>Delete my data</b>.</div>
+<h2>2. If you cannot access the app</h2>
+<div class="k">Send an e-mail with the subject <b>"Account deletion request"</b> from your account's e-mail address to <code>cekirdekdijital@gmail.com</code>. Your request is completed within 30 days at the latest.</div>
+<h2>What is deleted and what is kept</h2>
+<ul>
+<li>Deleted: e-mail address, password, account ID, reading counters and plan details linked to the account.</li>
+<li>Your profile and reading history exist only on your device and are deleted with "Delete my data" or by uninstalling the app.</li>
+<li>Subscription records are kept for the period required by tax and commercial law.</li>
+<li>Deleting the account does not cancel a Google Play subscription. Cancel it in Google Play → Payments &amp; subscriptions.</li>
+</ul>
+<p>Details: <a href="gizlilik.html">Privacy Policy</a> (Turkish text is authoritative)</p>
+</section>
+</main>
+<script>
+document.querySelectorAll(".dil button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".dil button").forEach(x=>x.setAttribute("aria-pressed",x===b));document.querySelectorAll("section[data-l]").forEach(s=>s.hidden=s.dataset.l!==b.dataset.l);document.documentElement.lang=b.dataset.l;});
+if((navigator.language||"").slice(0,2)!=="tr")document.querySelector('.dil button[data-l=en]').click();
+</script></body></html>

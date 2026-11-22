@@ -41,10 +41,24 @@ export const CONFIG = {
     ink: "#8496e0",
   },
 
+  // Hesap sistemi (Firebase Authentication). Firebase konsolundaki "Web uygulaması" ayarlarını buraya yapıştırın.
+  // Boş bırakılırsa hesap bölümü görünmez; uygulama hesapsız (ücretsiz plan, cihaz bazlı) çalışır.
+  // Bu değerler gizli değildir; Firebase bunların uygulamada görünmesini öngörür. Asıl güvenlik sunucudaki doğrulamadadır.
+  FIREBASE: {
+    apiKey: "",
+    authDomain: "",   // ör. "logos-fal.firebaseapp.com"
+    projectId: "",    // ör. "logos-fal" (sunucudaki FIREBASE_PROJECT_ID ile aynı olmalı)
+    appId: "",
+  },
+
+  // Geliştirici görünümü: true iken çalışma modu etiketi, test planı seçici ve hak sıfırlama görünür.
+  // Mağazaya göndermeden önce false yapın; kullanıcı yalnızca gerçek uygulamayı görür.
+  GELISTIRICI: true,
+
   // Test için premium kodları sunucuda tanımlanır (README'ye bakın).
   // Uygulama mağazası satın alması bir sonraki aşamada eklenecek.
   STORE_READY: false,
 
   // Sürüm. Dosyaları güncellediğinizde bu sayıyı artırın; telefonlar yeni sürümü indirir.
-  VERSION: "0.5.0",
+  VERSION: "0.7.0",
 };

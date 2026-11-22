@@ -298,3 +298,25 @@ html[dir="rtl"] .rhead,html[dir="rtl"] .bar{direction:rtl}
 /* Arapçada eğik yazı yapay görünür; vurgu için kalınlık ve renk yeterli */
 html[data-yazi="arap"] i,html[data-yazi="arap"] em,html[data-yazi="arap"] [style*="italic"],html[data-yazi="arap"] .soz,html[data-yazi="arap"] .hint,html[data-yazi="arap"] .read{font-style:normal!important}
 html[data-yazi="arap"] .aiout i{color:var(--muted)}
+
+/* 0.6.0 — sorumluluk notu, misafir, hesap, rehber, hukuki metinler */
+.feragat{font-size:11px;line-height:1.45;color:var(--dim,#8b8fae);margin-top:14px;padding-top:10px;border-top:1px solid var(--line);opacity:.85}
+.misafir{border:1px dashed var(--line);border-radius:12px;padding:12px;background:#0e1124aa}
+.rehberkart{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit}
+.rehberkart > span[aria-hidden]{margin-inline-start:auto;font-size:22px;color:var(--blue)}
+.rehberkart .sigil.small{width:48px;height:48px;flex:none}
+.rhbas{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:8px 0 18px}
+.rhbas .soz{max-width:38ch}
+.rh{display:flex;gap:14px;align-items:flex-start}
+.rhno{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-size:15px;color:var(--c);border:1px solid var(--c);box-shadow:0 0 14px color-mix(in srgb,var(--c) 35%,transparent)}
+.rh h3{font-size:17px}
+.hukuk h1{font-size:18px;margin:14px 0 6px}.hukuk h2{font-size:15px;margin:14px 0 6px;color:var(--blue)}.hukuk h3{font-size:14px;margin:10px 0 4px}
+.hukuk table{width:100%;border-collapse:collapse;font-size:12px;margin:6px 0}.hukuk td,.hukuk th{border:1px solid var(--line);padding:4px 6px;text-align:start;vertical-align:top}
+.hukuk .doldur{background:#d65a4f33;border-radius:3px;padding:0 3px}
+.hukuk ul{padding-inline-start:18px}
+.hidden.feragat{display:none}
+/* 0.7.0 — bildirim düğmesi, bölge ekranı */
+.feragat{display:flex;gap:12px;justify-content:space-between;align-items:flex-start}
+.feragat .bildir{flex:none;font:inherit;font-size:11px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:2px 10px;cursor:pointer}
+.feragat .bildir:disabled{opacity:.6;cursor:default}
+.intro.bolge h2{font-size:18px;margin-top:4px}

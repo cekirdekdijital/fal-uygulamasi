@@ -1,9 +1,10 @@
 // Uygulamanın ekranları ve akışı.
 import { CONFIG } from "../app.config.js";
-import { KATMANLAR, OKUMALAR } from "../shared/katmanlar.js";
+import { KATMANLAR, OKUMALAR, UCRETLI, FIYAT_TR } from "../shared/katmanlar.js";
 import { POS, SIGNS, SIGN, TAGS, NIYET, sunSign, analyze } from "../shared/motor.js";
 import { store, zamanAnahtarlari } from "./store.js";
-import { okumaIste, hakDurumu, calismaModu, OkumaHatasi } from "./ai.js";
+import { okumaIste, hakDurumu, calismaModu, OkumaHatasi, reklamOncesi, bolgeDurumu, beklemeKaydet, bildirGonder } from "./ai.js";
+import * as H from "./hesap.js";
 import { ses, titres, gokyuzu, kivilcim, kivilcimEl, efektAyar, setEfekt, azHareket, sis, ortam } from "./fx.js";
 import { TEMA, baskinSet, koruyucuHTML, koruyucuOnYukle, korAd, korSoz } from "./koruyucu.js";
 import { t, tv, aktifDil, yerelKod, dilYukle, dilKaydet, desteBirlestir, kartCevirisi, metinler } from "./i18n.js";
@@ -13,6 +14,8 @@ const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAl
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const sleep = ms => new Promise(r => setTimeout(r, azHareket() ? Math.min(ms, 60) : ms));
 let D = null, DT = null, CARD = {}, SET = {}, MODE = "demo";
+const DEV = () => !!CONFIG.GELISTIRICI;
+let BOLGE = { izinli: true }; // Türkiye dışından erişimde okuma kapalı, bekleme listesi açık
 // DT: Türkçe ana deste (analiz ve yorum istemi için) · D: seçili dile çevrilmiş görüntüleme destesi
 
 /* ---------- Ortak parçalar ---------- */
@@ -70,7 +73,7 @@ $("#dlg").addEventListener("click", e => { if (e.target === $("#dlg")) $("#dlg")
 document.addEventListener("click", e => { if (e.target.closest("button,a,.lcard")) ses.dokun(); }, true);
 
 /* ---------- Yönlendirme ---------- */
-const ROUTES = { hosgeldin: viewHosgeldin, ana: viewAna, kartlar: viewKartlar, gecmis: viewGecmis, profil: viewProfil, premium: viewPremium, sonuc: viewSonuc };
+const ROUTES = { hosgeldin: viewHosgeldin, ana: viewAna, kartlar: viewKartlar, gecmis: viewGecmis, profil: viewProfil, premium: viewPremium, sonuc: viewSonuc, rehber: viewRehber, bolge: viewBolge };
 let BEKLE = null, ILK = true;
 function go(h) { if (location.hash === "#" + h) route(); else location.hash = h; }
 function route() {
@@ -79,7 +82,8 @@ function route() {
   document.querySelector(".reading")?.remove(); document.body.style.overflow = "";
   clearInterval(BEKLE);
   const p = store.profil();
-  if (!p?.onay && r !== "hosgeldin") return go("hosgeldin");
+  if (!BOLGE.izinli && r !== "bolge") return go("bolge");
+  if (BOLGE.izinli && !p?.onay && r !== "hosgeldin") return go("hosgeldin");
   if (r !== "sonuc") ortam.durdur();
   sis.surekli(0);
   if (!ILK) { sis.gecis(); ses.gecis(); } ILK = false;
@@ -117,7 +121,7 @@ function viewProfilForm(ilk) {
     <div id="pBurc" class="row"></div>
     ${ilk ? `<div class="stack" style="gap:12px;margin-top:6px">
       <label class="check"><input type="checkbox" id="c18"> ${t("pf.onay18")}</label>
-      <label class="check"><input type="checkbox" id="cEg"> ${t("pf.onayEglence")}</label>
+      <label class="check"><input type="checkbox" id="cEg"> <span>${t("pf.onayKosul", { btn: `<button type="button" class="chip" id="kosul" style="display:inline;padding:0 6px">${t("pf.kosulBtn")}</button>` })}</span></label>
       <label class="check"><input type="checkbox" id="cKv"> <span>${t("pf.onayAktarim", { btn: `<button type="button" class="chip" id="kvkk" style="display:inline;padding:0 6px">${t("pf.onayMetinBtn")}</button>` })}</span></label>
     </div>` : ""}
     <button class="btn primary block" id="pKaydet" disabled>${ilk ? t("genel.devam") : t("genel.kaydet")}</button>
@@ -128,21 +132,28 @@ function viewProfilForm(ilk) {
     $("#pKaydet").disabled = !b || (ilk && !($("#c18").checked && $("#cEg").checked && $("#cKv").checked));
   };
   $$("#view input,#view select").forEach(e => e.addEventListener("input", check)); check();
-  $("#kvkk")?.addEventListener("click", aydinlatma);
+  $("#kvkk")?.addEventListener("click", e => { e.preventDefault(); hukukMetni("aydinlatma"); });
+  $("#kosul")?.addEventListener("click", e => { e.preventDefault(); hukukMetni("kosullar"); });
   $("#pKaydet").onclick = () => {
     const n = { ...p, ad: $("#pAd").value.trim(), dt: $("#pDt").value, yk: $("#pYk").value, burc: sunSign($("#pDt").value) };
-    if (ilk) n.onay = { tarih: new Date().toISOString(), surum: "1", dil: aktifDil() };
+    if (ilk) n.onay = { tarih: new Date().toISOString(), surum: "2", dil: aktifDil(), kosullar: true, aktarim: true };
     store.setProfil(n); ses.tamam(); toast(ilk ? (n.ad ? t("pf.hosgeldinAd", { ad: n.ad }) : t("pf.hosgeldin")) : t("pf.kaydedildi")); go(ilk ? "ana" : "profil");
   };
 }
-function aydinlatma() {
-  const b = ["taslak", "sorumlu", "veriler", "amac", "aktarim", "haklar"].map(k => `<p>${t("gz." + k)}</p>`).join("");
-  openDialog(`<div class="lab">${t("gz.etiket")}</div><h2>${t("gz.baslik")}</h2>`, `<div class="read small stack" style="gap:10px">${b}</div>`);
+// Hukuki metinler: data/hukuk/tr.json (hukukçu onayından sonra diğer dillere çevrilecek)
+let HUKUK = null;
+async function hukukMetni(tur = "aydinlatma") {
+  if (!HUKUK) { try { HUKUK = await (await fetch("data/hukuk/tr.json")).json(); } catch { HUKUK = {}; } }
+  const m = HUKUK[tur];
+  const ozet = tur === "aydinlatma" && aktifDil() !== "tr" ? ["sorumlu", "veriler", "amac", "aktarim", "haklar"].map(k => `<p>${t("gz." + k)}</p>`).join("") : "";
+  const govde = m ? `${aktifDil() !== "tr" ? `${ozet}<p class="note small">${t("hk.ceviri")}</p>` : ""}<div lang="tr" dir="ltr" class="hukuk">${m.html}</div>`
+    : ["sorumlu", "veriler", "amac", "aktarim", "haklar"].map(k => `<p>${t("gz." + k)}</p>`).join("");
+  openDialog(`<div class="lab">${t("pr.hukuk")}</div><h2>${t("hk." + tur)}</h2>`, `<div class="read small stack" style="gap:10px">${govde}</div>`);
 }
 
 /* ---------- Dil seçimi ---------- */
 function dilSecici() {
-  openDialog(`<div class="lab">🌐</div><h2>${t("dil.baslik")}</h2>`, `<div class="dilliste">${Object.entries(DILLER).map(([k, v]) =>
+  openDialog(`<div class="lab">🌐</div><h2>${t("dil.baslik")}</h2>`, `<div class="dilliste">${Object.entries(DILLER).filter(([, v]) => v.hazir || DEV()).map(([k, v]) =>
     `<button class="dilbtn ${k === aktifDil() ? "on" : ""}" data-d="${k}" ${v.hazir ? "" : "disabled"} lang="${k}" dir="${v.yon || "ltr"}"><b>${v.ad}</b>${v.hazir ? "" : `<span class="small muted">${t("dil.yakinda")}</span>`}</button>`).join("")}</div>`);
   $$(".dilbtn[data-d]").forEach(b => b.onclick = async () => {
     if (b.disabled) return; dilKaydet(b.dataset.d); $("#dlg").close();
@@ -157,7 +168,7 @@ async function dilUygula(d) {
 }
 
 /* ---------- Ana sayfa ---------- */
-let SECIM = { niyet: "genel", soru: "", derin: false };
+let SECIM = { niyet: "genel", soru: "", derin: false, kim: "ben", misafir: { ad: "", dt: "", yk: "", onay: false } };
 function gununKarti(burc) {
   const g = zamanAnahtarlari().gun + burc; let h = 2166136261;
   for (const ch of g) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); }
@@ -172,11 +183,12 @@ async function viewAna() {
   const g = store.gecmis().slice(0, 3); const gk = gununKarti(p.burc);
   $("#view").innerHTML = `
    <section class="welcome">${SIGIL()}<div class="stack" style="gap:6px"><p class="muted">${selam}${p.ad ? ", " + esc(p.ad) : ""}</p>
-     <div class="row"><span class="chip on">${burcAd(p.burc)}</span><span class="chip el-${SIGN[p.burc].el}">${elAd(SIGN[p.burc].el)}</span>${p.yk ? `<span class="chip">${t("ana.yukselen", { b: burcAd(p.yk) })}</span>` : ""}${MODE !== "sunucu" ? `<span class="chip warn">${t("mod." + MODE)}</span>` : ""}</div></div></section>
+     <div class="row"><span class="chip on">${burcAd(p.burc)}</span><span class="chip el-${SIGN[p.burc].el}">${elAd(SIGN[p.burc].el)}</span>${p.yk ? `<span class="chip">${t("ana.yukselen", { b: burcAd(p.yk) })}</span>` : ""}${DEV() && MODE !== "sunucu" ? `<span class="chip warn">${t("mod." + MODE)}</span>` : ""}</div></div></section>
    <section class="panel hero">
      <div class="lab">${t("ana.etiket")}</div><h2>${t("ana.baslik")}</h2>
      <div class="stack"><span class="small muted">${t("ana.niyet")}</span><div class="row" id="niyet">${Object.keys(NIYET).map(k => `<button class="chip ${SECIM.niyet === k ? "on" : ""}" data-k="${k}">${t("niyet." + k)}</button>`).join("")}</div></div>
      <label class="f">${t("ana.soru")}<input id="soru" maxlength="160" value="${esc(SECIM.soru)}" placeholder="${t("ana.soruOrnek")}"></label>
+     <div class="stack" style="gap:8px"><span class="small muted">${t("kim.baslik")}</span><div class="row" id="kim">${["ben", "misafir"].map(k => `<button class="chip ${SECIM.kim === k ? "on" : ""}" data-k="${k}">${t("kim." + k)}</button>`).join("")}</div><div id="misafirBox"></div></div>
      <div id="derinBox"></div>
      <div class="quota" id="quota">${halka(0, 1, "–")}${halka(0, 1, "–")}${halka(0, 1, "–")}</div>
      <div class="quota-l"><span>${t("ana.bugun")}</span><span>${t("ana.buHafta")}</span><span>${t("ana.derin")}</span></div>
@@ -188,20 +200,41 @@ async function viewAna() {
   $$("#niyet button").forEach(b => b.onclick = () => { SECIM.niyet = b.dataset.k; $$("#niyet button").forEach(x => x.classList.toggle("on", x === b)); });
   $("#soru").oninput = e => SECIM.soru = e.target.value;
   $("#gun").onclick = () => kartDetay(gk.kod);
-  const h = await hakDurumu(); const k = KATMANLAR[h.katman];
-  $("#quota").innerHTML = halka(h.gunKalan, h.gunluk, `${h.gunKalan}/${h.gunluk}`) + halka(h.haftaKalan, h.haftalik, `${h.haftaKalan}/${h.haftalik}`) + (k.okuma === "derin" ? halka(1, 1, "∞") : halka(h.derinKalan, h.derinAylik || 1, `${h.derinKalan}/${h.derinAylik}`));
-  const var_ = h.gunKalan > 0 && h.haftaKalan > 0; $("#basla").disabled = !var_;
+  let hakVar = false;
+  const misafirGecerli = () => SECIM.kim !== "misafir" || (!!sunSign(SECIM.misafir.dt) && SECIM.misafir.onay);
+  const ctaGuncelle = () => { $("#basla").disabled = !(hakVar && misafirGecerli()); };
+  const misafirCiz = () => {
+    const M = SECIM.misafir, b = $("#misafirBox");
+    if (SECIM.kim !== "misafir") { b.innerHTML = ""; return ctaGuncelle(); }
+    b.innerHTML = `<div class="misafir stack" style="gap:10px"><div class="lab">${t("mf.baslik")}</div>
+      <label class="f">${t("mf.ad")}<input id="mAd" maxlength="30" value="${esc(M.ad)}" autocomplete="off"></label>
+      <label class="f">${t("mf.dt")}<input id="mDt" type="date" value="${esc(M.dt)}" max="${new Date().toISOString().slice(0, 10)}"></label>
+      <label class="f">${t("pf.yk")}<select id="mYk"><option value="">${t("pf.ykYok")}</option>${SIGNS.map(x => `<option value="${x[0]}" ${M.yk === x[0] ? "selected" : ""}>${burcAd(x[0])}</option>`).join("")}</select></label>
+      <div id="mBurc" class="row"></div>
+      <label class="check"><input type="checkbox" id="mOn" ${M.onay ? "checked" : ""}> <span class="small">${t("mf.onay")}</span></label>
+      <p class="small muted">${t("kim.not")}</p></div>`;
+    const g = () => { M.ad = $("#mAd").value.trim(); M.dt = $("#mDt").value; M.yk = $("#mYk").value; M.onay = $("#mOn").checked;
+      const bb = sunSign(M.dt); $("#mBurc").innerHTML = bb ? `<span class="chip on">${burcAd(bb)}</span><span class="chip el-${SIGN[bb].el}">${elAd(SIGN[bb].el)}</span>` : ""; ctaGuncelle(); };
+    $$("#misafirBox input,#misafirBox select").forEach(e => e.addEventListener("input", g)); g();
+  };
+  $$("#kim button").forEach(b => b.onclick = () => { SECIM.kim = b.dataset.k; $$("#kim button").forEach(x => x.classList.toggle("on", x === b)); misafirCiz(); });
+  misafirCiz();
+  const h = await hakDurumu(); if (h.bolge) { BOLGE = { izinli: false }; return go("bolge"); } const k = KATMANLAR[h.katman];
+  $("#quota").innerHTML = halka(h.gunKalan, h.gunluk, `${h.gunKalan}/${h.gunluk}`) + halka(h.haftaKalan, h.haftalik, `${h.haftaKalan}/${h.haftalik}`) + (h.derinAylik ? halka(h.derinKalan, h.derinAylik, `${h.derinKalan}/${h.derinAylik}`) : halka(0, 1, "–"));
+  const var_ = h.gunKalan > 0 && h.haftaKalan > 0; hakVar = var_; ctaGuncelle();
   if (k.okuma === "tam" && h.derinKalan > 0) {
     $("#derinBox").innerHTML = `<label class="check"><input type="checkbox" id="derin" ${SECIM.derin ? "checked" : ""}> ${t("ana.derinKullan", { n: h.derinKalan })}</label>`;
     $("#derin").onchange = e => SECIM.derin = e.target.checked;
   } else SECIM.derin = false;
-  $("#hakNot").innerHTML = var_ ? t("ana.hakNot", { okuma: okumaAd(k.okuma), katman: katmanAd(h.katman) }) : `${t(h.gunKalan <= 0 ? "ana.hakBittiGun" : "ana.hakBittiHafta")} <a href="#premium" style="color:var(--blue)">${t("ana.premiumIle")}</a>`;
-  $("#basla").onclick = () => okumaBaslat();
+  const okumaTuru = k.okuma === "derin" && h.derinKalan <= 0 ? "tam" : k.okuma;
+  $("#hakNot").innerHTML = var_ ? t("ana.hakNot", { okuma: okumaAd(okumaTuru), katman: katmanAd(h.katman) }) + (k.okuma === "derin" && h.derinKalan <= 0 ? `<br>${t("ana.derinSinir")}` : "")
+    : `${t(h.gunKalan <= 0 ? "ana.hakBittiGun" : "ana.hakBittiHafta")} ${h.katman !== "elmas" ? `<a href="#premium" style="color:var(--blue)">${t("ana.premiumIle")}</a>` : ""}`;
+  $("#basla").onclick = async () => { if (!misafirGecerli()) return; $("#basla").disabled = true; const ok = await reklamOncesi(h.katman); ctaGuncelle(); if (ok) okumaBaslat(); };
 }
 function histItem(r) {
   const d = new Date(r.tarih); const ks = r.koruyucu || baskinSet(r.picks.map(p => CARD[p.kod])).set;
   return `<a class="hitem" href="#sonuc-${r.id}" style="--c:${TEMA[ks].renk}">${koruyucuHTML(ks, "mini")}
-   <div class="stack" style="gap:2px;flex:1"><span class="t">${esc(r.baslik || t("genel.okuma"))}</span><span class="small muted">${d.toLocaleDateString(yerelKod(), { day: "numeric", month: "long" })} · ${okumaAd(r.mod)}</span></div>
+   <div class="stack" style="gap:2px;flex:1"><span class="t">${esc(r.baslik || t("genel.okuma"))}</span><span class="small muted">${d.toLocaleDateString(yerelKod(), { day: "numeric", month: "long" })} · ${okumaAd(r.mod)}${r.misafir ? ` · ${esc(t("mf.etiket", { ad: r.misafir.ad || t("mf.isimsiz") }))}` : ""}</span></div>
    <div class="thumbs">${r.picks.slice(0, 3).map(p => `<img src="${img(p.kod)}" alt="">`).join("")}</div></a>`;
 }
 
@@ -279,12 +312,15 @@ function okumaBaslat() {
 }
 
 async function acilis(picks) {
-  const p = store.profil(); const P = { ...p, niyet: SECIM.niyet, soru: SECIM.soru.trim() };
+  const p = store.profil(); const M = SECIM.kim === "misafir" ? SECIM.misafir : null;
+  const kisi = M ? { ad: M.ad, dt: M.dt, yk: M.yk, burc: sunSign(M.dt) } : p;
+  const P = { ...kisi, niyet: SECIM.niyet, soru: SECIM.soru.trim() };
   const k = KATMANLAR[store.katman()]; const mod = k.okuma === "tam" && SECIM.derin ? "derin" : k.okuma;
   const A = analyze(D, picks, P); const B = baskinSet(A.cs); koruyucuOnYukle(B.set);
   const At = analyze(DT, picks, P); const yerel = yerelIstem(aktifDil(), metinler(), kartCevirisi(), At.cs);
   const id = Date.now().toString(36);
-  store.addGecmis({ id, tarih: new Date().toISOString(), picks, profil: { burc: P.burc, yk: P.yk, niyet: P.niyet, soru: P.soru }, mod, metin: "", baslik: "", durum: "bekliyor", koruyucu: B.set, dil: aktifDil() });
+  store.addGecmis({ id, tarih: new Date().toISOString(), picks, profil: { burc: P.burc, yk: P.yk, niyet: P.niyet, soru: P.soru }, mod, metin: "", baslik: "", durum: "bekliyor", koruyucu: B.set, dil: aktifDil(), ...(M ? { misafir: { ad: M.ad, burc: P.burc } } : {}) });
+  if (M) SECIM.misafir = { ad: "", dt: "", yk: "", onay: false };
   // Yorum isteği açılış animasyonu başlamadan gönderilir; bekleme animasyonun arkasında kalır.
   CTL?.abort(); CTL = new AbortController(); const t0 = performance.now(); let tIlk = null;
   const LIVE = window.__LIVE = { id, text: "", bitti: false };
@@ -347,13 +383,14 @@ function viewSonuc(id, yenile) {
      <span class="small muted">${S.diger} · ${mitAd(B.set)}</span>
      <span class="small">${adet >= 2 && B.neden !== "kader" ? t("sn.cogunluk", { n: adet, set: S.diger }) : t(new Set(A.cs.map(c => c.set)).size === 6 ? "sn.altiFarkli" : "sn.esit", { kader: posAd(5) })}</span>
      <p class="soz">${korSoz(B.set)}</p></div></section>
-   <section class="stack"><div class="lab">${new Date(r.tarih).toLocaleString(yerelKod(), { dateStyle: "long", timeStyle: "short" })} · ${okumaAd(r.mod)}</div>
+   <section class="stack"><div class="lab">${new Date(r.tarih).toLocaleString(yerelKod(), { dateStyle: "long", timeStyle: "short" })} · ${okumaAd(r.mod)}${r.misafir ? ` · ${esc(t("mf.etiket", { ad: r.misafir.ad || t("mf.isimsiz") }))} · ${burcAd(r.misafir.burc)}` : ""}</div>
     <div class="strip">${A.cs.map((c, i) => `<button data-k="${c.kod}" data-i="${i}" style="--c:${TEMA[c.set].renk}"><span class="p">${posAd(i)}</span><span class="bx"><span class="t ${c.o === "Y" ? "y" : ""}">${face(c)}</span></span><span class="n">${esc(c.ad)}</span></button>`).join("")}</div></section>
    <section class="panel reading-text">
     <div class="oracle ${metin || r.durum !== "bekliyor" ? "hidden" : ""}" id="oracle">${W ? `<video src="${W}" autoplay muted loop playsinline></video>` : SIGIL("small spin")}<span id="obek">${t("bek.1")}</span></div>
     <div class="aiout" id="aiout">${metin ? (akiyor ? mdAkan(metin) : md(metin)) : ""}</div>
+    <div class="feragat ${r.metin ? "" : "hidden"}" id="feragat"><span>${t("sn.sorumluluk")}</span>${r.metin ? `<button class="bildir" id="bildir" ${r.bildirildi ? "disabled" : ""}>${t(r.bildirildi ? "bd.bildirildi" : "bd.dugme")}</button>` : ""}</div>
     ${r.durum === "hata" ? `<p class="note" style="border-color:var(--warn)">${esc(r.hata)}</p>` : ""}
-    ${r.sure ? `<p class="small muted" style="margin-top:12px">${t("sn.sure", { ilk: (r.sure.ilk / 1000 || 0).toFixed(1), top: (r.sure.toplam / 1000).toFixed(1) })}${r.demo ? " · demo" : ""}</p>` : ""}
+    ${DEV() && r.sure ? `<p class="small muted" style="margin-top:12px">${t("sn.sure", { ilk: (r.sure.ilk / 1000 || 0).toFixed(1), top: (r.sure.toplam / 1000).toFixed(1) })}${r.demo ? " · demo" : ""}</p>` : ""}
    </section>
    <section class="panel stack"><div class="lab">${t("sn.harita")}</div>
     <div class="row small">${Object.entries(A.elc).map(([e, n]) => `<span class="chip el-${e}">${elAd(e)} ${n}</span>`).join("")}<span class="chip">${t("sn.dikYat", { d: A.dik, y: 6 - A.dik })}</span></div>
@@ -362,6 +399,7 @@ function viewSonuc(id, yenile) {
     <p class="small muted">${t("sn.dokun")}</p></section>
    <a class="btn block" href="#ana">${t("sn.anaDon")}</a>`;
   $$(".strip button").forEach(b => b.onclick = () => kartDetay(b.dataset.k, A.cs[+b.dataset.i], +b.dataset.i));
+  $("#bildir")?.addEventListener("click", () => bildirPenceresi(r));
   if (!metin && r.durum === "bekliyor") { const L = BEKLEME(A); let n = 0; clearInterval(BEKLE); BEKLE = setInterval(() => { const e = $("#obek"); if (!e) return clearInterval(BEKLE); e.classList.remove("swap"); void e.offsetWidth; e.textContent = L[++n % L.length]; e.classList.add("swap"); }, 2200); }
   if (!yenile) { const g = $(".ghero .guard"); g && setTimeout(() => kivilcimEl(g, { n: 10, renk: T.rgba, hiz: 40, omur: 2 }), 350); }
   if (!metin && r.durum === "bekliyor") sis.surekli(0.35);
@@ -403,46 +441,156 @@ function viewGecmis() {
 }
 
 /* ---------- Profil ---------- */
+function hesapBolumu() {
+  if (!H.hesapAcik()) return "";
+  const u = H.kullanici();
+  if (!u) return `<section class="panel stack"><div class="lab">${t("hs.baslik")}</div><p class="small muted">${t("hs.aciklama")}</p>
+    <button class="btn primary" id="hsAc">${t("hs.girisAc")}</button></section>`;
+  return `<section class="panel stack"><div class="lab">${t("hs.baslik")}</div>
+    <div class="row" style="justify-content:space-between"><b style="word-break:break-all">${esc(u.email)}</b>${u.emailVerified ? `<span class="chip on">${t("hs.dogrulandi")}</span>` : ""}</div>
+    ${u.emailVerified ? "" : `<p class="small muted">${t("hs.dogrulanmadi")}</p><div class="row"><button class="btn" id="hsDgT">${t("hs.dogrulaTekrar")}</button><button class="btn ghost" id="hsDgY">${t("hs.dogruladim")}</button></div>`}
+    <button class="btn ghost" id="hsCik">${t("hs.cikis")}</button>
+    <button class="btn ghost small" id="hsSil">${t("hs.sil")}</button><div id="hsSilOnay"></div></section>`;
+}
+function hesapOlaylari() {
+  const hata = e => toast(t(H.hataAnahtari(e)));
+  $("#hsAc")?.addEventListener("click", () => hesapPenceresi("giris"));
+  $("#hsDgT")?.addEventListener("click", async () => { try { await H.dogrulamaGonder(aktifDil()); toast(t("hs.dogrulaGonderildi")); } catch (e) { hata(e); } });
+  $("#hsDgY")?.addEventListener("click", async () => { try { await H.dogrulamaYenile(); route(); } catch (e) { hata(e); } });
+  $("#hsCik")?.addEventListener("click", async () => { await H.cikisYap(); store.setKatman("ucretsiz"); toast(t("hs.cikildi")); route(); });
+  $("#hsSil")?.addEventListener("click", () => { $("#hsSilOnay").innerHTML = `<p class="small">${t("hs.silUyari")}</p><div class="row"><button class="btn primary" id="hsSilE">${t("pr.silEvet")}</button><button class="btn ghost" id="hsSilH">${t("genel.vazgec")}</button></div>`;
+    $("#hsSilE").onclick = async () => { try { await H.hesabiSil(); store.setKatman("ucretsiz"); toast(t("hs.silindi")); route(); } catch (e) { hata(e); } };
+    $("#hsSilH").onclick = () => $("#hsSilOnay").innerHTML = ""; });
+}
+// Giriş / kayıt penceresi
+function hesapPenceresi(tur = "giris", sonra) {
+  const kayit = tur === "kayit";
+  openDialog(`<div class="lab">${t("hs.baslik")}</div><h2>${t(kayit ? "hs.kayit" : "hs.giris")}</h2>`, `<form class="stack" id="hsF" style="gap:12px" novalidate>
+    <label class="f">${t("hs.eposta")}<input id="hsE" type="email" autocomplete="email" inputmode="email" required></label>
+    <label class="f">${t("hs.sifre")}<input id="hsP" type="password" autocomplete="${kayit ? "new-password" : "current-password"}" minlength="8" required>${kayit ? `<span class="small muted">${t("hs.sifreKural")}</span>` : ""}</label>
+    ${kayit ? `<label class="f">${t("hs.sifreTekrar")}<input id="hsP2" type="password" autocomplete="new-password" minlength="8" required></label>` : ""}
+    <label class="check"><input type="checkbox" id="hsH" checked> ${t("hs.hatirla")}</label>
+    <p class="small" id="hsMsg" role="alert" style="color:var(--warn)"></p>
+    <button class="btn primary block" id="hsOk">${t(kayit ? "hs.kayit" : "hs.giris")}</button>
+    ${kayit ? `<p class="small muted">${t("hs.kosul", { btn: `<button type="button" class="chip" id="hsKs" style="display:inline;padding:0 6px">${t("hk.kosullar")}</button>` })}</p>` : `<button type="button" class="btn ghost small" id="hsUn">${t("hs.unuttum")}</button>`}
+    <button type="button" class="btn ghost block" id="hsGec">${t(kayit ? "hs.girisGec" : "hs.kayitGec")}</button></form>`);
+  const msg = m => $("#hsMsg").textContent = m || "";
+  $("#hsGec").onclick = () => hesapPenceresi(kayit ? "giris" : "kayit", sonra);
+  $("#hsKs")?.addEventListener("click", () => hukukMetni("kosullar"));
+  $("#hsUn")?.addEventListener("click", async () => { const e = $("#hsE").value.trim(); if (!e) return msg(t("hs.hata.eposta"));
+    try { await H.sifreSifirla(e, aktifDil()); msg(""); toast(t("hs.sifirlaGonderildi")); } catch (er) { msg(t(H.hataAnahtari(er))); } });
+  $("#hsF").onsubmit = async ev => {
+    ev.preventDefault(); const e = $("#hsE").value.trim(), pw = $("#hsP").value, hatirla = $("#hsH").checked;
+    if (!/^\S+@\S+\.\S+$/.test(e)) return msg(t("hs.hata.eposta"));
+    if (pw.length < 8) return msg(t("hs.hata.zayif"));
+    if (kayit && pw !== $("#hsP2").value) return msg(t("hs.sifreUyusmuyor"));
+    $("#hsOk").disabled = true; msg("");
+    try {
+      if (kayit) { await H.kayitOl(e, pw, { dil: aktifDil(), hatirla }); toast(t("hs.olusturuldu")); }
+      else { await H.girisYap(e, pw, { dil: aktifDil(), hatirla }); toast(t("hs.girildi")); }
+      $("#dlg").close(); await hakDurumu(); sonra ? sonra() : route();
+    } catch (er) { msg(t(H.hataAnahtari(er))); $("#hsOk").disabled = false; }
+  };
+}
 function viewProfil(alt) {
   chrome(true, "profil");
   if (alt === "duzenle") return viewProfilForm(false);
   const p = store.profil(); const k = store.katman(); const ef = efektAyar();
+  const gelistirici = !DEV() ? "" : `<section class="panel stack"><div class="lab">${t("mod." + MODE)}</div>
+    ${MODE === "sunucu" ? `<label class="f">${t("pr.testKod")}<input id="kod" value="${esc(store.kod())}" placeholder="${t("pr.testKodYer")}"></label><button class="btn" id="kodK">${t("pr.kodUygula")}</button>`
+      : `<label class="f">${t("pr.testKatman", { mod: t("mod." + MODE) })}<select id="tk">${Object.keys(KATMANLAR).map(id => `<option value="${id}" ${id === k ? "selected" : ""}>${katmanAd(id)}</option>`).join("")}</select></label>`}
+    <button class="btn ghost" id="hakSifir">${t("pr.hakSifirla")}</button></section>`;
   $("#view").innerHTML = `<h2>${t("pr.baslik")}</h2>
    <section class="panel stack"><div class="row" style="justify-content:space-between"><div class="stack" style="gap:2px"><b>${esc(p.ad || t("pr.isimsiz"))}</b><span class="small muted">${burcAd(p.burc)}${p.yk ? " · " + t("ana.yukselen", { b: burcAd(p.yk) }) : ""}</span></div><a class="btn" href="#profil-duzenle">${t("pr.duzenle")}</a></div></section>
+   <a class="panel rehberkart" href="#rehber">${SIGIL("small")}<div class="stack" style="gap:2px"><b>${t("pr.rehber")}</b><span class="small muted">${t("pr.rehberAlt")}</span></div><span aria-hidden="true">›</span></a>
+   ${hesapBolumu()}
+   <section class="panel stack"><div class="lab">${t("pr.uyelik")}</div><div class="row" style="justify-content:space-between"><b>${katmanAd(k)}</b><a class="btn" href="#premium">${t("pr.planlar")}</a></div></section>
    <section class="panel stack"><div class="lab">${t("pr.dil")}</div><div class="row" style="justify-content:space-between"><b>${DILLER[aktifDil()].ad}</b><button class="btn" id="dilB">${t("pr.dilDegistir")}</button></div>
     <p class="small muted">${t("pr.dilNot")}</p></section>
-   <section class="panel stack"><div class="lab">${t("pr.uyelik")}</div><div class="row" style="justify-content:space-between"><b>${katmanAd(k)}</b><a class="btn" href="#premium">${t("pr.planlar")}</a></div>
-    ${MODE === "sunucu" ? `<label class="f">${t("pr.testKod")}<input id="kod" value="${esc(store.kod())}" placeholder="${t("pr.testKodYer")}"></label><button class="btn" id="kodK">${t("pr.kodUygula")}</button>`
-      : `<label class="f">${t("pr.testKatman", { mod: t("mod." + MODE) })}<select id="tk">${Object.keys(KATMANLAR).map(id => `<option value="${id}" ${id === k ? "selected" : ""}>${katmanAd(id)}</option>`).join("")}</select></label>
-         <button class="btn ghost" id="hakSifir">${t("pr.hakSifirla")}</button>`}</section>
    <section class="panel stack"><div class="lab">${t("pr.sesTitresim")}</div>
     <label class="check"><input type="checkbox" id="efS" ${ef.ses ? "checked" : ""}> ${t("pr.ses")}</label>
     <label class="check"><input type="checkbox" id="efT" ${ef.titresim ? "checked" : ""}> ${t("pr.titresim")}</label></section>
-   <section class="panel stack"><div class="lab">${t("pr.gizlilik")}</div><button class="btn ghost" id="kv">${t("gz.baslik")}</button>
+   <section class="panel stack"><div class="lab">${t("pr.hukuk")}</div>
+    ${["aydinlatma", "gizlilik", "kosullar"].map(x => `<button class="btn ghost" data-hk="${x}">${t("hk." + x)}</button>`).join("")}
     <button class="btn ghost" id="sil">${t("pr.sil")}</button><div id="silOnay"></div></section>
-   <p class="small muted" style="text-align:center">${esc(CONFIG.APP_NAME)} · ${t("pr.surum", { v: CONFIG.VERSION })} · ${t("mod." + MODE)}</p>`;
+   ${gelistirici}
+   <p class="small muted" style="text-align:center">${esc(CONFIG.APP_NAME)} · ${t("pr.surum", { v: CONFIG.VERSION })}</p>`;
   $("#dilB").onclick = dilSecici;
-  $("#kv").onclick = aydinlatma;
+  $$("[data-hk]").forEach(b => b.onclick = () => hukukMetni(b.dataset.hk));
+  hesapOlaylari();
   $("#efS").onchange = e => { setEfekt("ses", e.target.checked); if (e.target.checked) ses.tamam(); };
   $("#efT").onchange = e => { setEfekt("titresim", e.target.checked); if (e.target.checked) titres(30); };
   $("#tk")?.addEventListener("change", e => { store.setKatman(e.target.value); chrome(true, "profil"); toast(t("pr.katmanSecildi", { k: katmanAd(e.target.value) })); });
   $("#hakSifir")?.addEventListener("click", () => { store.setHak({}); toast(t("pr.hakSifirlandi")); });
   $("#kodK")?.addEventListener("click", async () => { store.setKod($("#kod").value.trim()); const h = await hakDurumu(); chrome(true, "profil"); toast(t("pr.katman", { k: katmanAd(h.katman) })); });
   $("#sil").onclick = () => { $("#silOnay").innerHTML = `<p class="small">${t("pr.silUyari")}</p><div class="row"><button class="btn primary" id="silE">${t("pr.silEvet")}</button><button class="btn ghost" id="silH">${t("genel.vazgec")}</button></div>`;
-    $("#silE").onclick = () => { store.hepsiniSil(); go("hosgeldin"); }; $("#silH").onclick = () => $("#silOnay").innerHTML = ""; };
+    $("#silE").onclick = async () => { await H.cikisYap().catch(() => {}); store.hepsiniSil(); go("hosgeldin"); }; $("#silH").onclick = () => $("#silOnay").innerHTML = ""; };
 }
 
-/* ---------- Premium ---------- */
-// Türkiye fiyatları (KDV dahil). Diğer ülkelerde fiyat Google Play'den, yerel para birimiyle gelecek.
-const FIYAT_TR = { premium: "79,99 TL", premiumPlus: "149,99 TL" };
+/* ---------- Rehber ---------- */
+function viewRehber() {
+  chrome(true, "profil");
+  const bolum = i => `<section class="rh"><div class="rhno" style="--c:${TEMA["S" + (((i - 1) % 6) + 1)].renk}">${i}</div><div class="stack" style="gap:6px"><h3>${t(`rh.${i}.b`)}</h3><p class="read">${t(`rh.${i}.m`)}</p></div></section>`;
+  $("#view").innerHTML = `<section class="rhbas">${SIGIL("big")}<div class="lab">${t("rh.etiket")}</div><h2 class="glow">${t("rh.baslik")}</h2><p class="read soz">${t("rh.giris")}</p></section>
+   <div class="stack" style="gap:18px">${Array.from({ length: 9 }, (_, i) => bolum(i + 1)).join("")}</div>
+   <div class="setline" style="justify-content:center;margin:8px 0">${D.sets.map(s => `<span style="--c:${TEMA[s.id].renk}">${s.diger}</span>`).join("")}</div>
+   <a class="btn block" href="#profil">${t("genel.kapat")}</a>`;
+}
+
+/* ---------- Planlar ---------- */
 function viewPremium() {
   chrome(true, "profil"); const k = store.katman();
   const fiyat = id => id === "ucretsiz" ? t("pm.ucretsiz") : aktifDil() === "tr" ? t("pm.ay", { f: FIYAT_TR[id] }) : t("pm.playFiyat");
   const tier = (id, best) => `<div class="tier ${best ? "best" : ""}"><div class="row" style="justify-content:space-between"><h3>${katmanAd(id)}</h3>${k === id ? `<span class="chip on">${t("pm.aktif")}</span>` : best ? `<span class="chip on">${t("pm.onerilen")}</span>` : ""}</div>
     <div class="pr">${fiyat(id)}</div><ul>${t("pm.oz." + id).split("|").map(o => `<li>${o}</li>`).join("")}</ul>
-    ${id !== "ucretsiz" && k !== id ? `<button class="btn ${best ? "primary" : ""} block" ${CONFIG.STORE_READY ? "" : "disabled"}>${CONFIG.STORE_READY ? t("pm.aboneOl") : t("pm.yakinda")}</button>` : ""}</div>`;
-  $("#view").innerHTML = `<h2>${t("pm.baslik")}</h2>${tier("ucretsiz")}${tier("premium", true)}${tier("premiumPlus")}
+    ${id !== "ucretsiz" && k !== id && CONFIG.STORE_READY ? `<button class="btn ${best ? "primary" : ""} block" data-abone="${id}">${t("pm.aboneOl")}</button>` : ""}</div>`;
+  $("#view").innerHTML = `<h2>${t("pm.baslik")}</h2>${tier("ucretsiz")}${tier("gumus")}${tier("altin", true)}${tier("elmas")}
    <p class="small muted">${t(aktifDil() === "tr" ? "pm.notTR" : "pm.not")}</p>`;
+  $$("[data-abone]").forEach(b => b.onclick = () => {
+    if (H.hesapAcik() && !H.kullanici()) { toast(t("pm.hesapGerek")); return hesapPenceresi("giris", () => go("premium")); }
+    // Google Play satın alma akışı Android sürümünde window.LogosOdeme.satinAl(planId) ile bağlanacak
+    window.LogosOdeme?.satinAl?.(b.dataset.abone);
+  });
+}
+
+/* ---------- Bölge dışı ---------- */
+function viewBolge() {
+  chrome(false);
+  $("#view").innerHTML = `<section class="intro bolge">${SIGIL("big")}
+    <h1 class="glow">${esc(CONFIG.APP_NAME)}</h1>
+    <h2>${t("bl.baslik")}</h2><p class="muted" style="max-width:36ch">${t("bl.metin")}</p>
+    <form class="stack" id="blF" style="gap:12px;width:100%;max-width:340px;text-align:start" novalidate>
+      <label class="f">${t("hs.eposta")}<input id="blE" type="email" autocomplete="email" inputmode="email" required></label>
+      <label class="check"><input type="checkbox" id="blO"> <span class="small">${t("bl.onay")}</span></label>
+      <p class="small" id="blM" role="alert" style="color:var(--warn)"></p>
+      <button class="btn primary block" id="blG" disabled>${t("bl.gonder")}</button>
+      <p class="small muted">${t("bl.not", { btn: `<button type="button" class="chip" id="blK" style="display:inline;padding:0 6px">${t("hk.aydinlatma")}</button>` })}</p>
+    </form>
+    <button class="chip dilchip" id="blD">🌐 ${DILLER[aktifDil()].ad}</button></section>`;
+  const kontrol = () => $("#blG").disabled = !($("#blO").checked && /^\S+@\S+\.\S+$/.test($("#blE").value.trim()));
+  $("#blE").oninput = kontrol; $("#blO").onchange = kontrol;
+  $("#blK").onclick = () => hukukMetni("aydinlatma"); $("#blD").onclick = dilSecici;
+  $("#blF").onsubmit = async e => { e.preventDefault(); $("#blG").disabled = true;
+    const r = await beklemeKaydet($("#blE").value.trim(), aktifDil()).catch(() => ({ tamam: false }));
+    if (r.tamam) { $("#blF").innerHTML = `<p class="note">${t("bl.tesekkur")}</p>`; ses.tamam(); }
+    else { $("#blM").textContent = t(r.kod === "cok_istek" ? "bl.cokIstek" : "bl.hata"); kontrol(); } };
+}
+
+/* ---------- İçerik bildirimi (Google Play yapay zekâ içerik politikası) ---------- */
+function bildirPenceresi(r) {
+  const N = ["uygunsuz", "yanlis", "zararli", "diger"]; let secim = null;
+  openDialog(`<div class="lab">${t("bd.etiket")}</div><h2>${t("bd.baslik")}</h2>`, `<div class="stack" style="gap:12px">
+    <p class="small muted">${t("bd.aciklama")}</p>
+    <div class="row" id="bdN">${N.map(n => `<button type="button" class="chip" data-n="${n}">${t("bd.n." + n)}</button>`).join("")}</div>
+    <label class="f">${t("bd.not")}<textarea id="bdT" maxlength="400" rows="3"></textarea></label>
+    <button class="btn primary block" id="bdG" disabled>${t("bd.gonder")}</button></div>`);
+  $$("#bdN button").forEach(b => b.onclick = () => { secim = b.dataset.n; $$("#bdN button").forEach(x => x.classList.toggle("on", x === b)); $("#bdG").disabled = false; });
+  $("#bdG").onclick = async () => {
+    $("#bdG").disabled = true;
+    const s = await bildirGonder({ okuma: r.id, neden: secim, not: $("#bdT").value.trim(), metin: r.metin, picks: r.picks, dil: r.dil, mod: r.mod }).catch(() => ({ tamam: false }));
+    if (s.tamam) { store.updateGecmis(r.id, { bildirildi: true }); $("#dlg").close(); toast(t("bd.tesekkur")); const b = $("#bildir"); if (b) { b.textContent = t("bd.bildirildi"); b.disabled = true; } }
+    else { toast(t("bd.hata")); $("#bdG").disabled = false; }
+  };
 }
 
 /* ---------- Başlat ---------- */
@@ -455,6 +603,9 @@ async function init() {
   $("#brand").innerHTML = `${CONFIG.MEDIA.logo ? `<img src="${CONFIG.MEDIA.logo}" alt="">` : SIGIL("logo")}<span>${esc(CONFIG.APP_NAME)}</span>`;
   setBack();
   MODE = await calismaModu();
+  BOLGE = await bolgeDurumu();
+  await Promise.race([H.hesapHazir(), sleep(4000)]);
+  H.hesapDinle(() => { if (/^#(profil|premium)/.test(location.hash) && !$("#dlg").open) route(); });
   route();
   if ("serviceWorker" in navigator && location.protocol === "https:" && !window.claude) navigator.serviceWorker.register("sw.js").catch(() => {});
 }

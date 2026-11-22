@@ -1,3 +1,4 @@
+import { katmanId } from "../shared/katmanlar.js";
 // Cihazda saklanan veriler: profil, okuma geçmişi, yerel hak sayacı.
 // Not: Bu veriler yalnızca bu cihazdadır. Uygulama silinirse ya da tarayıcı verisi temizlenirse kaybolur.
 
@@ -12,7 +13,7 @@ export const store = {
   addGecmis: r => { const g = get(K.gecmis, []); g.unshift(r); set(K.gecmis, g.slice(0, 40)); },
   updateGecmis: (id, patch) => { const g = get(K.gecmis, []); const i = g.findIndex(x => x.id === id); if (i >= 0) { g[i] = { ...g[i], ...patch }; set(K.gecmis, g); } },
   cihaz: () => { let c = get(K.cihaz, null); if (!c) { c = (crypto.randomUUID?.() || String(Math.random()).slice(2) + Date.now()); set(K.cihaz, c); } return c; },
-  katman: () => get(K.katman, "ucretsiz"),
+  katman: () => katmanId(get(K.katman, "ucretsiz")),
   setKatman: k => set(K.katman, k),
   kod: () => get(K.kod, ""),
   setKod: k => set(K.kod, k),

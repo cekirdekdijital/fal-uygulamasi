@@ -8,6 +8,16 @@ import { buildPrompt } from "../shared/prompt.js";
 import { POS } from "../shared/motor.js";
 import { store, zamanAnahtarlari } from "./store.js";
 import { t, tv } from "./i18n.js";
+import { kimlikBelgesi } from "./hesap.js";
+
+const baslik = async (ek = {}) => { const k = await kimlikBelgesi(); return k ? { ...ek, authorization: "Bearer " + k } : ek; };
+
+// Ücretsiz planda okuma öncesi ödüllü reklam. Android sürümünde reklam eklentisi window.LogosReklam.goster() sağlar.
+// Eklenti yoksa (web sürümü) okuma doğrudan açılır.
+export async function reklamOncesi(katman) {
+  if (!KATMANLAR[katman]?.reklam || !window.LogosReklam?.goster) return true;
+  try { return !!(await window.LogosReklam.goster()); } catch { return false; }
+}
 
 let samplePromise = null;
 function getSample() {
@@ -17,6 +27,25 @@ function getSample() {
 export async function calismaModu() {
   if (CONFIG.API_URL) return "sunucu";
   return (await getSample()) ? "onizleme" : "demo";
+}
+
+/* ---------- Bölge, bekleme listesi, içerik bildirimi (yalnızca sunucu modunda) ---------- */
+// Hizmet yalnızca izin verilen ülkelerde (şimdilik Türkiye) açıktır. Geliştirici görünümünde ?bolge=dis ile ekran denenebilir.
+export async function bolgeDurumu() {
+  if (CONFIG.GELISTIRICI && new URLSearchParams(location.search).get("bolge") === "dis") return { izinli: false, ulke: "DE", deneme: true };
+  if ((await calismaModu()) !== "sunucu") return { izinli: true };
+  try { const r = await fetch(`${CONFIG.API_URL}/api/bolge`); if (r.ok) return await r.json(); } catch {}
+  return { izinli: true, bilinmiyor: true }; // bağlantı yoksa engelleme; sunucu her istekte ayrıca denetler
+}
+export async function beklemeKaydet(eposta, dil) {
+  if ((await calismaModu()) !== "sunucu") return { tamam: true, deneme: true };
+  const r = await fetch(`${CONFIG.API_URL}/api/bekleme`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ eposta, dil, onay: true, onaySurum: "1" }) });
+  return r.ok ? { tamam: true } : { tamam: false, kod: (await r.json().catch(() => ({}))).kod || "hata" };
+}
+export async function bildirGonder(kayit) {
+  if ((await calismaModu()) !== "sunucu") return { tamam: true, deneme: true };
+  const r = await fetch(`${CONFIG.API_URL}/api/bildir`, { method: "POST", headers: await baslik({ "content-type": "application/json" }), body: JSON.stringify({ cihaz: store.cihaz(), ...kayit }) });
+  return r.ok ? { tamam: true } : { tamam: false };
 }
 
 /* ---------- Hak sayacı (sunucu yoksa cihazda tutulur) ---------- */
@@ -36,8 +65,9 @@ export async function hakDurumu() {
   const mod = await calismaModu();
   if (mod === "sunucu") {
     try {
-      const r = await fetch(`${CONFIG.API_URL}/api/hak?cihaz=${encodeURIComponent(store.cihaz())}&kod=${encodeURIComponent(store.kod())}`);
+      const r = await fetch(`${CONFIG.API_URL}/api/hak?cihaz=${encodeURIComponent(store.cihaz())}&kod=${encodeURIComponent(store.kod())}`, { headers: await baslik() });
       if (r.ok) { const j = await r.json(); store.setKatman(j.katman); return j; }
+      if (r.status === 451) return { ...yerelHak("ucretsiz"), gunKalan: 0, katman: store.katman(), bolge: true };
     } catch {}
     return { ...yerelHak(store.katman()), katman: store.katman(), cevrimdisi: true };
   }
@@ -54,7 +84,7 @@ export async function okumaIste({ D, A, Dy = D, Ay = A, dil = "tr", yerel = null
 
   if (calisma === "sunucu") {
     const r = await fetch(`${CONFIG.API_URL}/api/okuma`, {
-      method: "POST", signal, headers: { "content-type": "application/json" },
+      method: "POST", signal, headers: await baslik({ "content-type": "application/json" }),
       body: JSON.stringify({ cihaz: store.cihaz(), kod: store.kod(), profil: P, picks, mod, dil }),
     });
     if (!r.ok) { let j = {}; try { j = await r.json(); } catch {} throw new OkumaHatasi(j.kod || "sunucu", j.kod && t("hata." + j.kod) !== "hata." + j.kod ? t("hata." + j.kod) : j.mesaj || t("hata.sunucu")); }
@@ -65,7 +95,8 @@ export async function okumaIste({ D, A, Dy = D, Ay = A, dil = "tr", yerel = null
 
   const kalan = yerelHak(store.katman());
   if (kalan.gunKalan <= 0 || kalan.haftaKalan <= 0) throw new OkumaHatasi("hak_bitti", t("hata.hak_bitti"));
-  if (mod === "derin" && store.katman() !== "premiumPlus" && kalan.derinKalan <= 0) mod = KATMANLAR[store.katman()].okuma;
+  const kk = KATMANLAR[store.katman()];
+  if (mod === "derin" && kalan.derinKalan <= 0) mod = kk.okuma === "derin" ? "tam" : kk.okuma;
 
   if (calisma === "onizleme") {
     const sample = await getSample(); const pr = buildPrompt(D, A, P, mod, yerel);
@@ -97,6 +128,6 @@ export function demoYorum(D, A, mod) {
       metin ? `${metin} ${c.mitDers ? t("demo.mit", { m: mit(c.set), f: c.mitFigur[0], d: c.mitDers }) : ""}` : t("demo.kisaKart", { a: anahtar, m: mit(c.set), f: c.mitFigur[0] }));
   });
   if (mod !== "kisa" && A.kopru.length) L.push(`## ${t("istem.kopru")}`, A.kopru.map(k => `${tv("motif", k.m)}: ${k.l.map(c => c.ad).join(", ")}.`).join(" "));
-  L.push(`## ${t("istem.kapanis")}`, t("demo.kapanis", { a: A.cs[0].ad, b: A.cs[5].ad, p1: pos(0), p2: pos(5) }), `_${t("istem.uyari")}_`);
+  L.push(`## ${t("istem.kapanis")}`, t("demo.kapanis", { a: A.cs[0].ad, b: A.cs[5].ad, p1: pos(0), p2: pos(5) }));
   return L.join("\n\n");
 }
