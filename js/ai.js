@@ -89,7 +89,9 @@ export async function okumaIste({ D, A, Dy = D, Ay = A, dil = "tr", yerel = null
     });
     if (!r.ok) { let j = {}; try { j = await r.json(); } catch {} throw new OkumaHatasi(j.kod || "sunucu", j.kod && t("hata." + j.kod) !== "hata." + j.kod ? t("hata." + j.kod) : j.mesaj || t("hata.sunucu")); }
     const reader = r.body.getReader(); const dec = new TextDecoder(); let text = "";
-    for (;;) { const { done, value } = await reader.read(); if (done) break; text += dec.decode(value, { stream: true }); onText(text); }
+    for (;;) { const { done, value } = await reader.read(); if (done) break; text += dec.decode(value, { stream: true }); if (!text.includes("\u0001")) onText(text); }
+    const hi = text.indexOf("\u0001HATA:");
+    if (hi >= 0 || !text.trim()) { const neden = hi >= 0 ? text.slice(hi + 6).trim() : "bos"; console.warn("Logos yorum hatası:", neden); throw new OkumaHatasi("yz_hata", `${t("hata.yz_hata")} (${neden})`); }
     return { text, mod: r.headers.get("x-mod") || mod };
   }
 
