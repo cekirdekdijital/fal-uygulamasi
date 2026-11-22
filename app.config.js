@@ -60,5 +60,5 @@ export const CONFIG = {
   STORE_READY: false,
 
   // Sürüm. Dosyaları güncellediğinizde bu sayıyı artırın; telefonlar yeni sürümü indirir.
-  VERSION: "0.7.0",
+  VERSION: "0.8.0",
 };
