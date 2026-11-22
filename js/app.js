@@ -540,12 +540,13 @@ function viewRehber() {
 /* ---------- Planlar ---------- */
 function viewPremium() {
   chrome(true, "profil"); const k = store.katman();
-  const fiyat = id => id === "ucretsiz" ? t("pm.ucretsiz") : aktifDil() === "tr" ? t("pm.ay", { f: FIYAT_TR[id] }) : t("pm.playFiyat");
+  // İlk aşamada hizmet yalnızca Türkiye'de: tüm dillerde TL fiyat (KDV dahil) gösterilir
+  const fiyat = id => id === "ucretsiz" ? t("pm.ucretsiz") : t("pm.ay", { f: FIYAT_TR[id] });
   const tier = (id, best) => `<div class="tier ${best ? "best" : ""}"><div class="row" style="justify-content:space-between"><h3>${katmanAd(id)}</h3>${k === id ? `<span class="chip on">${t("pm.aktif")}</span>` : best ? `<span class="chip on">${t("pm.onerilen")}</span>` : ""}</div>
     <div class="pr">${fiyat(id)}</div><ul>${t("pm.oz." + id).split("|").map(o => `<li>${o}</li>`).join("")}</ul>
     ${id !== "ucretsiz" && k !== id && CONFIG.STORE_READY ? `<button class="btn ${best ? "primary" : ""} block" data-abone="${id}">${t("pm.aboneOl")}</button>` : ""}</div>`;
   $("#view").innerHTML = `<h2>${t("pm.baslik")}</h2>${tier("ucretsiz")}${tier("gumus")}${tier("altin", true)}${tier("elmas")}
-   <p class="small muted">${t(aktifDil() === "tr" ? "pm.notTR" : "pm.not")}</p>`;
+   <p class="small muted">${t("pm.notTR")}</p>`;
   $$("[data-abone]").forEach(b => b.onclick = () => {
     if (H.hesapAcik() && !H.kullanici()) { toast(t("pm.hesapGerek")); return hesapPenceresi("giris", () => go("premium")); }
     // Google Play satın alma akışı Android sürümünde window.LogosOdeme.satinAl(planId) ile bağlanacak
