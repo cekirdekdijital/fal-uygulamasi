@@ -6,10 +6,10 @@
 export const DILLER = {
   tr: { ad: "Türkçe",                     yerel: "tr-TR", yazi: "latin", hazir: true,  istem: "Türkçe" },
   en: { ad: "English",                    yerel: "en-GB", yazi: "latin", hazir: true,  istem: "English" },
-  de: { ad: "Deutsch",                    yerel: "de-DE", yazi: "latin", hazir: false, istem: "Deutsch" },
+  de: { ad: "Deutsch",                    yerel: "de-DE", yazi: "latin", hazir: true , istem: "Deutsch" },
   es: { ad: "Español",                    yerel: "es-ES", yazi: "latin", hazir: false, istem: "Español" },
   fr: { ad: "Français",                   yerel: "fr-FR", yazi: "latin", hazir: false, istem: "Français" },
-  ru: { ad: "Русский",                    yerel: "ru-RU", yazi: "kiril", hazir: false, istem: "Русский" },
+  ru: { ad: "Русский",                    yerel: "ru-RU", yazi: "kiril", hazir: true , istem: "Русский" },
   ar: { ad: "العربية",                    yerel: "ar",    yazi: "arap",  hazir: true,  istem: "العربية الفصحى", yon: "rtl",
         istemNot: "Hitapta tekil eril genel kullanımı (أنت) kullan; arayüzle uyumlu kalsın. Rakamları 1, 2, 3 biçiminde yaz." },
   ja: { ad: "日本語",                      yerel: "ja-JP", yazi: "ja",    hazir: false, istem: "日本語" },
