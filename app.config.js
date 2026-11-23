@@ -12,7 +12,7 @@ export const CONFIG = {
   // Sunucu (Cloudflare Worker) adresi. Boş bırakılırsa uygulama "demo modu"nda çalışır:
   // yorumlar yapay zekâ olmadan, kart verisinden örnek olarak üretilir.
   // Örnek: "https://fal-sunucu.KULLANICIADI.workers.dev"
-  API_URL: "https://fal-sunucu.cekirdekdijital.workers.dev",
+  API_URL: "https://api.logosmyths.com",
 
   // Kart görsellerinin yolu. {kod} yerine kart kodu (S1-K1 gibi) gelir.
   // Görselleri PNG olarak koyacaksanız ".webp" yerine ".png" yazın.
@@ -60,5 +60,5 @@ export const CONFIG = {
   STORE_READY: false,
 
   // Sürüm. Dosyaları güncellediğinizde bu sayıyı artırın; telefonlar yeni sürümü indirir.
-  VERSION: "0.9.3",
+  VERSION: "0.9.4",
 };
