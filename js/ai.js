@@ -10,7 +10,7 @@ import { store, zamanAnahtarlari, gelistiriciAcik } from "./store.js";
 import { t, tv } from "./i18n.js";
 import { kimlikBelgesi } from "./hesap.js";
 
-const baslik = async (ek = {}) => { const k = await kimlikBelgesi(); return k ? { ...ek, authorization: "Bearer " + k } : ek; };
+const baslik = async (ek = {}) => { const k = await kimlikBelgesi(); const h = { ...ek, ...(store.kod() ? { "x-logos-kod": store.kod() } : {}) }; return k ? { ...h, authorization: "Bearer " + k } : h; };
 
 // Ücretsiz planda okuma öncesi ödüllü reklam. Android sürümünde reklam eklentisi window.LogosReklam.goster() sağlar.
 // Eklenti yoksa (web sürümü) okuma doğrudan açılır.
@@ -34,7 +34,7 @@ export async function calismaModu() {
 export async function bolgeDurumu() {
   if (gelistiriciAcik(CONFIG.GELISTIRICI) && new URLSearchParams(location.search).get("bolge") === "dis") return { izinli: false, ulke: "DE", deneme: true };
   if ((await calismaModu()) !== "sunucu") return { izinli: true };
-  try { const r = await fetch(`${CONFIG.API_URL}/api/bolge`); if (r.ok) return await r.json(); } catch {}
+  try { const r = await fetch(`${CONFIG.API_URL}/api/bolge`, { headers: store.kod() ? { "x-logos-kod": store.kod() } : {} }); if (r.ok) return await r.json(); } catch {}
   return { izinli: true, bilinmiyor: true }; // bağlantı yoksa engelleme; sunucu her istekte ayrıca denetler
 }
 export async function beklemeKaydet(eposta, dil) {

@@ -597,7 +597,10 @@ function viewBolge() {
       <button class="btn primary block" id="blG" disabled>${t("bl.gonder")}</button>
       <p class="small muted">${t("bl.not", { btn: `<button type="button" class="chip" id="blK" style="display:inline;padding:0 6px">${t("hk.aydinlatma")}</button>` })}</p>
     </form>
+    <details class="hediye" style="max-width:340px;width:100%;text-align:start"><summary class="small">${t("bl.kodVar")}</summary>
+      <div class="row" style="gap:8px;margin-top:8px"><input id="blKod" autocomplete="off" autocapitalize="characters" spellcheck="false" style="flex:1;min-width:0"><button class="btn" id="blKodB">${t("hd.btn")}</button></div></details>
     <button class="chip dilchip" id="blD">🌐 ${DILLER[aktifDil()].ad}</button></section>`;
+  $("#blKodB").onclick = () => { const k = $("#blKod").value.trim(); if (!k) return; store.setKod(k); location.reload(); };
   const kontrol = () => $("#blG").disabled = !($("#blO").checked && /^\S+@\S+\.\S+$/.test($("#blE").value.trim()));
   $("#blE").oninput = kontrol; $("#blO").onchange = kontrol;
   $("#blK").onclick = () => hukukMetni("aydinlatma"); $("#blD").onclick = dilSecici;
@@ -638,6 +641,18 @@ async function init() {
   await Promise.race([H.hesapHazir(), sleep(4000)]);
   H.hesapDinle(() => { if (/^#(profil|premium)/.test(location.hash) && !$("#dlg").open) route(); });
   route();
-  if ("serviceWorker" in navigator && location.protocol === "https:" && !window.claude) navigator.serviceWorker.register("sw.js").catch(() => {});
+  if ("serviceWorker" in navigator && location.protocol === "https:" && !window.claude && !window.Capacitor?.isNativePlatform?.()) { // Android uygulamasında dosyalar pakette, önbellek gerekmez
+    // Yeni sürüm yüklendiğinde uygulama kendini bir kez yeniler (okuma sürüyorsa beklemez, bir sonraki açılışa kalır).
+    // Veriler (profil, geçmiş, kodlar, geliştirici görünümü) cihazda kalır; güncelleme bunları silmez.
+    let vardi = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!vardi) { vardi = true; return; }
+      if (window.__LIVE && !window.__LIVE.bitti) return;
+      location.reload();
+    });
+    navigator.serviceWorker.register("sw.js").then(reg => {
+      document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") reg.update().catch(() => {}); });
+    }).catch(() => {});
+  }
 }
 init();
