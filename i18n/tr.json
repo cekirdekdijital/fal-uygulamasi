@@ -355,5 +355,6 @@
 "hd.tamam": "{k} planın açıldı. {t} tarihine kadar seninle.",
 "hd.gecersiz": "Bu kod geçersiz ya da daha önce kullanılmış.",
 "hd.bitis": "{t} tarihine kadar",
-"hd.baglanti": "Kod denetlenemedi. İnternet bağlantını kontrol edip yeniden dene."
+"hd.baglanti": "Kod denetlenemedi. İnternet bağlantını kontrol edip yeniden dene.",
+"bl.kodVar": "Erişim kodun var mı?"
 }

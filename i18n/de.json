@@ -381,5 +381,6 @@
 "hd.tamam": "Dein {k}-Plan ist freigeschaltet. Er begleitet dich bis {t}.",
 "hd.gecersiz": "Dieser Code ist ungültig oder wurde bereits verwendet.",
 "hd.bitis": "Bis {t}",
-"hd.baglanti": "Der Code konnte nicht geprüft werden. Prüfe deine Internetverbindung und versuche es erneut."
+"hd.baglanti": "Der Code konnte nicht geprüft werden. Prüfe deine Internetverbindung und versuche es erneut.",
+"bl.kodVar": "Hast du einen Zugangscode?"
 }
