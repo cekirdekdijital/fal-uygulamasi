@@ -56,9 +56,13 @@ export const CONFIG = {
   GELISTIRICI: false,
 
   // Test için premium kodları sunucuda tanımlanır (README'ye bakın).
-  // Uygulama mağazası satın alması bir sonraki aşamada eklenecek.
-  STORE_READY: false,
+  // Google Play abonelikleri (yalnızca Android uygulamasında etkin olur; web'de satın alma yoktur).
+  STORE_READY: true,
+
+  // AdMob ödüllü reklam (yalnızca Android, Ücretsiz plan). odulluId boşsa reklam gösterilmez.
+  // uygulamaId Android projesinde strings.xml > admob_app_id içine de yazılır.
+  ADMOB: { uygulamaId: "ca-app-pub-6704221376566982~2598583371", odulluId: "ca-app-pub-6704221376566982/7507742234", test: false },
 
   // Sürüm. Dosyaları güncellediğinizde bu sayıyı artırın; telefonlar yeni sürümü indirir.
-  VERSION: "0.9.7",
+  VERSION: "0.9.8",
 };

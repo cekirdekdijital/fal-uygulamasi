@@ -19,6 +19,12 @@ export const katmanId = k => KATMANLAR[k] ? k : ESKI[k] || "ucretsiz";
 // Türkiye fiyatları (KDV dahil, aylık). Diğer ülkelerde fiyat Google Play'den, yerel para birimiyle gelir.
 export const FIYAT_TR = { gumus: "124,99 TL", altin: "199,99 TL", elmas: "249,99 TL" };
 
+// Google Play abonelik ürünleri: ürün kimliği → katman. Her ürünün tek temel planı "aylik" (otomatik yenilenen, aylık).
+// Play Console > Para kazanın > Abonelikler bölümünde aynı kimliklerle oluşturulmalıdır.
+export const PLAY_URUN = { logos_gumus: "gumus", logos_altin: "altin", logos_elmas: "elmas" };
+export const PLAY_PLAN = "aylik";
+export const playUrunu = katman => Object.keys(PLAY_URUN).find(u => PLAY_URUN[u] === katman);
+
 // Okuma türleri: hangi model, en fazla kaç token çıktı, hedef uzunluk.
 // Claude 5.5 modelleri varsayılan olarak önce "düşünür"; düşünme de max_tokens'tan harcar.
 // ek: isteğe eklenen ayarlar. Haiku'da ve Sonnet'te yazmadan önceki düşünme kapalı (her model kendi değerini kabul eder).

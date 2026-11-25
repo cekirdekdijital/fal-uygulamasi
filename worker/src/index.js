@@ -5,7 +5,7 @@
 // - Hesaplı kullanıcıların Firebase kimlik belgesini doğrular; hakları hesaba (uid) bağlar
 // Uç noktalar:  GET /api/hak   POST /api/okuma
 import D from "../../data/deste.json";
-import { KATMANLAR, OKUMALAR, UCRETLI, katmanId } from "../../shared/katmanlar.js";
+import { KATMANLAR, OKUMALAR, UCRETLI, katmanId, PLAY_URUN } from "../../shared/katmanlar.js";
 import { analyze, validatePicks, SIGN } from "../../shared/motor.js";
 import { buildPrompt } from "../../shared/prompt.js";
 import { DILLER, yerelIstem } from "../../shared/diller.js";
@@ -77,13 +77,63 @@ async function kimlikDogrula(req, env) {
 const kodNorm = s => String(s || "").trim().replace(/\s+/g, "").toUpperCase();
 // Google Play inceleme kodu (INCELEME_KODU): incelemeciler Türkiye dışından bağlanabilir; bu kod ülke sınırını açar ve Elmas verir.
 const incelemeMi = (env, k) => !!(k && env.INCELEME_KODU && kodNorm(k) === kodNorm(env.INCELEME_KODU));
+/* ---------- Google Play abonelik doğrulama ----------
+   Gizli değer PLAY_SERVICE_ACCOUNT: Google Cloud hizmet hesabının JSON anahtarı (Play Console'da "Finansal verileri görüntüleme" ve
+   "Siparişleri ve abonelikleri yönetme" izni verilmiş olmalı). Sunucu bununla Google Play Developer API'ye bağlanır. */
+const PAKET = "com.cekirdekdijital.logos";
+const b64url = b => btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const b64urlStr = s => b64url(new TextEncoder().encode(s));
+let playErisimOnbellek = null;
+async function playErisim(env) {
+  if (playErisimOnbellek && playErisimOnbellek.bitis > Date.now() + 60e3) return playErisimOnbellek.token;
+  if (!env.PLAY_SERVICE_ACCOUNT) throw new Error("PLAY_SERVICE_ACCOUNT tanımlı değil");
+  const sa = JSON.parse(env.PLAY_SERVICE_ACCOUNT); const simdi = Math.floor(Date.now() / 1000);
+  const govde = `${b64urlStr(JSON.stringify({ alg: "RS256", typ: "JWT" }))}.${b64urlStr(JSON.stringify({ iss: sa.client_email, scope: "https://www.googleapis.com/auth/androidpublisher", aud: "https://oauth2.googleapis.com/token", iat: simdi, exp: simdi + 3600 }))}`;
+  const pem = sa.private_key.replace(/-----[^-]+-----/g, "").replace(/\s+/g, "");
+  const anahtar = await crypto.subtle.importKey("pkcs8", Uint8Array.from(atob(pem), c => c.charCodeAt(0)), { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, false, ["sign"]);
+  const imza = await crypto.subtle.sign("RSASSA-PKCS1-v1_5", anahtar, new TextEncoder().encode(govde));
+  const r = await fetch("https://oauth2.googleapis.com/token", { method: "POST", headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: `grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${govde}.${b64url(imza)}` });
+  const j = await r.json(); if (!j.access_token) throw new Error("Google erişim belgesi alınamadı: " + (j.error || r.status));
+  playErisimOnbellek = { token: j.access_token, bitis: Date.now() + (j.expires_in || 3600) * 1000 };
+  return j.access_token;
+}
+async function playAbonelik(env, token) {
+  const r = await fetch(`https://androidpublisher.googleapis.com/androidpublisher/v3/applications/${PAKET}/purchases/subscriptionsv2/tokens/${encodeURIComponent(token)}`, { headers: { authorization: "Bearer " + await playErisim(env) } });
+  if (!r.ok) throw new Error("Play abonelik sorgusu: " + r.status); return r.json();
+}
+async function playOnayla(env, urun, token) {
+  const r = await fetch(`https://androidpublisher.googleapis.com/androidpublisher/v3/applications/${PAKET}/purchases/subscriptions/${urun}/tokens/${encodeURIComponent(token)}:acknowledge`, { method: "POST", headers: { authorization: "Bearer " + await playErisim(env), "content-type": "application/json" }, body: "{}" });
+  return r.ok;
+}
+// Kullanıcı kimliğinin karması: satın almaya "obfuscatedAccountId" olarak eklenir; başka hesabın satın almasını kullanmayı önler
+const hesapKarmasi = async uid => { const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("logos:" + uid)); return [...new Uint8Array(h)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 64); };
+const GECERLI_DURUM = ["SUBSCRIPTION_STATE_ACTIVE", "SUBSCRIPTION_STATE_IN_GRACE_PERIOD", "SUBSCRIPTION_STATE_CANCELED"];
+// Play yanıtından plan kaydı: { katman, bitis, urun, durum } ya da hata kodu
+function playKaydi(v) {
+  const kalem = (v.lineItems || []).filter(l => PLAY_URUN[l.productId]).sort((a, b) => Date.parse(b.expiryTime) - Date.parse(a.expiryTime))[0];
+  if (!kalem) return { hata: "urun_yok" };
+  return { katman: PLAY_URUN[kalem.productId], urun: kalem.productId, bitis: kalem.expiryTime, durum: v.subscriptionState, gecerli: GECERLI_DURUM.includes(v.subscriptionState) && Date.parse(kalem.expiryTime) > Date.now() };
+}
+// Süresi dolan Play aboneliği saatte en çok bir kez Google'dan yeniden sorgulanır (yenilenmiş olabilir)
+async function playYenile(env, anahtar, a) {
+  if (!a || a.kaynak !== "play" || !a.token || !env.PLAY_SERVICE_ACCOUNT) return a;
+  if (a.kontrol && Date.now() - Date.parse(a.kontrol) < 3600e3) return a;
+  try { const k = playKaydi(await playAbonelik(env, a.token)); if (k.hata) return a;
+    const yeni = { ...a, katman: k.katman, urun: k.urun, bitis: k.bitis, durum: k.durum, kontrol: new Date().toISOString() };
+    await env.HAK.put(anahtar, JSON.stringify(yeni)); return yeni; }
+  catch { return a; }
+}
+
 const aktifAbone = a => a && KATMANLAR[katmanId(a.katman)] && (!a.bitis || new Date(a.bitis) > new Date());
 async function katmanBul(env, kod, kim, cihaz) {
   const k = kodNorm(kod);
   if (k && env.TAM_ERISIM_KODU && k === kodNorm(env.TAM_ERISIM_KODU)) return { katman: "elmas", sinirsiz: true };
   if (incelemeMi(env, k)) return { katman: "elmas", sinirsiz: true, sayac: "inc" };
   const aboneKey = kim ? `abone:${kim.uid}` : cihaz ? `abone_c:${cihaz}` : null;
-  if (aboneKey) { const a = await env.HAK.get(aboneKey, "json"); if (aktifAbone(a)) return { katman: katmanId(a.katman), bitis: a.bitis || null }; }
+  if (aboneKey) { let a = await env.HAK.get(aboneKey, "json");
+    if (a?.kaynak === "play" && !aktifAbone(a)) a = await playYenile(env, aboneKey, a);
+    if (aktifAbone(a)) return { katman: katmanId(a.katman), bitis: a.bitis || null, play: a.kaynak === "play" || undefined }; }
   // Hesapsızken cihaza tanımlanan plan (hediye kodu), kullanıcı giriş yapınca hesaba taşınır
   if (kim && cihaz) { const c = await env.HAK.get(`abone_c:${cihaz}`, "json");
     if (aktifAbone(c)) { const ttl = Math.max(120, Math.ceil((new Date(c.bitis || Date.now() + 864e5) - Date.now()) / 1000) + 86400);
@@ -112,12 +162,44 @@ function hediyeKodu() { const r = crypto.getRandomValues(new Uint8Array(8)); con
 async function sayaclar(env, sahip) {
   const z = zaman(); const key = `h:${sahip}`;
   const s = (await env.HAK.get(key, "json")) || {};
-  return { z, key, gun: s.gun === z.gun ? s.gn || 0 : 0, hafta: s.hafta === z.hafta ? s.hn || 0 : 0, ay: s.ay === z.ay ? s.dn || 0 : 0 };
+  return { z, key, gun: s.gun === z.gun ? s.gn || 0 : 0, hafta: s.hafta === z.hafta ? s.hn || 0 : 0, ay: s.ay === z.ay ? s.dn || 0 : 0,
+    eg: s.gun === z.gun ? s.eg || 0 : 0, eh: s.hafta === z.hafta ? s.eh || 0 : 0 }; // eg/eh: reklamla kazanılan ek okumalar
 }
 function kalanlar(katman, c, kOzel) {
   const k = kOzel || KATMANLAR[katman];
   return { katman, gunluk: k.gunluk, haftalik: k.haftalik, derinAylik: k.derinAylik,
     gunKalan: Math.max(0, k.gunluk - c.gun), haftaKalan: Math.max(0, k.haftalik - c.hafta), derinKalan: Math.max(0, k.derinAylik - c.ay) };
+}
+
+/* ---------- Ödüllü reklam (AdMob, yalnız Android, yalnız Ücretsiz plan) ----------
+   Ücretsiz plandaki her okumadan önce uygulama ödüllü reklam gösterir (reklam yüklenemezse okuma yine açılır).
+   Ücretsiz hak bitince reklam izleyerek günde en çok REKLAM_EK_GUN, haftada en çok REKLAM_EK_HAFTA ek kısa okuma açılır.
+   Ödül, AdMob'un sunucuya imzalı bildirimiyle (SSV) verilir: /api/reklam/odul. Ayar: REKLAM_AKTIF = "1". */
+const REKLAM_EK_GUN = 2, REKLAM_EK_HAFTA = 10;
+const reklamAktif = env => env.REKLAM_AKTIF === "1";
+const krediAnahtari = sahip => `rk:${sahip}`;
+async function reklamKredisi(env, sahip) { return +(await env.HAK.get(krediAnahtari(sahip))) || 0; }
+let admobAnahtarlari = null;
+async function admobAnahtari(keyId) {
+  if (!admobAnahtarlari || admobAnahtarlari.t < Date.now() - 6 * 3600e3) {
+    const j = await (await fetch("https://www.gstatic.com/admob/reward/verifier-keys.json")).json();
+    admobAnahtarlari = { t: Date.now(), k: Object.fromEntries((j.keys || []).map(k => [String(k.keyId), k.base64])) };
+  }
+  const b = admobAnahtarlari.k[String(keyId)]; if (!b) return null;
+  return crypto.subtle.importKey("spki", Uint8Array.from(atob(b), c => c.charCodeAt(0)), { name: "ECDSA", namedCurve: "P-256" }, false, ["verify"]);
+}
+// DER biçimli ECDSA imzasını WebCrypto'nun beklediği 64 baytlık r||s biçimine çevirir
+function derdenHam(der) {
+  let i = 2; if (der[1] & 0x80) i += der[1] & 0x7f;
+  const oku = () => { i++; const n = der[i++]; let v = der.slice(i, i + n); i += n; while (v.length > 32 && v[0] === 0) v = v.slice(1); const o = new Uint8Array(32); o.set(v, 32 - v.length); return o; };
+  const r = oku(), s = oku(); const h = new Uint8Array(64); h.set(r, 0); h.set(s, 32); return h;
+}
+async function admobDogrula(sorgu) {
+  const i = sorgu.indexOf("&signature="); if (i < 0) return false;
+  const mesaj = sorgu.slice(0, i); const p = new URLSearchParams(sorgu);
+  const anahtar = await admobAnahtari(p.get("key_id")); if (!anahtar) return false;
+  const imza = Uint8Array.from(atob(p.get("signature").replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(p.get("signature").length / 4) * 4, "=")), c => c.charCodeAt(0));
+  return crypto.subtle.verify({ name: "ECDSA", hash: "SHA-256" }, anahtar, derdenHam(imza), new TextEncoder().encode(mesaj));
 }
 
 /* ---------- Profil doğrulama ---------- */
@@ -208,6 +290,50 @@ async function isle(req, env) {
     }
 
 
+
+    /* ---------- Ödüllü reklam ---------- */
+    // Reklamı göstermeden önce: tek kullanımlık numara alınır; AdMob bunu ödül bildiriminde (custom_data) geri gönderir
+    if (url.pathname === "/api/reklam/baslat" && req.method === "POST") {
+      let b; try { b = await req.json(); } catch { b = {}; }
+      const cihaz = String(b.cihaz || "").slice(0, 64); if (!cihaz) return json({ kod: "istek" }, 400, cors);
+      const kim = await kimlikDogrula(req, env);
+      const numara = [...crypto.getRandomValues(new Uint8Array(16))].map(x => x.toString(16).padStart(2, "0")).join("");
+      await env.HAK.put(`rkn:${numara}`, kim ? "u:" + kim.uid : cihaz, { expirationTtl: 3600 });
+      return json({ numara }, 200, cors);
+    }
+    // AdMob sunucu taraflı doğrulama (SSV) bildirimi: imza doğrulanır, numaranın sahibine 1 reklam kredisi yazılır
+    if (url.pathname === "/api/reklam/odul" && req.method === "GET") {
+      const sorgu = url.search.slice(1);
+      if (!url.searchParams.get("signature")) return new Response("ok", { status: 200 }); // AdMob'un adres doğrulama isteği
+      let gecerli = false; try { gecerli = await admobDogrula(sorgu); } catch (e) { console.log("ssv", e?.message); }
+      if (!gecerli) return new Response("imza", { status: 400 });
+      const islem = url.searchParams.get("transaction_id") || ""; const numara = url.searchParams.get("custom_data") || "";
+      if (islem && await env.HAK.get(`rkt:${islem}`)) return new Response("ok", { status: 200 });
+      const sahip = numara ? await env.HAK.get(`rkn:${numara}`) : null;
+      if (sahip) { await env.HAK.put(krediAnahtari(sahip), String(Math.min(3, (await reklamKredisi(env, sahip)) + 1)), { expirationTtl: 3600 }); await env.HAK.delete(`rkn:${numara}`); }
+      if (islem) await env.HAK.put(`rkt:${islem}`, "1", { expirationTtl: 86400 * 2 });
+      return new Response("ok", { status: 200 });
+    }
+
+    /* ---------- Google Play aboneliği: satın alma belgesini doğrula, hesaba tanımla, onayla ---------- */
+    if (url.pathname === "/api/abonelik/dogrula" && req.method === "POST") {
+      const kim = await kimlikDogrula(req, env); if (!kim) return json({ kod: "giris_gerek" }, 401, cors);
+      let b; try { b = await req.json(); } catch { return json({ kod: "istek" }, 400, cors); }
+      const token = String(b.token || "").slice(0, 600); if (!token) return json({ kod: "istek" }, 400, cors);
+      if (!env.PLAY_SERVICE_ACCOUNT) return json({ kod: "ayar_yok" }, 503, cors);
+      let v; try { v = await playAbonelik(env, token); } catch (e) { return json({ kod: "play_hata", mesaj: String(e.message || e).slice(0, 120) }, 502, cors); }
+      const k = playKaydi(v); if (k.hata) return json({ kod: k.hata }, 400, cors);
+      const hesapId = v.externalAccountIdentifiers?.obfuscatedExternalAccountId;
+      if (hesapId && hesapId !== await hesapKarmasi(kim.uid)) return json({ kod: "baska_hesap" }, 403, cors);
+      // Aynı satın alma belgesi yalnızca bir hesaba tanımlanır
+      const tk = "play:" + (await hesapKarmasi("t:" + (v.linkedPurchaseToken || token))).slice(0, 40);
+      const sahip = await env.HAK.get(tk); if (sahip && sahip !== kim.uid) return json({ kod: "baska_hesap" }, 403, cors);
+      if (!k.gecerli) return json({ kod: "suresi_dolmus", durum: k.durum }, 400, cors);
+      await env.HAK.put(tk, kim.uid);
+      await env.HAK.put(`abone:${kim.uid}`, JSON.stringify({ katman: k.katman, bitis: k.bitis, kaynak: "play", urun: k.urun, token, durum: k.durum, kontrol: new Date().toISOString() }));
+      if (v.acknowledgementState !== "ACKNOWLEDGEMENT_STATE_ACKNOWLEDGED") await playOnayla(env, k.urun, token).catch(() => {});
+      return json({ tamam: true, katman: k.katman, bitis: k.bitis }, 200, cors);
+    }
     /* ---------- Hesap verisi: profil, onaylar, kampanya izni, okuma geçmişi ----------
        KV: "hesap:<uid>" = {profil, guncelleme}, "gecmis:<uid>" = [okumalar], "pz:<uid>" = kampanya e-postası izni (yalnızca izin verenler) */
     if (url.pathname.startsWith("/api/hesap")) {
@@ -259,7 +385,10 @@ async function isle(req, env) {
       const kim = await kimlikDogrula(req, env);
       const pl = await katmanBul(env, url.searchParams.get("kod"), kim, cihaz);
       const kal = pl.sinirsiz ? kalanlar("elmas", await sayaclar(env, pl.sayac || "tam"), tamSinir(env)) : kalanlar(pl.katman, await sayaclar(env, kim ? "u:" + kim.uid : cihaz));
-      return json({ ...kal, hesap: !!kim, tamErisim: !!pl.sinirsiz, bitis: pl.bitis || null, hediye: !!pl.hediye }, 200, cors);
+      const sahipH = kim ? "u:" + kim.uid : cihaz; const cH = await sayaclar(env, sahipH);
+      const reklam = reklamAktif(env) && pl.katman === "ucretsiz" && !pl.sinirsiz
+        ? { reklam: true, reklamKredi: await reklamKredisi(env, sahipH), ekGunKalan: Math.max(0, REKLAM_EK_GUN - cH.eg), ekHaftaKalan: Math.max(0, REKLAM_EK_HAFTA - cH.eh) } : { reklam: false };
+      return json({ ...kal, ...reklam, hesap: !!kim, tamErisim: !!pl.sinirsiz, bitis: pl.bitis || null, hediye: !!pl.hediye, play: !!pl.play }, 200, cors);
     }
 
     if (url.pathname === "/api/okuma" && req.method === "POST") {
@@ -280,7 +409,16 @@ async function isle(req, env) {
       const ipKey = !kim && katman === "ucretsiz" ? `ip:${req.headers.get("cf-connecting-ip") || "?"}:${c.z.gun}` : null;
       const ipSay = ipKey ? +(await env.HAK.get(ipKey)) || 0 : 0;
       if (ipKey && ipSay >= (+env.IP_GUNLUK || 6)) return json({ kod: "hak_bitti", mesaj: "Bugünkü okuma hakkın doldu.", ...kal, gunKalan: 0 }, 429, cors);
-      if (kal.gunKalan <= 0 || kal.haftaKalan <= 0) return json({ kod: "hak_bitti", mesaj: kal.gunKalan <= 0 ? "Bugünkü okuma hakkın doldu." : "Bu haftaki okuma hakkın doldu.", ...kal }, 429, cors);
+      // Ücretsiz planda: hak bittiyse reklamla kazanılan ek okuma kullanılabilir
+      const sahip = pl.sinirsiz ? null : kim ? "u:" + kim.uid : cihaz;
+      const reklamPlan = reklamAktif(env) && katman === "ucretsiz" && !pl.sinirsiz;
+      const kredi = reklamPlan ? await reklamKredisi(env, sahip) : 0;
+      let ekOkuma = false;
+      if (kal.gunKalan <= 0 || kal.haftaKalan <= 0) {
+        const ekVar = reklamPlan && c.eg < REKLAM_EK_GUN && c.eh < REKLAM_EK_HAFTA;
+        if (ekVar && kredi > 0) ekOkuma = true;
+        else return json({ kod: "hak_bitti", mesaj: kal.gunKalan <= 0 ? "Bugünkü okuma hakkın doldu." : "Bu haftaki okuma hakkın doldu.", ...kal, reklamla: ekVar }, 429, cors);
+      }
       let mod = pl.sinirsiz && OKUMALAR[b.mod] ? b.mod : k.okuma; // tam erişimde istenen okuma türü denenebilir
       if (b.mod === "derin" && k.okuma === "tam" && kal.derinKalan > 0) mod = "derin";
       if (mod === "derin" && kal.derinKalan <= 0) mod = "tam"; // Altın / Elmas aylık derin sınırı dolduysa tam okumaya düşer
@@ -303,8 +441,10 @@ async function isle(req, env) {
       }
       // Hak, yapay zekâ yanıtı başladıktan sonra düşülür
       const derin = mod === "derin";
-      if (ipKey) await env.HAK.put(ipKey, String(ipSay + 1), { expirationTtl: 60 * 60 * 26 });
-      await env.HAK.put(c.key, JSON.stringify({ gun: c.z.gun, hafta: c.z.hafta, ay: c.z.ay, gn: c.gun + 1, hn: c.hafta + 1, dn: c.ay + (derin ? 1 : 0) }), { expirationTtl: 60 * 60 * 24 * 40 });
+      if (ipKey && !ekOkuma) await env.HAK.put(ipKey, String(ipSay + 1), { expirationTtl: 60 * 60 * 26 });
+      if (kredi > 0) await env.HAK.put(krediAnahtari(sahip), String(kredi - 1), { expirationTtl: 3600 }); // izlenen reklam bu okumada kullanıldı
+      const eskiSayac = { gun: c.z.gun, hafta: c.z.hafta, ay: c.z.ay, gn: c.gun, hn: c.hafta, dn: c.ay, eg: c.eg, eh: c.eh };
+      await env.HAK.put(c.key, JSON.stringify(ekOkuma ? { ...eskiSayac, eg: c.eg + 1, eh: c.eh + 1 } : { ...eskiSayac, gn: c.gun + 1, hn: c.hafta + 1, dn: c.ay + (derin ? 1 : 0) }), { expirationTtl: 60 * 60 * 24 * 40 });
 
       // Anthropic olay akışını düz metne çevir
       // Metin gelmeden biterse (ör. sınır, ret, akış hatası) uygulamaya "\u0001HATA:<sebep>" satırı gönderilir.
@@ -329,12 +469,13 @@ async function isle(req, env) {
             console.log("bos_yanit", durus, akisHata, mod);
             ctl.enqueue(enc.encode("\u0001HATA:" + (akisHata || durus || "bos")));
             // Yorum gelmediyse düşülen hak geri verilir
-            await env.HAK.put(c.key, JSON.stringify({ gun: c.z.gun, hafta: c.z.hafta, ay: c.z.ay, gn: c.gun, hn: c.hafta, dn: c.ay }), { expirationTtl: 60 * 60 * 24 * 40 });
-            if (ipKey) await env.HAK.put(ipKey, String(ipSay), { expirationTtl: 60 * 60 * 26 });
+            await env.HAK.put(c.key, JSON.stringify(eskiSayac), { expirationTtl: 60 * 60 * 24 * 40 });
+            if (ipKey && !ekOkuma) await env.HAK.put(ipKey, String(ipSay), { expirationTtl: 60 * 60 * 26 });
+            if (kredi > 0) await env.HAK.put(krediAnahtari(sahip), String(kredi), { expirationTtl: 3600 });
           }
         },
       });
-      return new Response(up.body.pipeThrough(ts), { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store", "x-mod": mod, "x-gun-kalan": String(kal.gunKalan - 1), "x-hafta-kalan": String(kal.haftaKalan - 1), ...cors } });
+      return new Response(up.body.pipeThrough(ts), { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store", "x-mod": mod, "x-gun-kalan": String(ekOkuma ? 0 : kal.gunKalan - 1), "x-hafta-kalan": String(ekOkuma ? kal.haftaKalan : kal.haftaKalan - 1), "x-ek-okuma": ekOkuma ? "1" : "0", ...cors } });
     }
     return json({ kod: "yok", mesaj: "Bulunamadı." }, 404, cors);
   }

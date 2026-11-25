@@ -82,7 +82,7 @@ export async function hakDurumu() {
   if (mod === "sunucu") {
     try {
       const r = await fetch(`${CONFIG.API_URL}/api/hak?cihaz=${encodeURIComponent(store.cihaz())}&kod=${encodeURIComponent(store.kod())}`, { headers: await baslik() });
-      if (r.ok) { const j = await r.json(); store.setKatman(j.katman); store.setBitis(j.bitis); return j; }
+      if (r.ok) { const j = await r.json(); store.setKatman(j.katman); store.setBitis(j.bitis); try { localStorage.setItem("logos.play", j.play ? "1" : ""); } catch {} return j; }
       if (r.status === 451) return { ...yerelHak("ucretsiz"), gunKalan: 0, katman: store.katman(), bolge: true };
     } catch {}
     return { ...yerelHak(store.katman()), katman: store.katman(), cevrimdisi: true };

@@ -21,6 +21,8 @@ id = "7b3423f6038e475f8588a349e479aa6f"
 ALLOWED_ORIGINS = "https://cekirdekdijital.github.io,https://localhost"
 # Firebase proje kimliği (Firebase konsolu > Proje ayarları > Proje kimliği). Boşsa hesap girişi sunucuda kapalıdır.
 FIREBASE_PROJECT_ID = "logos-87791"
+# Ödüllü reklamla ek okuma (Ücretsiz plan, Android). "1" açık, "0" kapalı.
+REKLAM_AKTIF = "1"
 # Hesapsız kullanımda aynı internet bağlantısından günde en fazla kaç okuma (ev, okul gibi ortak ağlar için geniş tutuldu)
 IP_GUNLUK = "6"
 # Hizmetin açık olduğu ülkeler (ISO kodları, virgülle). Yeni ülke açmak için buraya ekleyip sunucuyu yeniden yayınlayın.

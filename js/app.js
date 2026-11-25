@@ -6,6 +6,8 @@ import { store, zamanAnahtarlari, gelistiriciAcik } from "./store.js";
 import { okumaIste, hakDurumu, calismaModu, OkumaHatasi, reklamOncesi, bolgeDurumu, beklemeKaydet, bildirGonder, hesapVerisi, profilGonder, gecmisGonder, hesapVerisiSil } from "./ai.js";
 import { dogumHaritasi, ILLER } from "../shared/natal.js";
 import * as H from "./hesap.js";
+import * as O from "./odeme.js";
+import * as R from "./reklam.js";
 import { ses, titres, gokyuzu, kivilcim, kivilcimEl, efektAyar, setEfekt, azHareket, sis, ortam } from "./fx.js";
 import { TEMA, baskinSet, koruyucuHTML, koruyucuOnYukle, korAd, korSoz } from "./koruyucu.js";
 import { t, tv, aktifDil, yerelKod, dilYukle, dilKaydet, desteBirlestir, kartCevirisi, metinler } from "./i18n.js";
@@ -154,6 +156,8 @@ async function googleGiris(sonra) {
 }
 // Giriş yapıldıktan sonra: sunucudaki profil ve geçmiş cihazla birleştirilir; profil yoksa kurulum başlar.
 async function girisSonrasi(sessiz, hedef = "ana") {
+  // Android'de bu Google hesabıyla alınmış Logos aboneliği varsa hesaba tanımlanır
+  O.geriYukle().then(r => { if (r) hakDurumu(); });
   const v = await hesapVerisi(); const yerel = store.profil();
   if (v?.gecmis?.length || store.gecmis().length) {
     const hepsi = [...store.gecmis(), ...(v?.gecmis || [])]; const g = new Map(); hepsi.forEach(r => { if (!g.has(r.id)) g.set(r.id, r); });
@@ -329,7 +333,7 @@ async function viewAna() {
   $$("#niyet button").forEach(b => b.onclick = () => { SECIM.niyet = b.dataset.k; $$("#niyet button").forEach(x => x.classList.toggle("on", x === b)); });
   $("#soru").oninput = e => SECIM.soru = e.target.value;
   $("#gun").onclick = () => kartDetay(gk.kod);
-  let hakVar = false;
+  let hakVar = false, EK_ACIK = false; // EK_ACIK: reklamla açılan ek okuma bir sonraki okumada kullanılır
   const misafirGecerli = () => SECIM.kim !== "misafir" || (!!sunSign(SECIM.misafir.dt) && SECIM.misafir.onay);
   const ctaGuncelle = () => { $("#basla").disabled = !(hakVar && misafirGecerli()); };
   const misafirCiz = () => {
@@ -358,7 +362,25 @@ async function viewAna() {
   const okumaTuru = k.okuma === "derin" && h.derinKalan <= 0 ? "tam" : k.okuma;
   $("#hakNot").innerHTML = var_ ? t("ana.hakNot", { okuma: okumaAd(okumaTuru), katman: katmanAd(h.katman) }) + (k.okuma === "derin" && h.derinKalan <= 0 ? `<br>${t("ana.derinSinir")}` : "")
     : `${t(h.gunKalan <= 0 ? "ana.hakBittiGun" : "ana.hakBittiHafta")} ${h.katman !== "elmas" ? `<a href="#premium" style="color:var(--blue)">${t("ana.premiumIle")}</a>` : ""}`;
-  $("#basla").onclick = async () => { if (!misafirGecerli()) return; $("#basla").disabled = true; const ok = await reklamOncesi(h.katman); ctaGuncelle(); if (ok) okumaBaslat(); };
+  // Ücretsiz planda (Android): hak varsa okumadan önce ödüllü reklam; hak bittiyse reklamla ek okuma açılabilir
+  const reklamli = h.reklam && R.reklamVar();
+  if (reklamli && var_) $("#hakNot").innerHTML += `<br><span class="small muted">${t("rk.bazNot")}</span>`;
+  if (!var_ && reklamli && h.ekGunKalan > 0 && h.ekHaftaKalan > 0) {
+    $("#hakNot").innerHTML += `<div class="stack" style="gap:6px;margin-top:10px"><button class="btn block" id="ekReklam">▶︎ ${t("rk.ekAc")}</button>
+      <span class="small muted">${t("rk.ekKalan", { g: h.ekGunKalan, h: h.ekHaftaKalan })}</span></div>`;
+    $("#ekReklam").onclick = async e => {
+      e.currentTarget.disabled = true; const s = await R.odulluReklam(hakDurumu);
+      if (s === "odul") { EK_ACIK = true; hakVar = true; ctaGuncelle(); toast(t("rk.ekAcildi")); ses.tamam(); $("#ekReklam").closest("div").remove(); }
+      else { toast(t(s === "iptal" ? "rk.iptal" : "rk.yok")); e.currentTarget.disabled = false; }
+    };
+  }
+  $("#basla").onclick = async () => {
+    if (!misafirGecerli()) return; $("#basla").disabled = true;
+    let ok = true;
+    if (reklamli && var_ && !EK_ACIK) { const s = await R.odulluReklam(hakDurumu); ok = s !== "iptal"; if (!ok) toast(t("rk.bazIptal")); }
+    else if (!reklamli && !EK_ACIK) ok = await reklamOncesi(h.katman);
+    EK_ACIK = false; ctaGuncelle(); if (ok) okumaBaslat();
+  };
 }
 function histItem(r) {
   const d = new Date(r.tarih); const ks = r.koruyucu || baskinSet(r.picks.map(p => CARD[p.kod])).set;
@@ -750,19 +772,36 @@ function viewRehber() {
 /* ---------- Planlar ---------- */
 function viewPremium() {
   chrome(true, "profil"); const k = store.katman();
-  // İlk aşamada hizmet yalnızca Türkiye'de: tüm dillerde TL fiyat (KDV dahil) gösterilir
-  const fiyat = id => id === "ucretsiz" ? t("pm.ucretsiz") : t("pm.ay", { f: FIYAT_TR[id] });
+  let playAbone = false; try { playAbone = localStorage.getItem("logos.play") === "1"; } catch {}
+  const satin = O.odemeVar(), android = !!window.Capacitor?.isNativePlatform?.();
+  // İlk aşamada hizmet yalnızca Türkiye'de: TL fiyat (KDV dahil). Android'de Google Play'in gösterdiği güncel fiyat kullanılır.
+  const fiyat = id => id === "ucretsiz" ? t("pm.ucretsiz") : `<span data-fiyat="${id}">${t("pm.ay", { f: FIYAT_TR[id] })}</span>`;
+  const dugme = (id, best) => {
+    if (id === "ucretsiz" || k === id) return "";
+    if (playAbone) return "";
+    if (satin) return `<button class="btn ${best ? "primary" : ""} block" data-abone="${id}">${t("pm.aboneOl")}</button>`;
+    return "";
+  };
   const tier = (id, best) => `<div class="tier ${best ? "best" : ""}"><div class="row" style="justify-content:space-between"><h3>${katmanAd(id)}</h3>${k === id ? `<span class="chip on">${t("pm.aktif")}</span>` : best ? `<span class="chip on">${t("pm.onerilen")}</span>` : ""}</div>
-    <div class="pr">${fiyat(id)}</div><ul>${t("pm.oz." + id).split("|").map(o => `<li>${o}</li>`).join("")}</ul>
-    ${id !== "ucretsiz" && k !== id && CONFIG.STORE_READY ? `<button class="btn ${best ? "primary" : ""} block" data-abone="${id}">${t("pm.aboneOl")}</button>` : ""}</div>`;
+    <div class="pr">${fiyat(id)}</div><ul>${t("pm.oz." + id).split("|").map(o => `<li>${o}</li>`).join("")}</ul>${dugme(id, best)}</div>`;
+  const alt = satin
+    ? `<section class="panel stack" style="gap:10px">${playAbone ? `<p class="small">${t("pm.playAbone")}</p><button class="btn block" id="pmYonet">${t("pm.yonet")}</button>` : ""}
+        <p class="small muted">${t("pm.kosul", { btn: `<button type="button" class="chip" id="pmKs" style="display:inline;padding:0 6px">${t("hk.kosullar")}</button>` })}</p>
+        ${H.kullanici() ? `<button class="btn ghost small" id="pmGeri">${t("pm.geriYukle")}</button>` : ""}</section>`
+    : `<section class="panel"><p class="small">${t(android ? "pm.yakinda" : "pm.webNot")}</p></section>`;
   $("#view").innerHTML = `<h2>${t("pm.baslik")}</h2>${tier("ucretsiz")}${tier("gumus")}${tier("altin", true)}${tier("elmas")}
-   <section class="panel stack">${hediyeKutusu()}</section>
+   ${alt}<section class="panel stack">${hediyeKutusu()}</section>
    <p class="small muted">${t("pm.notTR")}</p>`;
   hediyeOlay(() => viewPremium());
-  $$("[data-abone]").forEach(b => b.onclick = () => {
-    if (H.hesapAcik() && !H.kullanici()) { toast(t("pm.hesapGerek")); return hesapPenceresi("giris", () => girisSonrasi(true, "premium")); }
-    // Google Play satın alma akışı Android sürümünde window.LogosOdeme.satinAl(planId) ile bağlanacak
-    window.LogosOdeme?.satinAl?.(b.dataset.abone);
+  if (satin) O.playFiyatlari().then(f => Object.entries(f).forEach(([id, p]) => { const e = $(`[data-fiyat="${id}"]`); if (e) e.textContent = t("pm.ay", { f: p }); }));
+  $("#pmKs")?.addEventListener("click", () => hukukMetni("kosullar"));
+  $("#pmYonet")?.addEventListener("click", () => O.aboneligiYonet());
+  $("#pmGeri")?.addEventListener("click", async e => { e.currentTarget.disabled = true; const r = await O.geriYukle(); await hakDurumu(); toast(t(r ? "pm.geriYuklendi" : "pm.geriYok")); viewPremium(); });
+  $$("[data-abone]").forEach(b => b.onclick = async () => {
+    if (!H.kullanici()) { toast(t("pm.hesapGerek")); return hesapPenceresi("giris", () => girisSonrasi(true, "premium")); }
+    $$("[data-abone]").forEach(x => x.disabled = true);
+    try { const r = await O.satinAl(b.dataset.abone); await hakDurumu(); chrome(true, "profil"); ses.tamam(); toast(t("pm.basarili", { k: katmanAd(r.katman) })); viewPremium(); }
+    catch (e) { const kod = e?.kod || e?.code || ""; if (!/iptal|cancel/i.test(kod + (e?.message || ""))) toast(t(`pm.hata.${["giris_gerek", "baska_hesap", "suresi_dolmus"].includes(kod) ? kod : "genel"}`) + (kod ? ` (${String(kod).slice(0, 40)})` : "")); $$("[data-abone]").forEach(x => x.disabled = false); }
   });
 }
 
