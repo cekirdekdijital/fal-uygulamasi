@@ -110,7 +110,7 @@ export function buildPrompt(D, A, P, mod = "tam", yerel = null, { zaman = Date.n
   const L = [];
   L.push(`KULLANICI
 Güneş burcu: ${burcSatir(P.burc)}
-Yükselen: ${P.yk ? burcSatir(P.yk) : "bilinmiyor"}
+Yükselen: ${P.yk ? burcSatir(P.yk) : "bilinmiyor"}${P.ay ? `\nDoğum haritasındaki Ay burcu: ${burcSatir(P.ay)} (duygusal doğa, iç ihtiyaçlar)` : ""}
 Niyet: ${NIYET[P.niyet] || "Genel"}
 Soru: ${P.soru ? `"${String(P.soru).slice(0, 200)}"` : "yok"}`);
   L.push(`\nGÖKYÜZÜ (okuma anı: ${tarihTR(zaman)})

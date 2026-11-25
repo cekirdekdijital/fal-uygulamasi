@@ -45,10 +45,10 @@ export const CONFIG = {
   // Boş bırakılırsa hesap bölümü görünmez; uygulama hesapsız (ücretsiz plan, cihaz bazlı) çalışır.
   // Bu değerler gizli değildir; Firebase bunların uygulamada görünmesini öngörür. Asıl güvenlik sunucudaki doğrulamadadır.
   FIREBASE: {
-    apiKey: "",
-    authDomain: "",   // ör. "logos-fal.firebaseapp.com"
-    projectId: "",    // ör. "logos-fal" (sunucudaki FIREBASE_PROJECT_ID ile aynı olmalı)
-    appId: "",
+    apiKey: "AIzaSyDTnl7TJkx7IjcJOctiIb9oOJUJEbbNqJo",
+    authDomain: "logos-87791.firebaseapp.com",
+    projectId: "logos-87791",   // sunucudaki FIREBASE_PROJECT_ID ile aynı olmalı
+    appId: "1:578718754549:web:d1134a6e0154d9a2a507bc",
   },
 
   // Geliştirici görünümü: true iken çalışma modu etiketi, test planı seçici ve hak sıfırlama görünür.
@@ -60,5 +60,5 @@ export const CONFIG = {
   STORE_READY: false,
 
   // Sürüm. Dosyaları güncellediğinizde bu sayıyı artırın; telefonlar yeni sürümü indirir.
-  VERSION: "0.9.4",
+  VERSION: "0.9.5",
 };

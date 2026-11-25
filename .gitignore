@@ -1,0 +1,12 @@
+# GitHub'a gönderilmeyecekler
+node_modules/
+# Sunucu kodu GitHub'a gitmez (bilgisayardan wrangler ile yayınlanır)
+worker/
+worker/.wrangler/
+.wrangler/
+.dev.vars
+*.log
+Thumbs.db
+desktop.ini
+# Word taslakları (hukuki metin taslağı vb.)
+*.docx

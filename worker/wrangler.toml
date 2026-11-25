@@ -3,15 +3,34 @@ name = "fal-sunucu"
 main = "src/index.js"
 compatibility_date = "2026-11-01"
 
+# Kendi alan adı: bazı kurum/okul ağları *.workers.dev adresini engellediği için uygulama bu adresi kullanır.
+# Eski workers.dev adresi de açık kalır (eski sürümler için).
+workers_dev = true
+routes = [
+  { pattern = "api.logosmyths.com", custom_domain = true }
+]
+
 # Hak sayaçları için KV deposu. "npx wrangler kv namespace create HAK" komutunun verdiği id'yi buraya yazın.
 [[kv_namespaces]]
 binding = "HAK"
-id = "BURAYA_KV_ID"
+id = "7b3423f6038e475f8588a349e479aa6f"
 
 [vars]
 # Uygulamanın yayınlandığı adres(ler), virgülle ayrılmış. Test için "*" kullanılabilir.
-ALLOWED_ORIGINS = "https://KULLANICIADI.github.io"
+# https://localhost: Android uygulaması (Capacitor) içinden gelen istekler
+ALLOWED_ORIGINS = "https://cekirdekdijital.github.io,https://localhost"
+# Firebase proje kimliği (Firebase konsolu > Proje ayarları > Proje kimliği). Boşsa hesap girişi sunucuda kapalıdır.
+FIREBASE_PROJECT_ID = "logos-87791"
+# Hesapsız kullanımda aynı internet bağlantısından günde en fazla kaç okuma (ev, okul gibi ortak ağlar için geniş tutuldu)
+IP_GUNLUK = "6"
+# Hizmetin açık olduğu ülkeler (ISO kodları, virgülle). Yeni ülke açmak için buraya ekleyip sunucuyu yeniden yayınlayın.
+IZINLI_ULKELER = "TR"
+# Tam erişim koduyla günde en fazla kaç okuma (kod sızarsa harcamayı sınırlar)
+TAM_GUNLUK = "40"
 
 # Gizli değerler buraya YAZILMAZ; komutla eklenir:
 #   npx wrangler secret put ANTHROPIC_API_KEY
-#   npx wrangler secret put PREMIUM_KODLARI     (ör.  test-p:premium,test-pp:premiumPlus)
+#   npx wrangler secret put ADMIN_ANAHTARI      (bekleme listesi ve bildirimleri görmek için uzun, rastgele bir parola)
+#   npx wrangler secret put PREMIUM_KODLARI     (ör.  kod1:gumus,kod2:altin,kod3:elmas)
+#   npx wrangler secret put INCELEME_KODU       (Google Play incelemecilerine verilen kod: ülke sınırını açar, Elmas)
+#   npx wrangler secret put TAM_ERISIM_KODU     (yalnızca geliştiricinin kullandığı tek kod: Elmas + günde TAM_GUNLUK okuma)

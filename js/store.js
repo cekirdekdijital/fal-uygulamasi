@@ -10,6 +10,7 @@ export const store = {
   profil: () => get(K.profil, null),
   setProfil: p => set(K.profil, p),
   gecmis: () => get(K.gecmis, []),
+  setGecmis: g => set(K.gecmis, g),
   addGecmis: r => { const g = get(K.gecmis, []); g.unshift(r); set(K.gecmis, g.slice(0, 40)); },
   updateGecmis: (id, patch) => { const g = get(K.gecmis, []); const i = g.findIndex(x => x.id === id); if (i >= 0) { g[i] = { ...g[i], ...patch }; set(K.gecmis, g); } },
   cihaz: () => { let c = get(K.cihaz, null); if (!c) { c = (crypto.randomUUID?.() || String(Math.random()).slice(2) + Date.now()); set(K.cihaz, c); } return c; },

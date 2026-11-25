@@ -48,6 +48,22 @@ export async function bildirGonder(kayit) {
   return r.ok ? { tamam: true } : { tamam: false };
 }
 
+/* ---------- Hesap verisi (profil, onaylar, okuma geçmişi) ----------
+   Giriş yapan kullanıcının profili ve geçmişi sunucuda (Cloudflare KV) saklanır; böylece başka cihazda da görünür. */
+async function hesapIstek(yol, yontem = "GET", govde) {
+  if ((await calismaModu()) !== "sunucu") return null;
+  const h = await baslik(govde ? { "content-type": "application/json" } : {});
+  if (!h.authorization) return null;
+  try {
+    const r = await fetch(`${CONFIG.API_URL}/api/hesap${yol}`, { method: yontem, headers: h, body: govde ? JSON.stringify(govde) : undefined });
+    return r.ok ? await r.json() : null;
+  } catch { return null; }
+}
+export const hesapVerisi = () => hesapIstek("");
+export const profilGonder = profil => hesapIstek("/profil", "PUT", { profil, cihaz: store.cihaz() });
+export const gecmisGonder = gecmis => hesapIstek("/gecmis", "PUT", { gecmis });
+export const hesapVerisiSil = () => hesapIstek("", "DELETE");
+
 /* ---------- Hak sayacı (sunucu yoksa cihazda tutulur) ---------- */
 export function yerelHak(katmanId) {
   const k = KATMANLAR[katmanId]; const z = zamanAnahtarlari(); const h = store.hak();
@@ -80,7 +96,7 @@ export class OkumaHatasi extends Error { constructor(kod, mesaj) { super(mesaj);
 // D, A: Türkçe deste ve analiz (istem için) · Dy, Ay: seçili dildeki görüntüleme destesi ve analiz (demo için)
 export async function okumaIste({ D, A, Dy = D, Ay = A, dil = "tr", yerel = null, profil, picks, mod, gecmis = [], onText, signal }) {
   const calisma = await calismaModu();
-  const P = { burc: profil.burc, yk: profil.yk, niyet: profil.niyet, soru: profil.soru };
+  const P = { burc: profil.burc, yk: profil.yk, ay: profil.ay || "", niyet: profil.niyet, soru: profil.soru };
 
   if (calisma === "sunucu") {
     const r = await fetch(`${CONFIG.API_URL}/api/okuma`, {
