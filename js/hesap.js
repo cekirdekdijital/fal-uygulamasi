@@ -52,10 +52,13 @@ export async function girisYap(eposta, sifre, { dil, hatirla }) {
 export async function sifreSifirla(eposta, dil) { const a = await hazirla(dil); await F.sendPasswordResetEmail(a, eposta); }
 export async function dogrulamaGonder(dil) { const a = await hazirla(dil); if (a.currentUser) await F.sendEmailVerification(a.currentUser); }
 export async function dogrulamaYenile() { if (aktifKullanici) { await aktifKullanici.reload(); await aktifKullanici.getIdToken(true); } return aktifKullanici; }
-const YEREL = () => window.Capacitor?.isNativePlatform?.() && window.Capacitor?.Plugins?.FirebaseAuthentication;
+// Android uygulamasında yerel eklenti; Capacitor.Plugins boşsa registerPlugin ile alınır
+const yerelMi = () => !!window.Capacitor?.isNativePlatform?.();
+const YEREL = () => { const C = window.Capacitor; if (!yerelMi()) return null; return C.Plugins?.FirebaseAuthentication || C.registerPlugin?.("FirebaseAuthentication") || null; };
 export const googleVar = () => hesapAcik();
 async function googleKimligi(a) {
   const FA = YEREL();
+  if (yerelMi() && !FA) throw { code: "eklenti-yok", message: "FirebaseAuthentication eklentisi bulunamadı" };
   if (FA) { const r = await FA.signInWithGoogle(); const tok = r?.credential?.idToken; if (!tok) throw { code: "auth/popup-closed-by-user" }; return F.GoogleAuthProvider.credential(tok); }
   return null;
 }
@@ -84,6 +87,12 @@ export async function cikisYap() { const a = await yukle(); try { await YEREL()?
 export async function hesabiSil() { const a = await yukle(); if (a?.currentUser) await F.deleteUser(a.currentUser); }
 
 // Firebase hata kodunu dil dosyasındaki anahtara çevirir
+// Bilinmeyen hatalarda kısa teknik kod (destek ve hata ayıklama için); son hata cihazda saklanır
+export function hataKodu(e) {
+  const k = String(e?.code || e?.errorMessage || e?.message || e || "").replace(/^auth\//, "").slice(0, 80);
+  try { localStorage.setItem("logos.sonHata", JSON.stringify({ t: new Date().toISOString(), k, m: String(e?.message || "").slice(0, 300) })); } catch {}
+  return k;
+}
 export function hataAnahtari(e) {
   if (/cancel/i.test(String(e?.message || "")) && !e?.code) return "hs.hata.iptal";
   const c = String(e?.code || "").replace("auth/", "");
