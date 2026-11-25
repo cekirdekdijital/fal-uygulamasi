@@ -59,7 +59,19 @@ export const googleVar = () => hesapAcik();
 async function googleKimligi(a) {
   const FA = YEREL();
   if (yerelMi() && !FA) throw { code: "eklenti-yok", message: "FirebaseAuthentication eklentisi bulunamadı" };
-  if (FA) { const r = await FA.signInWithGoogle(); const tok = r?.credential?.idToken; if (!tok) throw { code: "auth/popup-closed-by-user" }; return F.GoogleAuthProvider.credential(tok); }
+  if (FA) {
+    // Önce Credential Manager (alttan açılan hesap seçici); bazı cihazlarda "[16] Account reauth failed" verir,
+    // o zaman klasik Google hesap seçme ekranıyla (useCredentialManager:false) yeniden denenir.
+    let r;
+    try { r = await FA.signInWithGoogle(); }
+    catch (e) {
+      const m = String(e?.message || e?.code || "");
+      if (/cancel/i.test(m) && !/reauth/i.test(m)) throw e;
+      r = await FA.signInWithGoogle({ useCredentialManager: false });
+    }
+    const tok = r?.credential?.idToken; if (!tok) throw { code: "auth/popup-closed-by-user" };
+    return F.GoogleAuthProvider.credential(tok);
+  }
   return null;
 }
 export async function googleIleGiris(dil) {
