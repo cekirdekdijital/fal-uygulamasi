@@ -5,10 +5,11 @@
 // - Hesaplı kullanıcıların Firebase kimlik belgesini doğrular; hakları hesaba (uid) bağlar
 // Uç noktalar:  GET /api/hak   POST /api/okuma
 import D from "../../data/deste.json";
-import { KATMANLAR, OKUMALAR, UCRETLI, katmanId, PLAY_URUN } from "../../shared/katmanlar.js";
+import { KATMANLAR, OKUMALAR, UCRETLI, katmanId, PLAY_URUN, UCRETSIZ_REKLAMSIZ } from "../../shared/katmanlar.js";
 import { analyze, validatePicks, SIGN } from "../../shared/motor.js";
 import { buildPrompt } from "../../shared/prompt.js";
 import { DILLER, yerelIstem } from "../../shared/diller.js";
+import { krizVar } from "../../shared/kriz.js";
 // Dil paketleri: yeni dil hazır olduğunda iki satır ekleyin (metin + kart çevirisi) ve DIL_PAKETI'ne yazın.
 import EN from "../../i18n/en.json";
 import KART_EN from "../../data/kartlar/en.json";
@@ -210,8 +211,9 @@ function profilTemizle(p) {
   const burc = x => BURCLAR.includes(x) ? x : "";
   const o = p.onay && typeof p.onay === "object" ? { tarih: kisalt(p.onay.tarih, 30), surum: kisalt(p.onay.surum, 8), dil: kisalt(p.onay.dil, 5), kosullar: !!p.onay.kosullar, aktarim: !!p.onay.aktarim, yas18: !!p.onay.yas18 } : null;
   const pz = p.pazarlama && typeof p.pazarlama === "object" ? { onay: !!p.pazarlama.onay, tarih: kisalt(p.pazarlama.tarih, 30), surum: kisalt(p.pazarlama.surum, 8) } : { onay: false };
+  const rk = p.reklam && typeof p.reklam === "object" ? { onay: !!p.reklam.onay, tarih: kisalt(p.reklam.tarih, 30), surum: kisalt(p.reklam.surum, 8) } : { onay: false };
   return { ad: kisalt(p.ad, 30), dt: p.dt, saat: /^\d{1,2}:\d{2}$/.test(p.saat || "") ? p.saat : "", il: kisalt(p.il, 30), burc: p.burc, ay: burc(p.ay), yk: burc(p.yk),
-    ykElle: !!p.ykElle, niyet: kisalt(p.niyet, 16), onay: o, pazarlama: pz };
+    ykElle: !!p.ykElle, niyet: kisalt(p.niyet, 16), onay: o, pazarlama: pz, reklam: rk };
 }
 
 /* ---------- Bölge ----------
@@ -384,10 +386,13 @@ async function isle(req, env) {
       if (!cihaz) return json({ kod: "istek", mesaj: "Cihaz kimliği eksik." }, 400, cors);
       const kim = await kimlikDogrula(req, env);
       const pl = await katmanBul(env, url.searchParams.get("kod"), kim, cihaz);
-      const kal = pl.sinirsiz ? kalanlar("elmas", await sayaclar(env, pl.sayac || "tam"), tamSinir(env)) : kalanlar(pl.katman, await sayaclar(env, kim ? "u:" + kim.uid : cihaz));
+      const rsH = url.searchParams.get("reklamsiz") === "1" && pl.katman === "ucretsiz" && !pl.sinirsiz; // reklam izni yok: haftada 7
+      const kal = pl.sinirsiz ? kalanlar("elmas", await sayaclar(env, pl.sayac || "tam"), tamSinir(env)) : kalanlar(pl.katman, await sayaclar(env, kim ? "u:" + kim.uid : cihaz), rsH ? UCRETSIZ_REKLAMSIZ : null);
       const sahipH = kim ? "u:" + kim.uid : cihaz; const cH = await sayaclar(env, sahipH);
-      const reklam = reklamAktif(env) && pl.katman === "ucretsiz" && !pl.sinirsiz
-        ? { reklam: true, reklamKredi: await reklamKredisi(env, sahipH), ekGunKalan: Math.max(0, REKLAM_EK_GUN - cH.eg), ekHaftaKalan: Math.max(0, REKLAM_EK_HAFTA - cH.eh) } : { reklam: false };
+      // reklamsiz=1: kullanıcı reklam iznini vermemiş; reklam ve reklamla ek okuma sunulmaz, günlük ücretsiz kısa okuma reklamsız açılır
+      const reklamsiz = url.searchParams.get("reklamsiz") === "1";
+      const reklam = reklamAktif(env) && pl.katman === "ucretsiz" && !pl.sinirsiz && !reklamsiz
+        ? { reklam: true, reklamKredi: await reklamKredisi(env, sahipH), ekGunKalan: Math.max(0, REKLAM_EK_GUN - cH.eg), ekHaftaKalan: Math.max(0, REKLAM_EK_HAFTA - cH.eh) } : { reklam: false, reklamsiz };
       return json({ ...kal, ...reklam, hesap: !!kim, tamErisim: !!pl.sinirsiz, bitis: pl.bitis || null, hediye: !!pl.hediye, play: !!pl.play }, 200, cors);
     }
 
@@ -399,10 +404,12 @@ async function isle(req, env) {
       const pr = b.profil || {};
       const P = { burc: SIGN[pr.burc] ? pr.burc : null, yk: SIGN[pr.yk] ? pr.yk : "", ay: SIGN[pr.ay] ? pr.ay : "", niyet: ["genel", "iliski", "yol", "ic"].includes(pr.niyet) ? pr.niyet : "genel", soru: String(pr.soru || "").slice(0, 200) };
       if (!P.burc) return json({ kod: "istek", mesaj: "Burç bilgisi eksik." }, 400, cors);
+      // Kriz içeriği (intihar / kendine zarar): okuma üretilmez, hak düşülmez; uygulama 112 yönlendirmesi gösterir
+      if (krizVar(P.soru)) return json({ kod: "kriz", mesaj: "Bu konuda okuma yapılmıyor. Acil bir durumdaysan 112'yi ara." }, 422, cors);
 
       const kim = await kimlikDogrula(req, env);
       const pl = await katmanBul(env, b.kod, kim, cihaz); const katman = pl.katman;
-      const k = pl.sinirsiz ? tamSinir(env) : KATMANLAR[katman];
+      const k = pl.sinirsiz ? tamSinir(env) : katman === "ucretsiz" && b.reklamsiz === true ? UCRETSIZ_REKLAMSIZ : KATMANLAR[katman]; // reklam izni yoksa haftada 7
       const c = await sayaclar(env, pl.sinirsiz ? (pl.sayac || "tam") : kim ? "u:" + kim.uid : cihaz); // hesaplı kullanıcıda haklar hesaba bağlıdır
       const kal = kalanlar(katman, c, k);
       // Hesapsız ücretsiz kullanımda cihaz kimliği değiştirilerek sınırın aşılmasını önlemek için IP başına günlük üst sınır
@@ -411,7 +418,7 @@ async function isle(req, env) {
       if (ipKey && ipSay >= (+env.IP_GUNLUK || 6)) return json({ kod: "hak_bitti", mesaj: "Bugünkü okuma hakkın doldu.", ...kal, gunKalan: 0 }, 429, cors);
       // Ücretsiz planda: hak bittiyse reklamla kazanılan ek okuma kullanılabilir
       const sahip = pl.sinirsiz ? null : kim ? "u:" + kim.uid : cihaz;
-      const reklamPlan = reklamAktif(env) && katman === "ucretsiz" && !pl.sinirsiz;
+      const reklamPlan = reklamAktif(env) && katman === "ucretsiz" && !pl.sinirsiz && b.reklamsiz !== true; // reklam izni yoksa ek okuma yok
       const kredi = reklamPlan ? await reklamKredisi(env, sahip) : 0;
       let ekOkuma = false;
       if (kal.gunKalan <= 0 || kal.haftaKalan <= 0) {

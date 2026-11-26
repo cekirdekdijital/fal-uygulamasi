@@ -401,3 +401,4 @@ html[dir="rtl"] .phero-kor{right:auto;left:-4px;object-position:bottom left;tran
 .ayar>summary::after{content:"›";color:var(--dim);transition:transform .25s;margin-inline-start:4px}
 .ayar[open]>summary::after{transform:rotate(90deg)}
 .ayar-ic{padding:0 2px 14px;gap:10px;animation:enter .35s both}
+p.hata{color:#f0a097;margin:-4px 0 0}

@@ -7,7 +7,10 @@ import * as H from "./hesap.js";
 
 const yerelMi = () => !!window.Capacitor?.isNativePlatform?.();
 const AM = () => { const C = window.Capacitor; if (!yerelMi()) return null; return C.Plugins?.AdMob || C.registerPlugin?.("AdMob") || null; };
-export const reklamVar = () => !!CONFIG.ADMOB?.odulluId && !!AM();
+// Kullanıcı reklam iznini vermediyse reklam altyapısı hiç başlatılmaz (KVKK açık rıza)
+const izin = () => !!store.profil()?.reklam?.onay;
+export const reklamDestek = () => !!CONFIG.ADMOB?.odulluId && !!AM(); // cihazda reklam gösterilebilir mi (izinden bağımsız)
+export const reklamVar = () => reklamDestek() && izin();
 let hazir = null;
 const baslat = () => hazir ||= AM().initialize({}).catch(() => {});
 

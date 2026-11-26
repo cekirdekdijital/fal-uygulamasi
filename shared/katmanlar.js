@@ -34,3 +34,6 @@ export const OKUMALAR = {
   tam:   { ad: "Tam okuma",   model: "claude-haiku-5-5",  maxTokens: 5000, kelime: "650–850", ek: { thinking: { type: "disabled" }, output_config: { effort: "medium" } } },
   derin: { ad: "Derin okuma", model: "claude-sonnet-5-5", maxTokens: 5000, kelime: "650–850", ek: { thinking: { type: "between_tools" }, output_config: { effort: "medium" } } },
 };
+
+// Android'de reklam iznini vermeyen Ücretsiz kullanıcı: reklam yok, her gün 1 kısa okuma (haftada 7)
+export const UCRETSIZ_REKLAMSIZ = { ad: "Ücretsiz", gunluk: 1, haftalik: 7, okuma: "kisa", derinAylik: 0, reklam: false };

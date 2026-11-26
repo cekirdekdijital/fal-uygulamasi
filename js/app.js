@@ -12,6 +12,7 @@ import { ses, titres, gokyuzu, kivilcim, kivilcimEl, efektAyar, setEfekt, azHare
 import { TEMA, baskinSet, koruyucuHTML, koruyucuOnYukle, korAd, korSoz } from "./koruyucu.js";
 import { t, tv, aktifDil, yerelKod, dilYukle, dilKaydet, desteBirlestir, kartCevirisi, metinler } from "./i18n.js";
 import { DILLER, yerelIstem } from "../shared/diller.js";
+import { krizVar } from "../shared/kriz.js";
 
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -87,6 +88,7 @@ function route() {
   const p = store.profil();
   if (!BOLGE.izinli && r !== "bolge") return go("bolge");
   if (BOLGE.izinli && !p?.onay && r !== "hosgeldin") return go("hosgeldin");
+  if (BOLGE.izinli && p?.onay && p.onay.surum !== ONAY_SURUM && r !== "hosgeldin") return go("hosgeldin-onay");
   if (r !== "sonuc") ortam.durdur();
   sis.surekli(0);
   if (!ILK) { sis.gecis(); ses.gecis(); } ILK = false;
@@ -97,7 +99,48 @@ addEventListener("hashchange", route);
 
 /* ---------- Hoş geldin, giriş ve profil kurulumu ---------- */
 const GLIF = Object.fromEntries(SIGNS.map((s, i) => [s[0], String.fromCodePoint(0x2648 + i) + "︎"]));
-const ONAY_SURUM = "3", PAZ_SURUM = "1";
+const ONAY_SURUM = "4", PAZ_SURUM = "2", RK_SURUM = "1"; // 4: aktarım rızası kaldırıldı, reklam izni ayrı ve isteğe bağlı (hukuk görüşü 26.11.2026)
+// Doğum tarihine göre yaş (tam yıl)
+function yas(dt) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dt || ""); if (!m) return null;
+  const b = new Date(), y = b.getFullYear() - +m[1]; return (b.getMonth() + 1 < +m[2] || (b.getMonth() + 1 === +m[2] && b.getDate() < +m[3])) ? y - 1 : y;
+}
+const yetiskin = dt => (yas(dt) ?? 0) >= 18;
+const onsekizOnce = () => { const d = new Date(); d.setFullYear(d.getFullYear() - 18); return d.toISOString().slice(0, 10); };
+// Onay bölümü: zorunlular (18+, kullanım koşulları), aydınlatma metni yalnızca bilgi bağlantısı; isteğe bağlılar (reklam, kampanya) işaretsiz gelir
+function onayBolumu({ pz = false } = {}) {
+  const chip = (id, m) => `<button type="button" class="chip" id="${id}" style="display:inline;padding:0 6px">${m}</button>`;
+  const rk = R.reklamDestek(), hesapli = !!H.kullanici();
+  return `<section class="panel stack onaylar"><span class="lab">${t("kr.zorunlu")}</span>
+      <label class="check"><input type="checkbox" id="c18" data-zorunlu> ${t("pf.onay18")}</label>
+      <label class="check"><input type="checkbox" id="cEg" data-zorunlu> <span>${t("pf.onayKosul", { btn: chip("kosul", t("pf.kosulBtn")) })}</span></label>
+      <p class="small muted">${t("kr.aydinlatmaNot", { btn: chip("kvkk", t("kr.aydinlatmaBtn")) })}</p></section>
+    ${rk || hesapli ? `<section class="panel stack onaylar"><span class="lab">${t("kr.istege")}</span>
+      ${rk ? `<label class="check"><input type="checkbox" id="cRk"> <span>${t("kr.reklamRiza")}<br><span class="small muted">${t("kr.reklamAlt")}</span></span></label>` : ""}
+      ${hesapli ? `<label class="check"><input type="checkbox" id="cPz" ${pz ? "checked" : ""}> <span>${t("kr.pazarlama")}</span></label>` : ""}</section>` : ""}`;
+}
+function onayOlaylari(ileri) {
+  const f = () => ileri.disabled = !$$(".onaylar input[data-zorunlu]").every(e => e.checked);
+  $$(".onaylar input").forEach(e => e.addEventListener("change", f)); f();
+  $("#kvkk").onclick = e => { e.preventDefault(); hukukMetni("aydinlatma"); };
+  $("#kosul").onclick = e => { e.preventDefault(); hukukMetni("kosullar"); };
+}
+// Kaydedilecek onay kayıtları (tarih, sürüm ve dil ile; ispat için)
+function onayKayitlari(eski = {}) {
+  const simdi = new Date().toISOString(), rk = !!$("#cRk")?.checked, pz = $("#cPz") ? $("#cPz").checked : !!eski.pazarlama?.onay;
+  return { onay: { tarih: simdi, surum: ONAY_SURUM, dil: aktifDil(), kosullar: true, yas18: true },
+    reklam: { onay: rk, tarih: rk ? simdi : "", surum: RK_SURUM },
+    pazarlama: { onay: pz, tarih: pz ? simdi : "", surum: PAZ_SURUM } };
+}
+// Koşullar güncellendiğinde mevcut kullanıcıdan yeniden onay alınır
+function viewYeniOnay() {
+  const p = store.profil() || {};
+  $("#view").innerHTML = `<section class="stack kurulum" style="gap:14px"><div class="stack kadim" style="gap:14px">
+    <h2>${t("yo.baslik")}</h2><p class="small muted">${t("yo.aciklama")}</p>${onayBolumu({ pz: !!p.pazarlama?.onay })}
+    <div class="bosluk"></div><button class="btn primary block" id="kIleri" disabled>${t("yo.kaydet")}</button></div></section>`;
+  const ileri = $("#kIleri"); onayOlaylari(ileri);
+  ileri.onclick = () => { const n = { ...store.profil(), ...onayKayitlari(p) }; delete n.onay.aktarim; store.setProfil(n); if (H.kullanici()) profilGonder(n); ses.tamam(); go("ana"); };
+}
 // Kullanıcının koruyucusu: kendi okumalarında en sık baskın gelen set; okuma yoksa Güneş burcunun en çok kartta yer aldığı set
 function kullaniciKoruyucu(p) {
   const n = {}; store.gecmis().filter(r => !r.misafir && r.koruyucu).forEach(r => n[r.koruyucu] = (n[r.koruyucu] || 0) + 1);
@@ -113,7 +156,7 @@ function haritaKartlari(h, { elle = false } = {}) {
 }
 const burcSecici = (id, sec) => `<select id="${id}"><option value="">${t("pf.ykYok")}</option>${SIGNS.map(s => `<option value="${s[0]}" ${sec === s[0] ? "selected" : ""}>${burcAd(s[0])}</option>`).join("")}</select>`;
 function dogumAlanlari(p) {
-  return `<label class="f">${t("pf.dt")}<input id="pDt" type="date" value="${esc(p.dt)}" min="1920-01-01" max="${new Date().toISOString().slice(0, 10)}"></label>
+  return `<label class="f">${t("pf.dt")}<input id="pDt" type="date" value="${esc(p.dt)}" min="1920-01-01" max="${onsekizOnce()}"></label><p class="small hata hidden" id="yasUyari" role="alert">${t("kr.yasKucuk")}</p>
     <label class="f">${t("kr.saat")}<input id="pSa" type="time" value="${esc(p.saat || "")}" ${p.saatYok ? "disabled" : ""}></label>
     <label class="check"><input type="checkbox" id="pSaY" ${p.saatYok ? "checked" : ""}> <span>${t("kr.saatYok")}</span></label>
     <label class="f">${t("kr.yer")}<select id="pIl"><option value="">${t("kr.yerSec")}</option>${ILLER.map(i => `<option ${p.il === i[0] ? "selected" : ""}>${i[0]}</option>`).join("")}<option value="-" ${p.il === "-" ? "selected" : ""}>${t("kr.yerDiger")}</option></select></label>
@@ -129,6 +172,7 @@ let KUR = null; // kurulum taslağı
 function viewHosgeldin(adim) {
   chrome(false);
   if (adim === "profil") return viewKurulum();
+  if (adim === "onay" && store.profil()?.onay) return viewYeniOnay();
   const M = CONFIG.MEDIA, hesap = H.hesapAcik() && MODE === "sunucu";
   if (hesap && H.kullanici()) return girisSonrasi(true);
   $("#view").innerHTML = `<section class="intro giris">
@@ -196,14 +240,7 @@ function viewKurulum() {
       <div class="bosluk"></div><button class="btn primary block" id="kIleri" disabled>${t("genel.devam")}</button>`;
   }
   if (n === 4) {
-    const hesapli = !!H.kullanici();
-    govde = `<h2>${t("kr.b4")}</h2><p class="small muted">${t("kr.a4")}</p>
-      <section class="panel stack onaylar"><span class="lab">${t("kr.zorunlu")}</span>
-        <label class="check"><input type="checkbox" id="c18"> ${t("pf.onay18")}</label>
-        <label class="check"><input type="checkbox" id="cEg"> <span>${t("pf.onayKosul", { btn: `<button type="button" class="chip" id="kosul" style="display:inline;padding:0 6px">${t("pf.kosulBtn")}</button>` })}</span></label>
-        <label class="check"><input type="checkbox" id="cKv"> <span>${t("kr.onayAktarim", { btn: `<button type="button" class="chip" id="kvkk" style="display:inline;padding:0 6px">${t("pf.onayMetinBtn")}</button>` })}</span></label></section>
-      ${hesapli ? `<section class="panel stack onaylar"><span class="lab">${t("kr.istege")}</span>
-        <label class="check"><input type="checkbox" id="cPz"> <span>${t("kr.pazarlama")}</span></label></section>` : ""}
+    govde = `<h2>${t("kr.b4")}</h2><p class="small muted">${t("kr.a4")}</p>${onayBolumu()}
       <div class="bosluk"></div><button class="btn primary block" id="kIleri" disabled>${t("kr.basla")}</button>`;
   }
   $("#view").innerHTML = `<section class="stack kurulum" style="gap:14px">${ust}<div class="stack kadim" style="gap:14px">${govde}</div></section>`;
@@ -211,7 +248,8 @@ function viewKurulum() {
   const ileri = $("#kIleri"), sonraki = () => { KUR.adim = n + 1; ses.gecis?.(); viewKurulum(); window.scrollTo(0, 0); };
   if (n === 1) { $("#pAd").focus(); $("#pAd").onkeydown = e => { if (e.key === "Enter") ileri.click(); }; ileri.onclick = () => { KUR.ad = $("#pAd").value.trim(); sonraki(); }; }
   if (n === 2) {
-    const f = () => { Object.assign(KUR, dogumOku()); ileri.disabled = !sunSign(KUR.dt) || (!KUR.saatYok && !KUR.saat) || !KUR.il; };
+    const f = () => { Object.assign(KUR, dogumOku()); const kucuk = !!sunSign(KUR.dt) && !yetiskin(KUR.dt); $("#yasUyari").classList.toggle("hidden", !kucuk);
+      ileri.disabled = !sunSign(KUR.dt) || kucuk || (!KUR.saatYok && !KUR.saat) || !KUR.il; };
     dogumOlaylari(f); f();
     ileri.onclick = () => { KUR.harita = dogumHaritasi(KUR.dt, KUR.saat, KUR.il); KUR.ykElle = false; sonraki(); };
   }
@@ -228,15 +266,10 @@ function viewKurulum() {
     ileri.onclick = () => { const h = KUR.harita; KUR.burc = h.gunes; KUR.yk = $("#eYk").value; KUR.ay = $("#eAy").value; KUR.ykElle = KUR.yk !== (h.yk || ""); sonraki(); };
   }
   if (n === 4) {
-    const f = () => ileri.disabled = !($("#c18").checked && $("#cEg").checked && $("#cKv").checked);
-    $$(".onaylar input").forEach(e => e.addEventListener("change", f));
-    $("#kvkk").onclick = e => { e.preventDefault(); hukukMetni("aydinlatma"); };
-    $("#kosul").onclick = e => { e.preventDefault(); hukukMetni("kosullar"); };
+    onayOlaylari(ileri);
     ileri.onclick = async () => {
-      const simdi = new Date().toISOString(), pz = !!$("#cPz")?.checked;
-      const p = { ad: KUR.ad || "", dt: KUR.dt, saat: KUR.saat || "", il: KUR.il || "", burc: KUR.burc, ay: KUR.ay || "", yk: KUR.yk || "", ykElle: !!KUR.ykElle, niyet: "genel",
-        onay: { tarih: simdi, surum: ONAY_SURUM, dil: aktifDil(), kosullar: true, aktarim: true, yas18: true },
-        pazarlama: { onay: pz, tarih: pz ? simdi : "", surum: PAZ_SURUM } };
+      if (!yetiskin(KUR.dt)) { toast(t("kr.yasKucuk")); KUR.adim = 2; return viewKurulum(); }
+      const p = { ad: KUR.ad || "", dt: KUR.dt, saat: KUR.saat || "", il: KUR.il || "", burc: KUR.burc, ay: KUR.ay || "", yk: KUR.yk || "", ykElle: !!KUR.ykElle, niyet: "genel", ...onayKayitlari() };
       store.setProfil(p); KUR = null; ileri.disabled = true;
       if (H.kullanici()) { profilGonder(p); if (store.gecmis().length) gecmisGonder(store.gecmis()); }
       kivilcimEl(ileri, { n: 24 }); ses.tamam(); toast(p.ad ? t("pf.hosgeldinAd", { ad: p.ad }) : t("pf.hosgeldin"));
@@ -261,7 +294,8 @@ function viewProfilForm() {
     if (h && !$("#eAy").dataset.dokunuldu) { $("#eAy").value = h.ay || ""; }
     $("#pHar").innerHTML = h ? haritaKartlari({ ...h, yk: $("#eYk").value, ay: $("#eAy").value, ykKesin: h.ykKesin || !!$("#eYk").dataset.dokunuldu }) : "";
     $$("#pHar .em").forEach(e => e.classList.add("gel"));
-    $("#pKaydet").disabled = !h;
+    const kucuk = !!h && !yetiskin(d.dt); $("#yasUyari").classList.toggle("hidden", !kucuk);
+    $("#pKaydet").disabled = !h || kucuk;
   };
   dogumOlaylari(f);
   ["#eYk", "#eAy"].forEach(s => $(s).onchange = e => { e.target.dataset.dokunuldu = "1"; f(); });
@@ -321,6 +355,7 @@ async function viewAna() {
      <div class="lab">${t("ana.etiket")}</div><h2>${t("ana.baslik")}</h2>
      <div class="stack"><span class="small muted">${t("ana.niyet")}</span><div class="row" id="niyet">${Object.keys(NIYET).map(k => `<button class="chip ${SECIM.niyet === k ? "on" : ""}" data-k="${k}">${t("niyet." + k)}</button>`).join("")}</div></div>
      <label class="f">${t("ana.soru")}<input id="soru" maxlength="160" value="${esc(SECIM.soru)}" placeholder="${t("ana.soruOrnek")}"></label>
+     <p class="small muted" style="margin-top:-6px">${t("ana.soruUyari")}</p>
      <div class="stack" style="gap:8px"><span class="small muted">${t("kim.baslik")}</span><div class="row" id="kim">${["ben", "misafir"].map(k => `<button class="chip ${SECIM.kim === k ? "on" : ""}" data-k="${k}">${t("kim." + k)}</button>`).join("")}</div><div id="misafirBox"></div></div>
      <div id="derinBox"></div>
      <div class="quota" id="quota">${halka(0, 1, "–")}${halka(0, 1, "–")}${halka(0, 1, "–")}</div>
@@ -334,20 +369,20 @@ async function viewAna() {
   $("#soru").oninput = e => SECIM.soru = e.target.value;
   $("#gun").onclick = () => kartDetay(gk.kod);
   let hakVar = false, EK_ACIK = false; // EK_ACIK: reklamla açılan ek okuma bir sonraki okumada kullanılır
-  const misafirGecerli = () => SECIM.kim !== "misafir" || (!!sunSign(SECIM.misafir.dt) && SECIM.misafir.onay);
+  const misafirGecerli = () => SECIM.kim !== "misafir" || (!!sunSign(SECIM.misafir.dt) && yetiskin(SECIM.misafir.dt) && SECIM.misafir.onay);
   const ctaGuncelle = () => { $("#basla").disabled = !(hakVar && misafirGecerli()); };
   const misafirCiz = () => {
     const M = SECIM.misafir, b = $("#misafirBox");
     if (SECIM.kim !== "misafir") { b.innerHTML = ""; return ctaGuncelle(); }
     b.innerHTML = `<div class="misafir stack" style="gap:10px"><div class="lab">${t("mf.baslik")}</div>
       <label class="f">${t("mf.ad")}<input id="mAd" maxlength="30" value="${esc(M.ad)}" autocomplete="off"></label>
-      <label class="f">${t("mf.dt")}<input id="mDt" type="date" value="${esc(M.dt)}" max="${new Date().toISOString().slice(0, 10)}"></label>
+      <label class="f">${t("mf.dt")}<input id="mDt" type="date" value="${esc(M.dt)}" max="${onsekizOnce()}"></label><p class="small hata hidden" id="mYas" role="alert">${t("mf.yasKucuk")}</p>
       <label class="f">${t("pf.yk")}<select id="mYk"><option value="">${t("pf.ykYok")}</option>${SIGNS.map(x => `<option value="${x[0]}" ${M.yk === x[0] ? "selected" : ""}>${burcAd(x[0])}</option>`).join("")}</select></label>
       <div id="mBurc" class="row"></div>
       <label class="check"><input type="checkbox" id="mOn" ${M.onay ? "checked" : ""}> <span class="small">${t("mf.onay")}</span></label>
       <p class="small muted">${t("kim.not")}</p></div>`;
     const g = () => { M.ad = $("#mAd").value.trim(); M.dt = $("#mDt").value; M.yk = $("#mYk").value; M.onay = $("#mOn").checked;
-      const bb = sunSign(M.dt); $("#mBurc").innerHTML = bb ? `<span class="chip on">${burcAd(bb)}</span><span class="chip el-${SIGN[bb].el}">${elAd(SIGN[bb].el)}</span>` : ""; ctaGuncelle(); };
+      const bb = sunSign(M.dt); $("#mYas").classList.toggle("hidden", !bb || yetiskin(M.dt)); $("#mBurc").innerHTML = bb ? `<span class="chip on">${burcAd(bb)}</span><span class="chip el-${SIGN[bb].el}">${elAd(SIGN[bb].el)}</span>` : ""; ctaGuncelle(); };
     $$("#misafirBox input,#misafirBox select").forEach(e => e.addEventListener("input", g)); g();
   };
   $$("#kim button").forEach(b => b.onclick = () => { SECIM.kim = b.dataset.k; $$("#kim button").forEach(x => x.classList.toggle("on", x === b)); misafirCiz(); });
@@ -365,6 +400,7 @@ async function viewAna() {
   // Ücretsiz planda (Android): hak varsa okumadan önce ödüllü reklam; hak bittiyse reklamla ek okuma açılabilir
   const reklamli = h.reklam && R.reklamVar();
   if (reklamli && var_) $("#hakNot").innerHTML += `<br><span class="small muted">${t("rk.bazNot")}</span>`;
+  if (!var_ && h.reklamsiz && h.katman === "ucretsiz" && R.reklamDestek()) $("#hakNot").innerHTML += `<br><span class="small muted">${t("rk.izinNot")}</span>`;
   if (!var_ && reklamli && h.ekGunKalan > 0 && h.ekHaftaKalan > 0) {
     $("#hakNot").innerHTML += `<div class="stack" style="gap:6px;margin-top:10px"><button class="btn block" id="ekReklam">▶︎ ${t("rk.ekAc")}</button>
       <span class="small muted">${t("rk.ekKalan", { g: h.ekGunKalan, h: h.ekHaftaKalan })}</span></div>`;
@@ -375,7 +411,9 @@ async function viewAna() {
     };
   }
   $("#basla").onclick = async () => {
-    if (!misafirGecerli()) return; $("#basla").disabled = true;
+    if (!misafirGecerli()) return;
+    if (krizVar(SECIM.soru)) return krizPenceresi();
+    $("#basla").disabled = true;
     let ok = true;
     if (reklamli && var_ && !EK_ACIK) { const s = await R.odulluReklam(hakDurumu); ok = s !== "iptal"; if (!ok) toast(t("rk.bazIptal")); }
     else if (!reklamli && !EK_ACIK) ok = await reklamOncesi(h.katman);
@@ -387,6 +425,13 @@ function histItem(r) {
   return `<a class="hitem" href="#sonuc-${r.id}" style="--c:${TEMA[ks].renk}">${koruyucuHTML(ks, "mini")}
    <div class="stack" style="gap:2px;flex:1"><span class="t">${esc(r.baslik || t("genel.okuma"))}</span><span class="small muted">${d.toLocaleDateString(yerelKod(), { day: "numeric", month: "long" })} · ${okumaAd(r.mod)}${r.misafir ? ` · ${esc(t("mf.etiket", { ad: r.misafir.ad || t("mf.isimsiz") }))}` : ""}</span></div>
    <div class="thumbs">${r.picks.slice(0, 3).map(p => `<img src="${img(p.kod)}" alt="">`).join("")}</div></a>`;
+}
+
+// Kriz içeriği: okuma yapılmaz, 112 yönlendirmesi gösterilir (reklam da gösterilmez, hak düşmez)
+function krizPenceresi() {
+  openDialog(`<div class="lab">♡</div><h2>${t("kz.baslik")}</h2>`, `<div class="stack" style="gap:12px"><p>${t("kz.metin")}</p>
+    <a class="btn primary block" href="tel:112">📞 ${t("kz.ara")}</a><button class="btn ghost block" id="kzD">${t("kz.duzenle")}</button></div>`);
+  $("#kzD").onclick = () => { $("#dlg").close(); $("#soru")?.focus(); };
 }
 
 /* ---------- Okuma akışı ---------- */
@@ -488,6 +533,7 @@ async function acilis(picks) {
     if (location.hash === "#sonuc-" + id) { ortam.durdur(3); sis.surekli(0); viewSonuc(id, true); ses.tamam(); }
   }).catch(e => {
     LIVE.bitti = true; ortam.durdur(); sis.surekli(0); store.updateGecmis(id, { durum: "hata", hata: e instanceof OkumaHatasi ? e.message : t("hata.genel"), hataKod: e.kod });
+    if (e.kod === "kriz") krizPenceresi();
     if (location.hash === "#sonuc-" + id) viewSonuc(id, true);
   });
 
@@ -698,7 +744,7 @@ function viewProfil(alt) {
   chrome(true, "profil");
   if (alt === "duzenle") return viewProfilForm();
   const p = store.profil(); const k = store.katman(); const ef = efektAyar();
-  const kor = kullaniciKoruyucu(p), st = profilIstatistik(), pz = !!p.pazarlama?.onay, u = H.kullanici();
+  const kor = kullaniciKoruyucu(p), st = profilIstatistik(), pz = !!p.pazarlama?.onay, rk = !!p.reklam?.onay, u = H.kullanici();
   const gelistirici = !DEV() ? "" : `<section class="panel stack"><div class="lab">${t("mod." + MODE)}</div>
     ${MODE === "sunucu" ? `<label class="f">${t("pr.testKod")}<input id="kod" value="${esc(store.kod())}" placeholder="${t("pr.testKodYer")}"></label><button class="btn" id="kodK">${t("pr.kodUygula")}</button>`
       : `<label class="f">${t("pr.testKatman", { mod: t("mod." + MODE) })}<select id="tk">${Object.keys(KATMANLAR).map(id => `<option value="${id}" ${id === k ? "selected" : ""}>${katmanAd(id)}</option>`).join("")}</select></label>`}
@@ -726,6 +772,9 @@ function viewProfil(alt) {
      ${H.kullanici() ? `<details class="ayar"><summary><span>${t("pr.bildirim")}</span><span class="muted small">${t(pz ? "pr.acik" : "pr.kapali")}</span></summary><div class="stack ayar-ic">
        <label class="check"><input type="checkbox" id="pzK" ${pz ? "checked" : ""}> <span>${t("kr.pazarlama")}</span></label>
        <p class="small muted">${t("pr.bildirimNot")}</p></div></details>` : ""}
+     ${R.reklamDestek() ? `<details class="ayar"><summary><span>${t("pr.reklam")}</span><span class="muted small">${t(rk ? "pr.acik" : "pr.kapali")}</span></summary><div class="stack ayar-ic">
+       <label class="check"><input type="checkbox" id="rkK" ${rk ? "checked" : ""}> <span>${t("kr.reklamRiza")}</span></label>
+       <p class="small muted">${t("pr.reklamNot")}</p></div></details>` : ""}
      <details class="ayar"><summary><span>${t("pr.dilSes")}</span><span class="muted small">${DILLER[aktifDil()].ad}</span></summary><div class="stack ayar-ic">
        <div class="row" style="justify-content:space-between"><b>${DILLER[aktifDil()].ad}</b><button class="btn" id="dilB">${t("pr.dilDegistir")}</button></div>
        <p class="small muted">${t("pr.dilNot")}</p>
@@ -733,7 +782,7 @@ function viewProfil(alt) {
        <label class="check"><input type="checkbox" id="efT" ${ef.titresim ? "checked" : ""}> ${t("pr.titresim")}</label></div></details>
      <a class="ayar link" href="#rehber"><span>${t("pr.rehber")}</span><span class="muted">›</span></a>
      <details class="ayar"><summary><span>${t("pr.hukukSil")}</span></summary><div class="stack ayar-ic">
-       ${["aydinlatma", "gizlilik", "kosullar"].map(x => `<button class="btn ghost" data-hk="${x}">${t("hk." + x)}</button>`).join("")}
+       ${["aydinlatma", "gizlilik", "kosullar", "riza"].map(x => `<button class="btn ghost" data-hk="${x}">${t("hk." + x)}</button>`).join("")}
        <button class="btn ghost" id="sil">${t("pr.sil")}</button><div id="silOnay"></div></div></details>
    </section>
    ${gelistirici}
@@ -747,6 +796,9 @@ function viewProfil(alt) {
   $("#hsG2")?.addEventListener("click", () => googleGiris(() => girisSonrasi(true, "profil")));
   $("#pzK")?.addEventListener("change", e => { const n = { ...store.profil(), pazarlama: { onay: e.target.checked, tarih: e.target.checked ? new Date().toISOString() : "", surum: PAZ_SURUM } };
     store.setProfil(n); profilGonder(n); toast(t(e.target.checked ? "pr.pzAcildi" : "pr.pzKapandi"));
+    e.target.closest("details").querySelector("summary .small").textContent = t(e.target.checked ? "pr.acik" : "pr.kapali"); });
+  $("#rkK")?.addEventListener("change", e => { const n = { ...store.profil(), reklam: { onay: e.target.checked, tarih: e.target.checked ? new Date().toISOString() : "", surum: RK_SURUM } };
+    store.setProfil(n); if (H.kullanici()) profilGonder(n); toast(t(e.target.checked ? "pr.rkAcildi" : "pr.rkKapandi"));
     e.target.closest("details").querySelector("summary .small").textContent = t(e.target.checked ? "pr.acik" : "pr.kapali"); });
   $("#efS").onchange = e => { setEfekt("ses", e.target.checked); if (e.target.checked) ses.tamam(); };
   $("#efT").onchange = e => { setEfekt("titresim", e.target.checked); if (e.target.checked) titres(30); };

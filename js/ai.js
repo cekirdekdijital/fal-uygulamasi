@@ -15,7 +15,7 @@ const baslik = async (ek = {}) => { const k = await kimlikBelgesi(); const h = {
 // Ücretsiz planda okuma öncesi ödüllü reklam. Android sürümünde reklam eklentisi window.LogosReklam.goster() sağlar.
 // Eklenti yoksa (web sürümü) okuma doğrudan açılır.
 export async function reklamOncesi(katman) {
-  if (!KATMANLAR[katman]?.reklam || !window.LogosReklam?.goster) return true;
+  if (!KATMANLAR[katman]?.reklam || !reklamIzni() || !window.LogosReklam?.goster) return true;
   try { return !!(await window.LogosReklam.goster()); } catch { return false; }
 }
 
@@ -77,11 +77,15 @@ function yerelHakKullan(derin) {
   store.setHak(n);
 }
 
+// Reklam açık rızası (kurulumda ve Profil'de, isteğe bağlı). Yoksa reklam hiç gösterilmez, AdMob başlatılmaz.
+export const reklamIzni = () => !!store.profil()?.reklam?.onay;
+// Android'de reklam gösterilebildiği hâlde izin verilmediyse sunucuya bildirilir (reklamsız mod: günde 1, haftada 7 kısa okuma)
+const reklamsizMi = () => !!window.Capacitor?.isNativePlatform?.() && !!CONFIG.ADMOB?.odulluId && !reklamIzni();
 export async function hakDurumu() {
   const mod = await calismaModu();
   if (mod === "sunucu") {
     try {
-      const r = await fetch(`${CONFIG.API_URL}/api/hak?cihaz=${encodeURIComponent(store.cihaz())}&kod=${encodeURIComponent(store.kod())}`, { headers: await baslik() });
+      const r = await fetch(`${CONFIG.API_URL}/api/hak?cihaz=${encodeURIComponent(store.cihaz())}&kod=${encodeURIComponent(store.kod())}${reklamsizMi() ? "&reklamsiz=1" : ""}`, { headers: await baslik() });
       if (r.ok) { const j = await r.json(); store.setKatman(j.katman); store.setBitis(j.bitis); try { localStorage.setItem("logos.play", j.play ? "1" : ""); } catch {} return j; }
       if (r.status === 451) return { ...yerelHak("ucretsiz"), gunKalan: 0, katman: store.katman(), bolge: true };
     } catch {}
@@ -101,7 +105,7 @@ export async function okumaIste({ D, A, Dy = D, Ay = A, dil = "tr", yerel = null
   if (calisma === "sunucu") {
     const r = await fetch(`${CONFIG.API_URL}/api/okuma`, {
       method: "POST", signal, headers: await baslik({ "content-type": "application/json" }),
-      body: JSON.stringify({ cihaz: store.cihaz(), kod: store.kod(), profil: P, picks, mod, dil, gecmis }),
+      body: JSON.stringify({ cihaz: store.cihaz(), kod: store.kod(), profil: P, picks, mod, dil, gecmis, reklamsiz: reklamsizMi() }),
     });
     if (!r.ok) { let j = {}; try { j = await r.json(); } catch {} throw new OkumaHatasi(j.kod || "sunucu", j.kod && t("hata." + j.kod) !== "hata." + j.kod ? t("hata." + j.kod) : j.mesaj || t("hata.sunucu")); }
     const reader = r.body.getReader(); const dec = new TextDecoder(); let text = "";

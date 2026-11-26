@@ -64,5 +64,5 @@ export const CONFIG = {
   ADMOB: { uygulamaId: "ca-app-pub-6704221376566982~2598583371", odulluId: "ca-app-pub-6704221376566982/7507742234", test: false },
 
   // Sürüm. Dosyaları güncellediğinizde bu sayıyı artırın; telefonlar yeni sürümü indirir.
-  VERSION: "0.9.8",
+  VERSION: "0.9.9",
 };
